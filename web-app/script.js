@@ -65,6 +65,12 @@ function calculateProcessing() {
     const energyRequired = (inputKg * data.energyPerKg).toFixed(2);
     const efficiency = (data.efficiency * 100).toFixed(1);
 
+    // [AudioBridge Integration] Play processing sonar
+    if (window.AudioBridge) {
+        const freq = 440 + (data.efficiency * 1000); // Frequency based on efficiency
+        window.AudioBridge.playTone(freq, 500, 'sine');
+    }
+
     // Format time
     let timeStr;
     if (processTime < 60) {

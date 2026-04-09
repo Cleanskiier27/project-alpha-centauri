@@ -438,11 +438,17 @@
     <!-- Floating Documentation Button for quick access -->
     <a href="/documentation.html" id="floating-docs-btn" title="Open Documentation">📖 Docs</a>
 
+        <script src="audio-bridge.js"></script>
         <script src="script.js"></script>
         <script src="chatbot.js"></script>
         <script>
         // Net Bot Toggle Button Logic
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize AudioBridge
+            if (window.AudioBridge) {
+                window.AudioBridge.initSession();
+            }
+            
             const toggleBtn = document.getElementById('toggle-netbot');
             const netbotChat = document.getElementById('netbot-chat');
             const netbotStatus = document.getElementById('netbot-status');
