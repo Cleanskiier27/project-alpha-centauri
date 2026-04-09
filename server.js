@@ -2,14 +2,54 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import os from 'os';
+import compression from 'compression';
+import helmet from 'helmet';
+import cors from 'cors';
+import { exec } from 'child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
-// Middleware
+// Security and Performance Middleware
+app.use(compression());
+app.use(helmet());
+app.use(cors());
+
+// Body Parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Admin Launch Capability
+app.get('/admin/open', (req, res) => {
+  const targetUrl = req.query.url || `http://localhost:${PORT}/home`;
+  console.log(`[Admin] Launching target: ${targetUrl}`);
+  
+  // Use 'start' on Windows to open in default browser
+  const command = process.platform === 'win32' ? `start ${targetUrl}` : `open ${targetUrl}`;
+  
+  exec(command, (error) => {
+    if (error) {
+      console.error(`[Admin] Launch error: ${error.message}`);
+      return res.status(500).json({ error: 'Failed to launch', details: error.message });
+    }
+    res.json({ success: true, message: `Launched ${targetUrl}` });
+  });
+});
+
+// Custom Security Headers
+app.use((req, res, next) => {
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  next();
+});
+
+// Request Logging
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  next();
+});
 
 // Application state
 const appState = {
@@ -20,17 +60,6 @@ const appState = {
   lastAction: null,
   logs: []
 };
-
-// Helper function to add logs
-function addLog(action, details = '') {
-  const timestamp = new Date().toISOString();
-  const logEntry = `[${timestamp}] ${action} ${details}`;
-  appState.logs.push(logEntry);
-  if (appState.logs.length > 100) {
-    appState.logs.shift();
-  }
-  console.log(logEntry);
-}
 
 // Update uptime
 setInterval(() => {
@@ -47,7 +76,16 @@ app.use((req, res, next) => {
 // OPERATIONAL API ENDPOINTS
 // ============================================
 
-// Health check endpoint
+// Health check endpoint (Page 8 Requirement)
+app.get('/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'healthy',
+    uptime: process.uptime(),
+    timestamp: new Date()
+  });
+});
+
+// Also keep /api/health for backward compatibility if needed, but Page 8 specifies root
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'healthy',

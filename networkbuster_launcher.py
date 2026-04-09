@@ -45,6 +45,14 @@ SERVICES = [
         'startup_delay': 4
     },
     {
+        'name': 'AI Music Studio',
+        'port': 3002,
+        'path': '/music-studio',
+        'type': 'web',
+        'critical': False,
+        'startup_delay': 0
+    },
+    {
         'name': 'Mission Control',
         'port': 5000,
         'command': 'python nasa_home_base.py',

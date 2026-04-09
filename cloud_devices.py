@@ -31,7 +31,8 @@ CLOUD_DEVICES = {
         "services": [
             {"name": "networkbuster-server", "port": 3000, "replicas": 1},
             {"name": "networkbuster-api", "port": 3001, "replicas": 1},
-            {"name": "networkbuster-audio", "port": 3002, "replicas": 1}
+            {"name": "networkbuster-audio", "port": 3002, "replicas": 1},
+            {"name": "networkbuster-music-studio", "port": 3002, "path": "/music-studio", "replicas": 1}
         ]
     },
     "azure_storage": {

@@ -18,6 +18,8 @@ try {
   console.warn('⚠️  helmet module not found');
 }
 
+import { WebAudioUI } from './music-factory.js';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.AUDIO_PORT || 3002;
@@ -244,6 +246,10 @@ app.get('/health', (req, res) => {
 });
 
 // Audio processing UI
+app.get('/music-studio', (req, res) => {
+  res.sendFile(path.join(__dirname, 'music-studio.html'));
+});
+
 app.get('/audio-lab', (req, res) => {
   const htmlContent = `<!DOCTYPE html>
 <html lang="en">
@@ -301,6 +307,7 @@ app.get('/audio-lab', (req, res) => {
             <button class="btn" onclick="detect()">DETECT_FREQ</button>
             <div id="results" class="status" style="white-space: pre;">TELEMETRY_READY</div>
         </div>
+        ${WebAudioUI}
     </div>
     <script>
         function createStream() {

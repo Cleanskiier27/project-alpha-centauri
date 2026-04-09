@@ -325,6 +325,10 @@ app.get('/audio-lab', (req, res) => {
   res.redirect('http://localhost:3002/audio-lab');
 });
 
+app.get('/music-studio', (req, res) => {
+  res.redirect('http://localhost:3002/music-studio');
+});
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: 'Not found', path: req.path });
