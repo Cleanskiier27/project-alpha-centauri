@@ -19,6 +19,10 @@ thumbnails.bat  - Extract and view thumbnails
 nb-start        - Start all services
 nb-stop         - Stop all services
 nb-status       - Show status
+nb-control      - Open Control Panel (Port 3000)
+nb-health       - Check API Health (uses Invoke-RestMethod)
+nb-api-status   - Check API Status (uses Invoke-RestMethod)
+nb-logs         - Fetch System Logs (uses Invoke-RestMethod)
 nb-map          - Open network map
 nb-tracer       - Open API tracer
 nb-mission      - Open mission control

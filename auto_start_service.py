@@ -114,10 +114,11 @@ def auto_start_all():
     
     print(f"\n✅ Auto-start complete: {started}/{len(services)} services running")
     
-    # Open dashboard after startup
+    # Open dashboards after startup
     time.sleep(3)
-    print("\n🌐 Opening Universal Launcher...")
+    print("\n🌐 Opening Dashboards...")
     subprocess.Popen('start http://localhost:7000', shell=True)
+    subprocess.Popen('start http://localhost:3000/control-panel', shell=True)
     
     return started
 

@@ -58,11 +58,50 @@ function nb-autostart {
     Start-Process powershell -ArgumentList "-ExecutionPolicy Bypass -File install_autostart.ps1" -Verb RunAs
 }
 
+function nb-control {
+    "Opening Control Panel..."
+    Start-Process http://localhost:3000/control-panel
+}
+
+function nb-health {
+    "Checking System Health..."
+    try {
+        $response = Invoke-RestMethod -Uri "http://localhost:3000/api/health" -Method Get
+        $response | ConvertTo-Json -Depth 5
+    } catch {
+        Write-Host "❌ Failed to connect to API: $($_.Exception.Message)" -ForegroundColor Red
+    }
+}
+
+function nb-api-status {
+    "Checking API Status..."
+    try {
+        $response = Invoke-RestMethod -Uri "http://localhost:3000/api/status" -Method Get
+        $response | ConvertTo-Json -Depth 5
+    } catch {
+        Write-Host "❌ Failed to connect to API: $($_.Exception.Message)" -ForegroundColor Red
+    }
+}
+
+function nb-logs {
+    "Fetching System Logs..."
+    try {
+        $response = Invoke-RestMethod -Uri "http://localhost:3000/api/logs" -Method Get
+        $response.logs | ForEach-Object { Write-Host $_ }
+    } catch {
+        Write-Host "❌ Failed to connect to API: $($_.Exception.Message)" -ForegroundColor Red
+    }
+}
+
 function nb-help {
     Write-Host "`nNetworkBuster Quick Commands:" -ForegroundColor Cyan
     Write-Host "  nb-start       Start all services" -ForegroundColor White
     Write-Host "  nb-stop        Stop all services" -ForegroundColor White
     Write-Host "  nb-status      Show service status" -ForegroundColor White
+    Write-Host "  nb-control     Open Control Panel (Port 3000)" -ForegroundColor Green
+    Write-Host "  nb-health      Check API Health (REST)" -ForegroundColor Cyan
+    Write-Host "  nb-api-status  Check API Status (REST)" -ForegroundColor Cyan
+    Write-Host "  nb-logs        Fetch System Logs (REST)" -ForegroundColor Cyan
     Write-Host "  nb-map         Open network map" -ForegroundColor White
     Write-Host "  nb-tracer      Open API tracer" -ForegroundColor White
     Write-Host "  nb-mission     Open mission control" -ForegroundColor White

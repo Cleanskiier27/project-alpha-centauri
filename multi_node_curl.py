@@ -10,6 +10,8 @@ import os
 import json
 import time
 from concurrent.futures import ThreadPoolExecutor
+import urllib.request
+import urllib.error
 
 # Define standard nodes/ports
 NODES = {
@@ -49,7 +51,7 @@ class DNSManager:
             return False
 
 class CurlNode:
-    """Automated curl interactions for a specific node."""
+    """Automated interactions for a specific node using native Python."""
     
     def __init__(self, name, port):
         self.name = name
@@ -60,12 +62,12 @@ class CurlNode:
         print(f"🛰️  Pinging {self.name} Node (:{self.port})...")
         # Try /api/health or /health
         for endpoint in ["/api/health", "/health", "/"]:
-            cmd = ["curl", "-s", "-o", "nul", "-w", "%{http_code}", f"{self.base_url}{endpoint}"]
+            url = f"{self.base_url}{endpoint}"
             try:
-                result = subprocess.run(cmd, capture_output=True, text=True)
-                if result.stdout == "200":
-                    print(f"   ✅ {self.name} node is ALIVE")
-                    return True
+                with urllib.request.urlopen(url, timeout=2) as response:
+                    if response.getcode() == 200:
+                        print(f"   ✅ {self.name} node is ALIVE")
+                        return True
             except:
                 pass
         print(f"   ❌ {self.name} node is UNREACHABLE")
@@ -90,8 +92,11 @@ def orchestrate_nodes():
 
     # 3. Custom Audio Server Shortcut Action
     print("\n[STEP 3] Triggering Audio Server Shortcut...")
-    subprocess.run(["curl", "-s", "http://localhost:3002/open"], capture_output=True)
-    print("   ✅ Audio Lab shortcut sent")
+    try:
+        urllib.request.urlopen("http://localhost:3002/open", timeout=2)
+        print("   ✅ Audio Lab shortcut sent")
+    except:
+        print("   ⚠️  Audio Lab shortcut could not be sent (Offline)")
 
     print("\n✨ Orchestration Complete. Systems are interlinked.")
 

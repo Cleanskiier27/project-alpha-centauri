@@ -306,11 +306,12 @@ class NetworkBusterManager:
         print(f"🕐 Launch time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print(f"📈 Total launches: {self.config['launch_count']}")
         
-        # Open main dashboard
+        # Open main dashboards
         if started > 0:
-            print("\n🌐 Opening Universal Launcher dashboard...")
+            print("\n🌐 Opening Dashboards...")
             time.sleep(3)
             webbrowser.open('http://localhost:7000')
+            webbrowser.open('http://localhost:3000/control-panel')
         
         return started, failed
     

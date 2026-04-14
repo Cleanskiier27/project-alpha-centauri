@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import os from 'os';
+import { exec } from 'child_process';
 
 // Optional performance packages with fallbacks
 let compression = null;
@@ -350,6 +351,14 @@ const server = app.listen(PORT, () => {
   console.log(`   ✓ Control panel: /control-panel`);
   console.log(`   ✓ API: /api/*\n`);
   addLog('Server started', `Port: ${PORT}`);
+
+  // Automatically open control panel on startup
+  const controlPanelUrl = `http://localhost:${PORT}/control-panel`;
+  const openCommand = process.platform === 'win32' ? `start ${controlPanelUrl}` : `open ${controlPanelUrl}`;
+  exec(openCommand, (error) => {
+    if (error) console.error(`[Startup] Failed to open browser: ${error.message}`);
+    else console.log(`[Startup] Opened Control Panel: ${controlPanelUrl}`);
+  });
 });
 
 // Graceful shutdown
