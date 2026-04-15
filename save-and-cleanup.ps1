@@ -1,11 +1,11 @@
 # NetworkBuster Universal Save & Cleanup
-# Targeting: Documents Folder
+# Targeting: K: Drive (networkbustersetup)
 
 $ErrorActionPreference = "Continue"
 $ProjectRoot = "C:\Users\ceans\OneDrive\Documents\GitHub\networkbuster.net"
-$BackupRoot = "C:\Users\ceans\OneDrive\Documents\NetworkBuster_Backups"
+$BackupRoot = "K:\NETWORKBUSTER_BACKUPS"
 
-Write-Host "--- INITIALIZING SAVE SEQUENCE ---" -ForegroundColor Cyan
+Write-Host "--- INITIALIZING SAVE SEQUENCE (K: DRIVE) ---" -ForegroundColor Cyan
 
 if (!(Test-Path $ProjectRoot)) { 
     Write-Host "Project not found at $ProjectRoot" -ForegroundColor Red
@@ -25,18 +25,19 @@ foreach ($p in $clean) {
 Write-Host "Staging and Committing..." -ForegroundColor Yellow
 if (Get-Command git -ErrorAction SilentlyContinue) {
     git add -A
-    git commit -m "Manual Save: $(Get-Date)"
+    git commit -m "Auto Save to K: Drive - $(Get-Date)"
 }
 
-# 3. Backup to Documents
-Write-Host "Backing up to Documents..." -ForegroundColor Yellow
+# 3. Backup to K: Drive
+Write-Host "Backing up to K: Drive..." -ForegroundColor Yellow
 $timestamp = Get-Date -Format "yyyyMMdd_HHmm"
-$dest = Join-Path $BackupRoot "NB_Archive_$timestamp"
+$dest = Join-Path $BackupRoot "NB_Setup_Archive_$timestamp"
 
 if (!(Test-Path $BackupRoot)) { New-Item -ItemType Directory -Path $BackupRoot -Force }
 New-Item -ItemType Directory -Path $dest -Force
 
-robocopy $ProjectRoot $dest /E /NFL /NDL /NJH /NJS /nc /ns /np /XD .git node_modules .venv
+# Exclude .git, node_modules, .venv AND .security (due to access errors)
+robocopy $ProjectRoot $dest /E /NFL /NDL /NJH /NJS /nc /ns /np /XD .git node_modules .venv .security
 
 Write-Host "--- SAVE COMPLETE ---" -ForegroundColor Green
 Write-Host "Location: $dest"
