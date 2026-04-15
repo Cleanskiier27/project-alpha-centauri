@@ -166,6 +166,8 @@ class SustainabilityOptimizer:
             "recommendations": recommendations
         }
 
+from wealth_megastructure import WealthPhysicsEngine
+
 class MissionControlEngine:
     """Main orchestrator for integrated missions"""
     
@@ -175,24 +177,32 @@ class MissionControlEngine:
         self.physics = AerospaceCalculations()
         self.galaxy = GalaxyDatabase()
         self.eco = SustainabilityOptimizer()
+        self.wealth_physics = WealthPhysicsEngine()
         
-    def start_mission(self, mission_type: str, params: Dict) -> Dict:
-        mission_id = f"NB-{int(time.time())}"
-        
-        mission_data = {
-            "id": mission_id,
-            "type": mission_type,
-            "status": "In Progress",
-            "start_time": datetime.now().isoformat(),
-            "params": params,
-            "phases": [
-                {"name": "Initialization", "status": "Completed", "timestamp": datetime.now().isoformat()},
-                {"name": "Security Check", "status": "In Progress", "timestamp": None}
-            ]
+    def analyze_wealth_mission(self, net_worth: float, percentile: float, strategy: str) -> Dict:
+        """
+        Analyzes a mission through the Wealth Megastructure
+        """
+        # Mapping strategies to effort/return
+        strategies = {
+            "aggressive": {"rate": 0.12, "effort": 1.5},
+            "conservative": {"rate": 0.05, "effort": 0.5},
+            "standard": {"rate": 0.08, "effort": 1.0}
         }
         
-        self.active_missions[mission_id] = mission_data
-        return mission_data
+        s = strategies.get(strategy.lower(), strategies["standard"])
+        
+        compounding = self.wealth_physics.calculate_compounding_vector(net_worth, percentile, s["rate"], 10)
+        mobility = self.wealth_physics.simulate_mobility_climb(percentile, s["effort"], 10)
+        
+        return {
+            "mission_id": f"WM-{int(time.time())}",
+            "terrain_context": compounding["terrain"],
+            "10_year_projection": compounding["final_wealth"],
+            "mobility_forecast": mobility["end_percentile"],
+            "physics_report": compounding["physics_metrics"],
+            "status": "CALCULATED"
+        }
     
     def get_mission_status(self, mission_id: str) -> Optional[Dict]:
         return self.active_missions.get(mission_id)
