@@ -176,6 +176,8 @@ To facilitate modular development and AI-driven updates, work has been branched 
 - `cleanskiier27/docs`: Documentation, timeline updates, and permission manifests.
 - `cleanskiier27/logic`: Core server logic, launcher roles, and distribution configs.
 - `cleanskiier27/database`: Database initialization and structural metadata.
+- `cleanskiier27/satgpu`: GPU monitoring components and Linux overlay scaffolding.
+- `cleanskiier27/gitvslocal`: Local Git repository synchronization and management.
 
 ---
 
