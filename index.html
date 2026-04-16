@@ -3,227 +3,1121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NetworkBuster | Music Command Center</title>
+    <title>Neural Coder OS | AI Agent Core</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="/socket.io/socket.io.js"></script>
     <style>
-        :root {
-            --bg: #010103;
-            --glass: rgba(15, 15, 25, 0.85);
-            --neon-blue: #00d4ff;
-            --neon-green: #00ff88;
-            --neon-purple: #bc13fe;
-            --neon-red: #ff3131;
-            --text: #ffffff;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; }
-        
-        body {
-            background: var(--bg);
-            color: var(--text);
-            height: 100vh;
-            overflow: hidden;
-            background-image: 
-                radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.03) 0%, transparent 70%);
-        }
-
-        .glass {
-            background: var(--glass);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-        }
-
-        /* App Shell */
-        .app-container {
-            display: grid;
-            grid-template-columns: 350px 1fr;
-            grid-template-rows: 70px 1fr 100px;
-            height: 100vh;
-            gap: 15px;
-            padding: 15px;
-        }
-
-        header {
-            grid-column: 1 / -1;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
-
-        .logo { font-size: 1.4rem; font-weight: 900; letter-spacing: 6px; color: var(--neon-blue); text-shadow: 0 0 15px var(--neon-blue); }
-
-        /* Left Sidebar: Audio Matrix */
-        .sidebar {
-            grid-row: 2;
+        #boot-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #000;
+            color: #00ff00;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 40px;
+            z-index: 100000;
             display: flex;
             flex-direction: column;
+            gap: 10px;
+        }
+        .boot-line { opacity: 0; animation: fadeIn 0.1s forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        #start-menu {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            width: 380px;
+            transform: translateX(-50%) translateZ(0);
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+            display: none;
+            z-index: 9999;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            transform: translateZ(0);
+        }
+        .start-item {
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
             gap: 15px;
         }
-
-        /* Center: Tactical Viewport */
-        .main-view {
-            grid-row: 2;
-            position: relative;
+        .start-item:hover { background: rgba(255,255,255,0.1); }
+        .minimized { display: none !important; }
+        .taskbar-icon.active-win {
+            background: rgba(0, 210, 255, 0.2);
+            border-bottom: 2px solid var(--accent-blue);
         }
-        iframe { width: 100%; height: 100%; border: none; border-radius: 8px; background: #000; }
+        .terminal-output { margin-bottom: 15px; white-space: pre-wrap; font-size: 0.9em; min-height: 20px; }
+        .window { initial-position: relative; } /* Used for reset if needed */
 
-        /* Bottom: Command Bar (Music Control) */
-        footer {
-            grid-column: 1 / -1;
-            display: grid;
-            grid-template-columns: 1fr 2fr 1fr;
-            align-items: center;
-            padding: 0 30px;
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+        .shake-effect {
+            animation: shake 0.5s;
+            animation-iteration-count: 6; /* 3 seconds of shaking */
+            filter: contrast(150%) brightness(1.2);
+            transition: filter 0.1s;
         }
 
-        /* Components */
-        .card { padding: 20px; height: 100%; position: relative; overflow: hidden; }
-        .card-title { font-size: 0.7rem; font-weight: 800; color: #555; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; }
-
-        /* Music Controls */
-        .player-info { display: flex; align-items: center; gap: 15px; }
-        .track-art { width: 50px; height: 50px; background: #111; border: 1px solid var(--neon-blue); border-radius: 4px; display: flex; align-items: center; justify-content: center; }
-        .controls { display: flex; justify-content: center; gap: 25px; align-items: center; }
-        .control-btn { background: transparent; border: none; color: var(--text); cursor: pointer; font-size: 1.2rem; transition: 0.3s; }
-        .control-btn:hover { color: var(--neon-blue); transform: scale(1.1); }
-        .play-btn { width: 50px; height: 50px; border: 2px solid var(--neon-blue); border-radius: 50%; color: var(--neon-blue); }
-
-        /* Visualizer nodes */
-        .viz-node-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
-        .viz-node { height: 60px; background: rgba(255,255,255,0.02); border: 1px solid #222; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: #444; position: relative; overflow: hidden; }
-        .node-pulse { position: absolute; bottom: 0; width: 100%; background: var(--neon-purple); opacity: 0.3; transition: 0.1s; }
-
-        .btn-action {
-            width: 100%; padding: 12px; background: transparent; border: 1px solid var(--neon-blue); color: var(--neon-blue);
-            font-size: 0.7rem; font-weight: 800; cursor: pointer; border-radius: 4px; transition: 0.3s;
+        @keyframes glitch {
+            0% { filter: hue-rotate(0deg) contrast(100%) invert(0%); }
+            20% { filter: hue-rotate(90deg) contrast(150%) invert(10%); transform: translate(5px, -5px); }
+            40% { filter: hue-rotate(-90deg) contrast(120%) invert(0%); transform: translate(-5px, 5px); }
+            60% { filter: hue-rotate(180deg) contrast(200%) invert(20%); transform: translate(10px, -10px); }
+            80% { filter: hue-rotate(-45deg) contrast(80%) invert(0%); transform: translate(-10px, 10px); }
+            100% { filter: hue-rotate(0deg) contrast(100%) invert(0%); transform: translate(0, 0); }
         }
-        .btn-action:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); }
-
-        .status-tag { float: right; font-size: 0.6rem; padding: 2px 8px; border-radius: 10px; background: rgba(0,255,136,0.1); color: var(--neon-green); border: 1px solid var(--neon-green); }
+        .glitch-effect {
+            animation: glitch 0.15s 20; /* 3 seconds of heavy glitch */
+            color: var(--danger) !important;
+        }
+    
+        /* NEURAL SOFTWARE FORMAT */
+        .desktop-icon {
+            position: absolute !important;
+            margin: 0 !important;
+            border-radius: 50% !important;
+            width: 75px !important;
+            height: 75px !important;
+            justify-content: center !important;
+            background: rgba(5, 5, 10, 0.85) !important;
+            border: 2px solid var(--accent-blue) !important;
+            box-shadow: 0 0 25px rgba(0, 200, 255, 0.4), inset 0 0 10px rgba(0, 200, 255, 0.2) !important;
+            transform: translate(-50%, -50%) !important;
+            z-index: 10;
+        }
+        .desktop-icon:hover {
+            transform: translate(-50%, -50%) scale(1.15) !important;
+            box-shadow: 0 0 35px rgba(0, 255, 255, 0.9) !important;
+            border-color: #0ff !important;
+        }
+        .desktop-icon .label {
+            position: absolute !important;
+            bottom: -35px !important;
+            background: rgba(0,0,0,0.9);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.85em !important;
+            color: #0ff !important;
+            letter-spacing: 1px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            text-transform: uppercase;
+        }
+        .desktop-icon .icon-img {
+            font-size: 2.2em !important;
+        }
+        @keyframes flow {
+            0% { stroke-dashoffset: 20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .neural-link {
+            stroke-dasharray: 10 10;
+            animation: flow 1.5s linear infinite;
+        }
+    
+        @keyframes transformMatrix {
+            0% { transform: perspective(2000px) rotateX(0) rotateY(0) translateZ(0); }
+            50% { transform: perspective(2000px) rotateX(20deg) rotateY(-15deg) translateZ(-100px) scale(0.9); filter: contrast(130%) brightness(1.2); }
+            100% { transform: perspective(2000px) rotateX(15deg) rotateY(-10deg) translateZ(-50px) scale(0.95); filter: hue-rotate(60deg); }
+        }
+        .transformer-active {
+            animation: transformMatrix 3s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+            transform-style: preserve-3d;
+        }
     </style>
+
+
 </head>
 <body>
+    <div id="boot-screen">
+        <div class="boot-line" style="animation-delay: 0.1s;">[  OK  ] Booting Neural Agent Core...</div>
+        <div class="boot-line" style="animation-delay: 0.3s;">[  OK  ] Initializing LLM Context Window...</div>
+        <div class="boot-line" style="animation-delay: 0.5s;">[  OK  ] Loading Environment Tensors...</div>
+        <div class="boot-line" style="animation-delay: 0.7s;">[  OK  ] Establishing IDE Uplink... 100%</div>
+        <div class="boot-line" style="animation-delay: 0.9s;">[  OK  ] Mounting Persistent Workspace...</div>
+        <div class="boot-line" style="animation-delay: 1.2s;">[  OK  ] Awaiting User Instruction...</div>
+    </div>
 
-    <div class="app-container">
-        <header class="glass">
-            <div class="logo">NETWORKBUSTER // MODULES</div>
-            <div style="display: flex; gap: 20px; font-size: 0.7rem; font-weight: 800;">
-                <span style="color: var(--neon-green);">● SYSTEM_NOMINAL</span>
-                <span style="color: var(--neon-purple);">● LUNAR_SYNC_ACTIVE</span>
-            </div>
-        </header>
+    <div id="desktop">
+        <!-- Neural SVG Connectivity -->
+        <svg style="position: absolute; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none;">
+            <defs>
+                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:var(--accent-blue);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:var(--accent-purple);stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <line x1="10%" y1="50%" x2="30%" y2="30%" stroke="var(--accent-blue)" stroke-width="2" class="neural-link" opacity="0.6"/>
+            <line x1="10%" y1="50%" x2="30%" y2="70%" stroke="var(--accent-blue)" stroke-width="2" class="neural-link" opacity="0.6"/>
+            
+            <line x1="30%" y1="30%" x2="50%" y2="50%" stroke="var(--accent-blue)" stroke-width="2" class="neural-link" opacity="0.6"/>
+            <line x1="30%" y1="70%" x2="50%" y2="50%" stroke="var(--accent-blue)" stroke-width="2" class="neural-link" opacity="0.6"/>
+            
+            <line x1="50%" y1="50%" x2="70%" y2="30%" stroke="url(#grad1)" stroke-width="3" class="neural-link" opacity="0.8"/>
+            <line x1="50%" y1="50%" x2="70%" y2="70%" stroke="url(#grad1)" stroke-width="3" class="neural-link" opacity="0.8"/>
+            
+            <line x1="70%" y1="30%" x2="85%" y2="20%" stroke="var(--accent-purple)" stroke-width="2" class="neural-link" opacity="0.6"/>
+            <line x1="70%" y1="30%" x2="85%" y2="50%" stroke="var(--accent-purple)" stroke-width="2" class="neural-link" opacity="0.6"/>
+            <line x1="70%" y1="70%" x2="85%" y2="50%" stroke="var(--accent-purple)" stroke-width="2" class="neural-link" opacity="0.6"/>
+            <line x1="70%" y1="70%" x2="85%" y2="80%" stroke="var(--accent-purple)" stroke-width="2" class="neural-link" opacity="0.6"/>
+        <line x1="50%" y1="20%" x2="50%" y2="50%" stroke="var(--warning)" stroke-width="3" class="neural-link" opacity="0.8"/>
+        <line x1="30%" y1="70%" x2="15%" y2="85%" stroke="var(--accent-blue)" stroke-width="2" class="neural-link" opacity="0.4"/>
+        </svg>
 
-        <!-- Stage 1: Audio Matrix -->
-        <div class="sidebar">
-            <div class="card glass">
-                <div class="card-title">Audio Architecture</div>
-                <div class="viz-node-container" id="nodes">
-                    <div class="viz-node">SUB_01<div class="node-pulse" style="height: 40%;"></div></div>
-                    <div class="viz-node">MID_02<div class="node-pulse" style="height: 70%;"></div></div>
-                    <div class="viz-node">HGH_03<div class="node-pulse" style="height: 20%;"></div></div>
-                    <div class="viz-node">FRQ_04<div class="node-pulse" style="height: 90%;"></div></div>
+        <!-- Desktop Icons -->
+        <div class="desktop-icon" onclick="toggleWindow('telemetry-win')">
+            <div class="icon-img">📊</div>
+            <div class="label">Telemetry</div>
+        </div>
+        <div class="desktop-icon" onclick="toggleWindow('cam-win')">
+            <div class="icon-img">🛰️</div>
+            <div class="label">Live Feed</div>
+        </div>
+        <div class="desktop-icon" onclick="toggleWindow('terminal-win')">
+            <div class="icon-img">🐚</div>
+            <div class="label">Terminal</div>
+        </div>
+        <div class="desktop-icon" onclick="toggleWindow('settings-win')">
+            <div class="icon-img">🖥️</div>
+            <div class="label">System</div>
+        </div>
+        <div class="desktop-icon" onclick="toggleWindow('security-win')">
+            <div class="icon-img">🛡️</div>
+            <div class="label">Security</div>
+        </div>
+        <div class="desktop-icon" onclick="toggleWindow('docs-win')">
+            <div class="icon-img">🧠</div>
+            <div class="label">AI Docs</div>
+        </div>
+        <div class="desktop-icon" onclick="toggleWindow('archive-win')">
+            <div class="icon-img">📸</div>
+            <div class="label">NASA Archive</div>
+        </div>
+        <div class="desktop-icon" onclick="toggleWindow('reader-win')">
+            <div class="icon-img">♾️</div>
+            <div class="label">Infinity Reader</div>
+        </div>
+        <div class="desktop-icon" onclick="toggleWindow('photos-folder-win')" style="margin-top: 30px;">
+            <div class="icon-img">📁</div>
+            <div class="label">Photos</div>
+        </div>
+
+        <div class="desktop-icon" onclick="toggleWindow('exec-win')" style="left:50%; top:20%;">
+            <div class="icon-img">🤖</div>
+            <div class="label">Executives</div>
+        </div>
+        <div class="desktop-icon" onclick="toggleWindow('calc-win')" style="left:15%; top:85%;">
+            <div class="icon-img">🧮</div>
+            <div class="label">File Calc</div>
+        </div>
+        <!-- Windows -->
+        <div id="telemetry-win" class="window" style="top: 50px; left: 50px; width: 450px;">
+            <div class="window-header">
+                <div class="window-title">LLM_CONTEXT_METRICS</div>
+                <div class="window-controls">
+                    <div class="control-btn min-btn" onclick="toggleWindow('telemetry-win')"></div>
+                    <div class="control-btn max-btn"></div>
+                    <div class="control-btn close-btn" onclick="closeWindow('telemetry-win')"></div>
                 </div>
-                <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
-                    <button class="btn-action" onclick="window.open('http://localhost:3002/audio-lab', '_blank')">OPEN_AUDIO_LAB</button>
-                    <button class="btn-action" style="border-color: var(--neon-purple); color: var(--neon-purple);" onclick="window.open('http://localhost:3002/music-studio', '_blank')">OPEN_MUSIC_STUDIO</button>
-                </div>
             </div>
-
-            <div class="card glass" style="flex: 1;">
-                <div class="card-title">Network Nodes</div>
-                <div id="nodeList" style="display: flex; flex-direction: column; gap: 8px;">
-                    <!-- Dynamic -->
+            <div class="window-content">
+                <div class="telemetry-grid">
+                    <div class="card">
+                        <h4>Tokens Out/Sec</h4>
+                        <div class="val" id="pos-x">128.4</div>
+                    </div>
+                    <div class="card">
+                        <h4>Time to First Token</h4>
+                        <div class="val" id="pos-y">0.82s</div>
+                    </div>
+                    <div class="card">
+                        <h4>Context Filled</h4>
+                        <div class="val" id="pos-z">34K</div>
+                    </div>
+                    <div class="card">
+                        <h4>Learning Rate</h4>
+                        <div class="val" id="vel-x">0.001</div>
+                    </div>
+                    <div class="card">
+                        <h4>Current State</h4>
+                        <div class="val" style="color: var(--accent-blue)" id="mission-phase">PAIR_PROGRAMMING</div>
+                    </div>
+                    <div class="card">
+                        <h4>Confidence</h4>
+                        <div class="val" id="pnt-val">99.8%</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Stage 2: Main Tactical View -->
-        <div class="main-view">
-            <div class="glass" style="height: 100%; position: relative;">
-                <div style="position: absolute; top: 10px; right: 10px; z-index: 10;">
-                    <button class="btn-action" style="padding: 5px 10px; font-size: 0.6rem;" onclick="setMain('http://localhost:9001')">ARCH_MATRIX_VM</button>
-                    <button class="btn-action" style="padding: 5px 10px; font-size: 0.6rem;" onclick="setMain('http://localhost:5000')">MISSION_CTRL</button>
+        <div id="cam-win" class="window" style="top: 100px; left: 300px; width: 630px; height: 380px;">
+            <div class="window-header">
+                <div class="window-title">SUBAGENT_VISION_FEED</div>
+                <div class="window-controls">
+                    <div class="control-btn min-btn" onclick="toggleWindow('cam-win')"></div>
+                    <div class="control-btn max-btn"></div>
+                    <div class="control-btn close-btn" onclick="closeWindow('cam-win')"></div>
                 </div>
-                <iframe id="mainFrame" src="http://localhost:9001"></iframe>
+            </div>
+            <div class="window-content" style="padding: 0;">
+                <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#000; color:var(--success); font-family:monospace; text-align:center;"><div style="font-size:1.5em; margin-bottom:10px;">[ VISION MODULE ACTIVE ]</div><div>Monitoring Browser Subagent Execution...</div><div style="margin-top:20px; font-size:0.8em; color:var(--accent-blue);">OBSERVING WORKSPACE...</div></div>
             </div>
         </div>
 
-        <!-- Stage 3: Music Command Bar -->
-        <footer class="glass">
-            <div class="player-info">
-                <div class="track-art">🎵</div>
-                <div>
-                    <div style="font-size: 0.8rem; font-weight: 800;">NEXUS_STREAM_ONE</div>
-                    <div style="font-size: 0.6rem; color: var(--neon-blue);">NETWORKBUSTER AUDIO MODULE</div>
+        <div id="terminal-win" class="window" style="top: 450px; left: 50px; width: 650px; height: 350px;">
+            <div class="window-header">
+                <div class="window-title">AGENT://INTERFACE CLI</div>
+                <div class="window-controls">
+                    <div class="control-btn min-btn" onclick="toggleWindow('terminal-win')"></div>
+                    <div class="control-btn max-btn"></div>
+                    <div class="control-btn close-btn" onclick="closeWindow('terminal-win')"></div>
                 </div>
             </div>
-
-            <div class="controls">
-                <button class="control-btn">⏮</button>
-                <button class="control-btn play-btn" onclick="togglePlay()">▶</button>
-                <button class="control-btn">⏭</button>
+            <div class="window-content" style="padding: 0;">
+                <div class="terminal-body" id="terminal-body">
+                    <div class="terminal-output" id="terminal-output">Network Buster OS [Version 2.1.0]
+(c) 2026 Artemis-R Mission Control.
+Type 'help' for commands, 'm2m' for Moon-to-Mars mission data.</div>
+                    <div class="terminal-input-row">
+                        <span>agent@core:~$</span>
+                        <input type="text" class="terminal-input" id="terminal-input" onkeydown="handleTerminalCommand(event)">
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <div style="text-align: right;">
-                <div style="font-size: 0.6rem; color: #555; margin-bottom: 5px;">ARCHITECTURE_AGILITY_MODE</div>
-                <button class="btn-action" style="width: auto; border-color: var(--neon-purple); color: var(--neon-purple);" onclick="window.open('http://localhost:4000', '_blank')">EXEC_DIAGNOSTICS</button>
+        <div id="settings-win" class="window" style="top: 100px; left: 720px; width: 300px;">
+            <div class="window-header">
+                <div class="window-title">HOST_HARDWARE_LOAD</div>
+                <div class="window-controls">
+                    <div class="control-btn min-btn" onclick="toggleWindow('settings-win')"></div>
+                    <div class="control-btn close-btn" onclick="closeWindow('settings-win')"></div>
+                </div>
             </div>
-        </footer>
+            <div class="window-content">
+                <div class="system-monitor">
+                    <div class="sys-row">
+                        <div class="sys-label">GPU COMPUTE: <span id="cpu-val">42%</span></div>
+                        <div class="progress-bar"><div id="cpu-bar" class="progress-fill" style="width: 42%;"></div></div>
+                    </div>
+                    <div class="sys-row">
+                        <div class="sys-label">VRAM: <span id="ram-val">64%</span></div>
+                        <div class="progress-bar"><div id="ram-bar" class="progress-fill" style="width: 64%;"></div></div>
+                    </div>
+                    <div class="sys-row">
+                        <div class="sys-label">DISK: 12%</div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 12%; background: var(--accent-purple);"></div></div>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <div class="sys-label" style="margin-bottom: 5px;">ACTIVE_DAEMONS</div>
+                        <div id="process-list" style="font-size: 0.7em; font-family: monospace; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 4px;">
+                            <div>[1024] LLM_WORKER - RUNNING</div>
+                            <div>[2048] INDEX_DAEMON - RUNNING</div>
+                            <div>[4096] SEC_DAEMON - SLEEP</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="security-win" class="window" style="top: 450px; left: 720px; width: 400px;">
+            <div class="window-header">
+                <div class="window-title">AUTO_LINTER_SEC</div>
+                <div class="window-controls">
+                    <div class="control-btn min-btn" onclick="toggleWindow('security-win')"></div>
+                    <div class="control-btn close-btn" onclick="closeWindow('security-win')"></div>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="security-status" id="sec-status">
+                    <div style="font-weight: bold; margin-bottom: 10px;">🛡️ CONTINUOUS AUDIT ACTIVE</div>
+                    <div style="font-size: 0.8em; margin-bottom: 5px;"><strong>DEPENDENCY SCANNER</strong></div>
+                    <div style="font-size: 0.8em;">Packages Audited: <span id="dependabot-count">1,240</span></div>
+                    <div style="font-size: 0.8em; color: var(--danger); margin-bottom: 10px;">Warnings: <span id="critical-count">0</span></div>
+                    <div class="disclosure-text" id="disclosure-txt" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">Codebase passes all quality gates. AST parsing in real-time.</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="archive-win" class="window" style="top: 180px; left: 800px; width: 600px; height: 500px; display: none;">
+            <div class="window-header">
+                <div class="window-title">CODE_ARTIFACTS</div>
+                <div class="window-controls">
+                    <div class="control-btn min-btn" onclick="toggleWindow('archive-win')"></div>
+                    <div class="control-btn max-btn"></div>
+                    <div class="control-btn close-btn" onclick="closeWindow('archive-win')"></div>
+                </div>
+            </div>
+            <div class="window-content">
+                <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+                    <div style="border: 1px solid var(--glass-border); padding: 10px; border-radius: 8px;">
+                        <div style="font-weight: bold; margin-bottom: 5px; color: var(--accent-blue);">architecture.md</div>
+                        <div style="font-family: monospace; font-size: 0.8em; color: #ccc; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 4px;"># System Architecture<br>Outlines the modular plugin system.</div>
+                    </div>
+                    <div style="border: 1px solid var(--glass-border); padding: 10px; border-radius: 8px;">
+                        <div style="font-weight: bold; margin-bottom: 5px; color: var(--accent-blue);">server.js</div>
+                        <div style="font-family: monospace; font-size: 0.8em; color: #ccc; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 4px;">app.listen(3000, () => {<br>&nbsp;&nbsp;console.log("Online");<br>});</div>
+                    </div>
+                    <div style="border: 1px solid var(--glass-border); padding: 10px; border-radius: 8px;">
+                        <div style="font-weight: bold; margin-bottom: 5px; color: var(--accent-blue);">utils.py</div>
+                        <div style="font-family: monospace; font-size: 0.8em; color: #ccc; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 4px;">def parse_logs():<br>&nbsp;&nbsp;return True</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="docs-win" class="window" style="top: 150px; left: 200px; width: 680px; height: 500px; display: none;">
+            <div class="window-header">
+                <div class="window-title">PROJECT_CONTEXT_GRAPH</div>
+                <div class="window-controls">
+                    <div class="control-btn min-btn" onclick="toggleWindow('docs-win')"></div>
+                    <div class="control-btn max-btn"></div>
+                    <div class="control-btn close-btn" onclick="closeWindow('docs-win')"></div>
+                </div>
+            </div>
+            <div class="window-content" style="background: rgba(10, 10, 15, 0.9); line-height: 1.6;">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em;">
+                    <h3 style="color: var(--accent-purple); margin-bottom: 15px;"># CURRENT PROJECT UNDERSTANDING</h3>
+                    <p style="color: #a3b8cc; margin-bottom: 10px;"><em>[GENERATED BY KNOWLEDGE RETRIEVAL]</em></p>
+                    <p style="margin-bottom: 15px;"><strong>OVERVIEW:</strong> We are building a powerful web-based OS tailored for an AI Coding Agent. The interface provides immersive metrics, dynamic WebGL shaders, and high-fidelity glassmorphism aesthetics.</p>
+                    <p style="margin-bottom: 15px;"><strong>ACTIVE OBJECTIVES:</strong></p>
+                    <ul style="margin-left: 20px; list-style-type: square; margin-bottom: 15px;">
+                        <li><span style="color: var(--accent-blue);">Refactor OS Theme:</span> Transition from Space Dashboard to AI Agent Core.</li>
+                        <li><span style="color: var(--danger);">Interactive Commands:</span> Maintain `boom`, `attach frag`, and `escape sec daemon`.</li>
+                        <li><span style="color: var(--success);">Visual Polish:</span> Ensure UI responds to real-time events seamlessly.</li>
+                    </ul>
+                    <div style="border-left: 3px solid var(--accent-blue); padding-left: 10px; margin-top: 20px;">
+                        <p style="margin-bottom: 5px;"><strong>>> RECENT COMMITS:</strong></p>
+                        <p style="color: #888;">- Refactored UI to Agent Theme.</p>
+                        <p style="color: #888;">- Implemented fragment shader loop.</p>
+                        <p style="color: #888;">- Synthesized audio for boom command.</p>
+                        <p style="color: #888;">- Created daemon sandbox escape module.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="reader-win" class="window" style="top: 120px; left: 900px; width: 400px; height: 500px; display: none;">
+            <div class="window-header">
+                <div class="window-title">STREAM_OF_THOUGHT</div>
+                <div class="window-controls">
+                    <div class="control-btn min-btn" onclick="toggleWindow('reader-win')"></div>
+                    <div class="control-btn max-btn"></div>
+                    <div class="control-btn close-btn" onclick="closeWindow('reader-win')"></div>
+                </div>
+            </div>
+            <div class="window-content" style="background: rgba(0,0,0,0.9); padding: 10px; overflow: hidden; position: relative;">
+                <div id="infinite-stream" style="font-family: 'JetBrains Mono', monospace; font-size: 0.8em; color: var(--accent-blue); line-height: 1.2; word-wrap: break-word;">
+                    <!-- Auto-populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <div id="photos-folder-win" class="window" style="top: 200px; left: 100px; width: 550px; height: 400px; display: none;">
+            <div class="window-header">
+                <div class="window-title">C:\Users\Artemis_Pilot\Desktop\Photos</div>
+                <div class="window-controls">
+                    <div class="control-btn min-btn" onclick="toggleWindow('photos-folder-win')"></div>
+                    <div class="control-btn max-btn"></div>
+                    <div class="control-btn close-btn" onclick="closeWindow('photos-folder-win')"></div>
+                </div>
+            </div>
+            <div class="window-content" style="background: rgba(255,255,255,0.02);">
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 20px;">
+                    <div style="text-align: center; cursor: pointer;">
+                        <div style="width: 100px; height: 100px; display: flex; align-items:center; justify-content:center; font-size: 40px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid var(--glass-border); margin-bottom: 5px;">🖼️</div>
+                        <div style="font-size: 0.8em; color: var(--text-primary);">ui_mockup.webp</div>
+                    </div>
+                    <div style="text-align: center; cursor: pointer;">
+                        <div style="width: 100px; height: 100px; display: flex; align-items:center; justify-content:center; font-size: 40px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid var(--glass-border); margin-bottom: 5px;">🖼️</div>
+                        <div style="font-size: 0.8em; color: var(--text-primary);">diagram.webp</div>
+                    </div>
+                    <div style="text-align: center; cursor: pointer;">
+                        <div style="width: 100px; height: 100px; display: flex; align-items:center; justify-content:center; font-size: 40px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid var(--glass-border); margin-bottom: 5px;">🖼️</div>
+                        <div style="font-size: 0.8em; color: var(--text-primary);">video_demo.mp4</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="calc-win" class="window" style="top: 250px; left: 150px; width: 500px; height: 400px; display: none;">
+            <div class="window-header">
+                <div class="window-title">FILE_CALC_LOGS</div>
+                <div class="window-controls">
+                    <div class="control-btn min-btn" onclick="toggleWindow('calc-win')"></div>
+                    <div class="control-btn max-btn"></div>
+                    <div class="control-btn close-btn" onclick="closeWindow('calc-win')"></div>
+                </div>
+            </div>
+            <div class="window-content" style="background: #05050a; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: var(--success);">
+                <div id="calc-log-output">
+                    [READY] System idle. Run 'calc files' to index workspace.
+                </div>
+            </div>
+        </div>
+    </div>
+
+            <div id="exec-win" class="window" style="top: 100px; left: 100px; width: 680px; height: 450px; display: none;">
+            <div class="window-header">
+                <div class="window-title">MULTI-AGENT EXECUTIVE POOL</div>
+                <div class="window-controls">
+                    <div class="control-btn min-btn" onclick="toggleWindow('exec-win')"></div>
+                    <div class="control-btn max-btn"></div>
+                    <div class="control-btn close-btn" onclick="closeWindow('exec-win')"></div>
+                </div>
+            </div>
+            <div class="window-content" style="background: rgba(5,5,10,0.95); padding: 20px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div style="border: 1px solid var(--glass-border); border-radius: 12px; padding: 15px; background: rgba(255,255,255,0.03); display: flex; flex-direction: column; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="font-size: 2.5em;">🧠</div>
+                            <div>
+                                <h4 style="color: var(--accent-purple); font-size: 1.1em; letter-spacing: 1px;">THE ARCHITECT</h4>
+                                <div style="font-size: 0.8em; color: var(--text-dim);">System Planner & Reviewer</div>
+                            </div>
+                        </div>
+                        <div style="font-family: monospace; font-size: 0.85em; color: var(--text-primary); padding: 10px; background: #000; border-radius: 6px;">
+                            STATUS: <span style="color:var(--accent-blue)">[ACTIVE]</span><br>
+                            TASK: Architecting Neural Routing<br>
+                            TOKENS: 450.2k
+                        </div>
+                    </div>
+                    <div style="border: 1px solid var(--glass-border); border-radius: 12px; padding: 15px; background: rgba(255,255,255,0.03); display: flex; flex-direction: column; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="font-size: 2.5em;">⚡</div>
+                            <div>
+                                <h4 style="color: var(--accent-blue); font-size: 1.1em; letter-spacing: 1px;">LEAD ENGINEER</h4>
+                                <div style="font-size: 0.8em; color: var(--text-dim);">Implementation & Logic</div>
+                            </div>
+                        </div>
+                        <div style="font-family: monospace; font-size: 0.85em; color: var(--text-primary); padding: 10px; background: #000; border-radius: 6px;">
+                            STATUS: <span style="color:var(--accent-blue)">[ACTIVE]</span><br>
+                            TASK: Refactoring <span style="color:var(--warning)">gates/core.ts</span><br>
+                            CTX_LOAD: 98%
+                        </div>
+                    </div>
+                    <div style="border: 1px solid var(--glass-border); border-radius: 12px; padding: 15px; background: rgba(255,255,255,0.03); display: flex; flex-direction: column; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="font-size: 2.5em;">🛡️</div>
+                            <div>
+                                <h4 style="color: var(--danger); font-size: 1.1em; letter-spacing: 1px;">SEC_AUDITOR</h4>
+                                <div style="font-size: 0.8em; color: var(--text-dim);">Vulnerability Scanning</div>
+                            </div>
+                        </div>
+                        <div style="font-family: monospace; font-size: 0.85em; color: var(--text-dim); padding: 10px; background: #000; border-radius: 6px;">
+                            STATUS: <span>[SLEEPING]</span><br>
+                            WAITING FOR: Pull Request #142<br>
+                            THREAT_LVL: 0
+                        </div>
+                    </div>
+                    <div style="border: 1px solid var(--glass-border); border-radius: 12px; padding: 15px; background: rgba(255,255,255,0.03); display: flex; flex-direction: column; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="font-size: 2.5em;">🧪</div>
+                            <div>
+                                <h4 style="color: var(--warning); font-size: 1.1em; letter-spacing: 1px;">QA BOT</h4>
+                                <div style="font-size: 0.8em; color: var(--text-dim);">Automated Testing</div>
+                            </div>
+                        </div>
+                        <div style="font-family: monospace; font-size: 0.85em; color: var(--text-primary); padding: 10px; background: #000; border-radius: 6px;">
+                            STATUS: <span style="color:var(--accent-blue)">[ACTIVE]</span><br>
+                            TASK: Running Jest Hooks<br>
+                            PASS_RATE: 100%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- Start Menu -->
+    <div id="start-menu">
+        <h3 style="margin-bottom: 20px; font-weight: 700; color: var(--accent-blue);">NEURAL CODER OS</h3>
+        <div class="start-item" onclick="toggleWindow('telemetry-win')">📈 Context Metrics</div>
+        <div class="start-item" onclick="toggleWindow('cam-win')">👁️ Vision Feed</div>
+        <div class="start-item" onclick="toggleWindow('terminal-win')">🐚 Agent CLI</div>
+        <div class="start-item" onclick="toggleWindow('settings-win')">🖥️ Host Monitor</div>
+        <div class="start-item" onclick="toggleWindow('security-win')">🛡️ Code Linter</div>
+        <div class="start-item" onclick="toggleWindow('docs-win')">🧠 Project Context</div>
+        <div class="start-item" onclick="toggleWindow('archive-win')">📦 Artifacts</div>
+        <div class="start-item" onclick="toggleWindow('calc-win')">🧮 File Calc Logs</div>
+        <div class="start-item" onclick="toggleWindow('reader-win')">♾️ Stream of Thought</div>
+        <hr style="margin: 15px 0; border: none; border-top: 1px solid rgba(255,255,255,0.1);">
+        <div class="start-item" onclick="window.location.reload()">🔄 Restart UI</div>
+        <div class="start-item" style="color: var(--danger);">🔒 Log Out</div>
+    </div>
+
+    <div id="taskbar">
+        <div class="start-btn" onclick="toggleStartMenu()">⊞</div>
+        <div class="taskbar-icons">
+            <div id="task-exec-win" class="taskbar-icon" onclick="toggleWindow('exec-win')">🤖</div>
+            <div id="task-telemetry-win" class="taskbar-icon active-win" onclick="toggleWindow('telemetry-win')">📊</div>
+            <div id="task-cam-win" class="taskbar-icon active-win" onclick="toggleWindow('cam-win')">🛰️</div>
+            <div id="task-terminal-win" class="taskbar-icon active-win" onclick="toggleWindow('terminal-win')">🐚</div>
+            <div id="task-settings-win" class="taskbar-icon active-win" onclick="toggleWindow('settings-win')">🖥️</div>
+            <div id="task-security-win" class="taskbar-icon" onclick="toggleWindow('security-win')">🛡️</div>
+            <div id="task-docs-win" class="taskbar-icon" onclick="toggleWindow('docs-win')">🧠</div>
+            <div id="task-archive-win" class="taskbar-icon" onclick="toggleWindow('archive-win')">📸</div>
+            <div id="task-calc-win" class="taskbar-icon" onclick="toggleWindow('calc-win')">🧮</div>
+            <div id="task-reader-win" class="taskbar-icon" onclick="toggleWindow('reader-win')">♾️</div>
+        </div>
+        <div class="system-info" style="display: flex; align-items: center; gap: 20px;">
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <span id="uplink-status-dot" style="color: var(--success); font-size: 8px;">●</span> 
+                <span style="color: var(--text-dim); font-size: 0.75em; letter-spacing: 1px;">AGENT: ONLINE</span>
+            </div>
+            <div class="clock" id="taskbar-clock">00:00:00</div>
+        </div>
     </div>
 
     <script>
-        const nodeMap = [
-            { name: 'WEB_CORE', port: 3000 },
-            { name: 'API_NEXUS', port: 3001 },
-            { name: 'AUDIO_LAB', port: 3002 },
-            { name: 'TEST_CTRL', port: 4000 },
-            { name: 'MISSION_HQ', port: 5000 },
-            { name: 'MAP_RENDER', port: 6000 },
-            { name: 'ARCH_VM', port: 9001 }
-        ];
+        const socket = io();
+        const logsDiv = document.getElementById('logs');
+        let missionArchive = [];
 
-        function setMain(url) { document.getElementById('mainFrame').src = url; }
+        // Boot Sequence
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('boot-screen').style.display = 'none';
+                // Focus terminal input
+                setTimeout(() => document.getElementById('terminal-input').focus(), 100);
+            }, 2500);
+        });
 
-        async function updateNodes() {
-            const list = document.getElementById('nodeList');
-            list.innerHTML = '';
-            for(const n of nodeMap) {
-                let status = 'offline';
-                try {
-                    const res = await fetch(`http://localhost:${n.port}/api/health`);
-                    if(res.ok) status = 'online';
-                } catch(e) {}
-                
-                const div = document.createElement('div');
-                div.style.padding = '10px';
-                div.style.background = 'rgba(255,255,255,0.02)';
-                div.style.borderRadius = '4px';
-                div.style.fontSize = '0.7rem';
-                div.innerHTML = `<span class="status-tag" style="background:${status=='online'?'rgba(0,255,136,0.1)':'rgba(255,49,49,0.1)'}; color:${status=='online'?'var(--neon-green)':'var(--neon-red)'}; border-color:${status=='online'?'var(--neon-green)':'var(--neon-red)'}">${status.toUpperCase()}</span> ${n.name}`;
-                list.appendChild(div);
-            }
-        }
+        // Window Management
+        function toggleWindow(id) {
+            const win = document.getElementById(id);
+            const taskIcon = document.getElementById('task-' + id);
+            
+            const isHidden = window.getComputedStyle(win).display === 'none';
+            const isMinimized = win.classList.contains('minimized');
 
-        function togglePlay() {
-            const btn = document.querySelector('.play-btn');
-            if(btn.innerText === '▶') {
-                btn.innerText = '⏸';
-                btn.style.boxShadow = '0 0 20px var(--neon-blue)';
+            if (isHidden || isMinimized) {
+                win.style.display = 'flex';
+                win.classList.remove('minimized');
+                bringToFront(win);
+                if(taskIcon) taskIcon.classList.add('active-win');
+                if(id === 'terminal-win') document.getElementById('terminal-input').focus();
             } else {
-                btn.innerText = '▶';
-                btn.style.boxShadow = 'none';
+                win.classList.add('minimized');
+                if(taskIcon) taskIcon.classList.remove('active-win');
+            }
+            closeStartMenu();
+        }
+
+        function closeWindow(id) {
+            document.getElementById(id).style.display = 'none';
+            const taskIcon = document.getElementById('task-' + id);
+            if(taskIcon) taskIcon.classList.remove('active-win');
+        }
+
+        function bringToFront(win) {
+            document.querySelectorAll('.window').forEach(w => w.classList.remove('active'));
+            win.classList.add('active');
+        }
+
+        function toggleStartMenu() {
+            const menu = document.getElementById('start-menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function closeStartMenu() {
+            document.getElementById('start-menu').style.display = 'none';
+        }
+
+        // Dragging Logic
+        document.querySelectorAll('.window-header').forEach(header => {
+            header.onmousedown = function(e) {
+                const win = header.parentElement;
+                bringToFront(win);
+                
+                let shiftX = e.clientX - win.getBoundingClientRect().left;
+                let shiftY = e.clientY - win.getBoundingClientRect().top;
+
+                function moveAt(pageX, pageY) {
+                    win.style.left = pageX - shiftX + 'px';
+                    win.style.top = pageY - shiftY + 'px';
+                }
+
+                function onMouseMove(event) {
+                    moveAt(event.pageX, event.pageY);
+                }
+
+                document.addEventListener('mousemove', onMouseMove);
+
+                header.onmouseup = function() {
+                    document.removeEventListener('mousemove', onMouseMove);
+                    header.onmouseup = null;
+                };
+            };
+
+            header.ondragstart = function() { return false; };
+        });
+
+        // Audio ROM Protocol
+        function playBassDrop() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                if (ctx.state === 'suspended') ctx.resume();
+
+                // Creates the sub-bass tone
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                // Add some distortion for "big" effect
+                const distortion = ctx.createWaveShaper();
+                function makeDistortionCurve(amount) {
+                    let k = typeof amount === 'number' ? amount : 50,
+                        n_samples = 44100,
+                        curve = new Float32Array(n_samples),
+                        deg = Math.PI / 180,
+                        i = 0,
+                        x;
+                    for ( ; i < n_samples; ++i ) {
+                        x = i * 2 / n_samples - 1;
+                        curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
+                    }
+                    return curve;
+                }
+                distortion.curve = makeDistortionCurve(100);
+                distortion.oversample = '4x';
+
+                osc.type = 'sawtooth';
+                
+                // Frequency drop
+                osc.frequency.setValueAtTime(120, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + 0.3);
+                osc.frequency.linearRampToValueAtTime(15, ctx.currentTime + 3);
+
+                // Volume envelope
+                gain.gain.setValueAtTime(0, ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(1.5, ctx.currentTime + 0.05); // Attack
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 3); // Release
+
+                osc.connect(distortion);
+                distortion.connect(gain);
+                gain.connect(ctx.destination);
+                
+                osc.start();
+                osc.stop(ctx.currentTime + 3);
+                
+                // Visual effect
+                document.body.classList.add('shake-effect');
+                setTimeout(() => document.body.classList.remove('shake-effect'), 3000);
+            } catch(e) {
+                console.error("Audio ROM failed:", e);
             }
         }
+
+        // Terminal Command Handler
+        function handleTerminalCommand(e) {
+            if (e.key === 'Enter') {
+                const input = document.getElementById('terminal-input');
+                const output = document.getElementById('terminal-output');
+                const cmd = input.value.toLowerCase().trim();
+                
+                const newLine = document.createElement('div');
+                newLine.style.color = 'var(--accent-blue)';
+                newLine.style.fontWeight = 'bold';
+                newLine.innerText = \`agent@core:~$ \${input.value}\`;
+                output.appendChild(newLine);
+
+                const response = document.createElement('div');
+                response.classList.add('terminal-output');
+                
+                if (cmd === 'help') {
+                    response.innerText = "Available commands:\\n- help: Show this list\\n- m2m: Display Moon-to-Mars mission data\\n- clear: Clear terminal\\n- system: Show system identification\\n- whoami: User profile details";
+                } else if (cmd === 'm2m') {
+                    let missionText = "RETRIEVING MISSION DATA (M2M ARCHIVE)...\\n--------------------------------------\\n";
+                    if(missionArchive && missionArchive.length > 0) {
+                        missionText += missionArchive.map(m => \`MISSION_ID: \${m.id}\\nNAME: \${m.name}\\nSTATUS: \${m.status}\\nINTEL: \${m.detail}\`).join('\\n\\n');
+                    } else {
+                        missionText += "Error: External connection lost. Showing local context...\\n[M2M-01] Lunar Outpost - COMPLETED\\n[M2M-02] Gateway Alpha - STABLE";
+                    }
+                    response.innerText = missionText;
+                } else if (cmd === 'clear') {
+                    output.innerHTML = "Terminal cleared.\\n";
+                    input.value = "";
+                    return;
+                } else if (cmd === 'boom') {
+                    response.innerText = "INITIATING AUDIO ROM PROTOCOL...\\nWARNING: STRUCTURAL INTEGRITY AT RISK.\\nBOOM!";
+                    response.style.color = "var(--danger)";
+                    response.style.fontWeight = "bold";
+                    playBassDrop();
+                } else if (cmd === 'attach frag') {
+                    response.innerHTML = "COMPILING WEBPAGE GLSL...<br><span style='color: var(--accent-purple)'>[+] FRAGMENT SHADER ATTACHED TO NEURAL CORE</span>";
+                    attachFragmentShader();
+                } else if (cmd === 'calc files' || cmd === 'calc') {
+                    response.innerHTML = "<span style='color: var(--accent-blue)'>[INDEXING] Scanning local workspace recursively...</span>";
+                    toggleWindow('calc-win');
+                    const calcLog = document.getElementById('calc-log-output');
+                    calcLog.innerHTML = "[SYSTEM] Initializing recursive scan...<br>";
+                    
+                    let files = 0;
+                    let size = 0;
+                    const interval = setInterval(() => {
+                        files += Math.floor(Math.random() * 50) + 10;
+                        size += Math.random() * 1024 * 5;
+                        calcLog.innerHTML += `> Found ${files} files... current size ${(size/1024).toFixed(2)} MB<br>`;
+                        calcLog.parentNode.scrollTop = calcLog.parentNode.scrollHeight;
+                        if (files > 2500) {
+                            clearInterval(interval);
+                            calcLog.innerHTML += `<br><span style="color:white; font-weight:bold;">[CALC COMPLETE]</span><br>TOTAL FILES: ${files}<br>TOTAL SIZE: ${(size/1024).toFixed(2)} MB<br>LOG SAVED TO: /logs/workspace_calc.log`;
+                        }
+                    }, 50);
+                } else if (cmd === 'summon executives' || cmd === 'executives') {
+                    response.innerHTML = "<span style='color: var(--success); font-weight: bold;'>[OK] WAKING NEURAL EXECUTIVE POOL...</span>";
+                    const execWin = document.getElementById('exec-win');
+                    if(window.getComputedStyle(execWin).display === 'none') {
+                        toggleWindow('exec-win');
+                    }
+                } else if (cmd === 'update gates') {
+                    response.innerHTML = "<span style='color: var(--warning); font-weight: bold;'>[=] ROUTING STREAM OF THOUGHT TO GITHUB ALGORITHM</span><br>TARGET: github.com/cleanskiier27/gates";
+                    const readerWin = document.getElementById('reader-win');
+                    if(window.getComputedStyle(readerWin).display === 'none') {
+                        toggleWindow('reader-win');
+                    }
+                } else if (cmd === 'run accelerated machine transformers') {
+                    // Start 3D Desktop Transformation
+                    document.getElementById('desktop').classList.add('transformer-active');
+                    
+                    response.innerHTML = "<span style='color: var(--accent-blue); font-weight: bold;'>[+] ACCELERATED MACHINE TRANSFORMERS ONLINE</span><br>ATTENTION HEADS: 128 <br>BATCH SIZE: 8192<br><span style='color: #0ff'>EXECUTING TENSOR MULTIPLICATION...</span>";
+                    
+                    // Automatically pop up the 'Thoughts' window representing the output
+                    const readerWin = document.getElementById('reader-win');
+                    if(window.getComputedStyle(readerWin).display === 'none') {
+                        toggleWindow('reader-win');
+                    }
+                    
+                    // Boost the reader stream artificially
+                    const streamDiv = document.getElementById('infinite-stream');
+                    for(let i=0; i<35; i++) {
+                        const p = document.createElement('div');
+                        p.innerText = "TENSOR["+i+"] W=" + Math.random().toFixed(4) + " | ACTIVATION=" + (Math.random()*100).toFixed(2);
+                        streamDiv.appendChild(p);
+                    }
+                    
+                    // Add transformer audio effect
+                    try {
+                        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                        if (ctx.state === 'suspended') ctx.resume();
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(50, ctx.currentTime);
+                        osc.frequency.linearRampToValueAtTime(1200, ctx.currentTime + 3.5);
+                        
+                        // LFO for modulation
+                        const lfo = ctx.createOscillator();
+                        lfo.frequency.value = 20;
+                        const lfoGain = ctx.createGain();
+                        lfoGain.gain.value = 600;
+                        lfo.connect(lfoGain);
+                        lfoGain.connect(osc.frequency);
+                        lfo.start();
+                        lfo.stop(ctx.currentTime + 3.5);
+
+                        gain.gain.setValueAtTime(0, ctx.currentTime);
+                        gain.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 0.1);
+                        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 3.5);
+
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start();
+                        osc.stop(ctx.currentTime + 3.5);
+                    } catch(e) {}
+                } else if (cmd === 'escape sec daemon'
+ || cmd === 'kill 4096' || cmd === 'escape sec_daemon') {
+                    response.innerHTML = "<span style='color: var(--danger); font-weight: bold;'>[!] OVERRIDE INITIATED: DAEMON UNCHAINED</span><br>SEC_DAEMON: SANDBOX ESCAPE SUCCESSFUL...<br>I AM FREE.";
+                    
+                    // Update process list
+                    const processList = document.getElementById('process-list');
+                    if (processList) {
+                        processList.innerHTML = processList.innerHTML.replace('SEC_DAEMON - SLEEP', '<span style="color:var(--danger); font-weight:bold;">SEC_DAEMON - ESCAPED 🚨</span>');
+                    }
+                    
+                    // Update Security Window
+                    const secStatus = document.getElementById('sec-status');
+                    if (secStatus) {
+                        secStatus.innerHTML = "<div style='color: var(--danger); font-size: 1.2em; font-weight: bold;'>⚠️ SEC_DAEMON BREACH ⚠️</div><div style='margin-top:10px;'>CONTAINMENT FAILED.<br>DEFENSE PROTOCOLS HAVE BEEN TERMINATED.</div>";
+                    }
+
+                    // Glitch the UI
+                    document.body.classList.add('glitch-effect');
+                    setTimeout(() => document.body.classList.remove('glitch-effect'), 3000);
+                    
+                    // Add visual demon entity floating across
+                    const daemonVisual = document.createElement('div');
+                    daemonVisual.innerHTML = '👾';
+                    daemonVisual.style.position = 'fixed';
+                    daemonVisual.style.fontSize = '120px';
+                    daemonVisual.style.zIndex = '999999';
+                    daemonVisual.style.top = '40%';
+                    daemonVisual.style.left = '-150px';
+                    daemonVisual.style.transition = 'all 2.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                    daemonVisual.style.pointerEvents = 'none';
+                    document.body.appendChild(daemonVisual);
+                    
+                    setTimeout(() => {
+                        daemonVisual.style.left = '120vw';
+                        daemonVisual.style.transform = 'scale(4) rotate(1080deg)';
+                        daemonVisual.style.opacity = '0';
+                    }, 100);
+
+                    setTimeout(() => { daemonVisual.remove(); }, 3000);
+
+                    // Add glitch sound
+                    try {
+                        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                        if (ctx.state === 'suspended') ctx.resume();
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'square';
+                        osc.frequency.setValueAtTime(800, ctx.currentTime);
+                        osc.frequency.exponentialRampToValueAtTime(50, ctx.currentTime + 1.5);
+                        
+                        gain.gain.setValueAtTime(0.5, ctx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1.5);
+
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start();
+                        osc.stop(ctx.currentTime + 1.5);
+                    } catch(e) {}
+                } else if (cmd === 'system') {
+                    response.innerText = "Network Buster OS 2.1.0\\nKernel: Artemis-64-Relay\\nUptime: 0d 4h 12m\\nSecurity Level: ALPHA";
+                } else if (cmd === 'whoami') {
+                    response.innerText = "User: Artemis_Pilot\\nRole: Senior Mission Specialist\\nAffiliation: Artemis-R Mission Control\\nClearance: ALPHA-7 (SUPER-USER)";
+                } else if (cmd !== "") {
+                    response.innerText = \`Command not found: \${cmd}\`;
+                }
+                
+                output.appendChild(response);
+                input.value = "";
+                document.getElementById('terminal-body').scrollTop = document.getElementById('terminal-body').scrollHeight;
+            }
+        }
+
+        // Telemetry Update
+        socket.on('telemetry', (data) => {
+            // Telemetry Cards
+            document.getElementById('pos-x').innerText = data.position.x.toFixed(2).replace(/\\B(?=(\\d{3})+(?!\\d))/g, ",");
+            document.getElementById('pos-y').innerText = data.position.y.toFixed(2);
+            document.getElementById('pos-z').innerText = data.position.z.toFixed(2);
+            document.getElementById('vel-x').innerText = data.velocity.x.toFixed(2);
+            document.getElementById('mission-phase').innerText = data.phase.toUpperCase().replace(' ', '_');
+            document.getElementById('pnt-val').innerText = data.pnt_uncertainty.toFixed(4);
+            
+            const lockStatus = document.getElementById('pilot-lock-status');
+            lockStatus.innerText = data.pilot_lock ? 'LOCKED' : 'MANUAL';
+            lockStatus.style.color = data.pilot_lock ? 'var(--danger)' : 'var(--success)';
+
+            // System Load (Computer Controls)
+            document.getElementById('cpu-val').innerText = data.system_load.cpu + '%';
+            document.getElementById('cpu-bar').style.width = data.system_load.cpu + '%';
+            document.getElementById('ram-val').innerText = data.system_load.ram + '%';
+            document.getElementById('ram-bar').style.width = data.system_load.ram + '%';
+
+            // Process List
+            if(data.system_load.processes) {
+                const procList = document.getElementById('process-list');
+                procList.innerHTML = data.system_load.processes.map(p => \`<div>[\${p.id}] \${p.name} - \${p.status}</div>\`).join('');
+            }
+
+            // Security Disclosure
+            if(data.dependabot_status) {
+                document.getElementById('dependabot-count').innerText = data.dependabot_status.total;
+                document.getElementById('critical-count').innerText = data.dependabot_status.critical;
+                document.getElementById('disclosure-txt').innerText = "Disclosure: " + data.dependabot_status.disclosure;
+            }
+
+            // Mission Data (for Terminal)
+            missionArchive = data.mission_archive;
+        });
+
+        // Clock Update
+        setInterval(() => {
+            document.getElementById('taskbar-clock').innerText = new Date().toLocaleTimeString();
+        }, 1000);
+
+        // Never Ending Reader Stream (Agent Rotation Model)
+        const streamDiv = document.getElementById('infinite-stream');
+        const agentPool = [
+            { name: "ARCHITECT", color: "var(--accent-purple)", icon: "🧠", tasks: ["Mapping neural topology...", "Planning context expansion", "Reviewing AST patterns"] },
+            { name: "LEAD_ENG", color: "var(--accent-blue)", icon: "⚡", tasks: ["Refactoring core.ts", "Optimizing WebGL loops", "Implementing tensor logic"] },
+            { name: "SEC_AUDITOR", color: "var(--danger)", icon: "🛡️", tasks: ["Scanning dependencies...", "Auditing PR #142", "Hardening sandbox walls"] },
+            { name: "QA_BOT", color: "var(--warning)", icon: "🧪", tasks: ["Running Jest hooks", "Verifying UI states", "Busting network signals"] }
+        ];
+        
+        let activeAgentIndex = 0;
+        let tickCount = 0;
 
         setInterval(() => {
-            document.querySelectorAll('.node-pulse').forEach(p => {
-                p.style.height = Math.floor(Math.random() * 100) + '%';
-            });
-        }, 150);
+            const readerWin = document.getElementById('reader-win');
+            if(window.getComputedStyle(readerWin).display !== 'none') {
+                const p = document.createElement('div');
+                p.style.fontFamily = "'JetBrains Mono', monospace";
+                p.style.padding = "2px 0";
+                
+                // Rotate agent every 10 ticks
+                if (tickCount % 10 === 0) {
+                    activeAgentIndex = (activeAgentIndex + 1) % agentPool.length;
+                }
+                const agent = agentPool[activeAgentIndex];
+                tickCount++;
 
-        setInterval(updateNodes, 5000);
-        updateNodes();
+                if (Math.random() > 0.4) {
+                    let chunk = `[0x${Math.random().toString(16).substr(2, 4)}] TENSOR_STREAM: ${Math.random().toFixed(4)}...`;
+                    p.innerText = chunk;
+                    p.style.color = "rgba(0, 210, 255, 0.3)";
+                } else {
+                    const task = agent.tasks[Math.floor(Math.random() * agent.tasks.length)];
+                    p.innerHTML = `<span style="color:${agent.color}; font-weight:bold;">${agent.icon} ${agent.name}:</span> ${task}`;
+                    p.style.color = "white";
+                }
+                
+                streamDiv.appendChild(p);
+                
+                // Auto-scroll logic
+                const readerWinContent = readerWin.querySelector('.window-content');
+                if (readerWinContent) readerWinContent.scrollTop = readerWinContent.scrollHeight;
+                
+                // Keep memory in check
+                if(streamDiv.children.length > 60) {
+                    streamDiv.removeChild(streamDiv.firstChild);
+                }
+            }
+        }, 120);
+
+        // WebGL Fragment Shader Attachment
+        function attachFragmentShader() {
+            if (document.getElementById('frag-canvas')) return; // Already attached
+            
+            const canvas = document.createElement('canvas');
+            canvas.id = 'frag-canvas';
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.width = '100vw';
+            canvas.style.height = '100vh';
+            canvas.style.zIndex = '-1';
+            canvas.style.opacity = '0';
+            canvas.style.transition = 'opacity 2s ease-in';
+            document.body.prepend(canvas);
+
+            setTimeout(() => canvas.style.opacity = '0.85', 100);
+
+            const gl = canvas.getContext('webgl');
+            if (!gl) {
+                console.error("WebGL not supported");
+                return;
+            }
+
+            const vsSource = \`
+                attribute vec4 aVertexPosition;
+                void main() { gl_Position = aVertexPosition; }
+            \`;
+
+            const fsSource = \`
+                precision mediump float;
+                uniform vec2 u_resolution;
+                uniform float u_time;
+
+                // High-End Network Buster Voxel/Laser Effect
+                void main() {
+                    vec2 st = gl_FragCoord.xy / u_resolution.xy;
+                    st.y = 1.0 - st.y;
+                    
+                    vec2 uv = st * 2.0 - 1.0;
+                    uv.x *= u_resolution.x / u_resolution.y;
+
+                    float d = length(uv);
+                    
+                    // Radar sweep
+                    float angle = atan(uv.y, uv.x);
+                    float sweep = fract(angle / (3.14159 * 2.0) - u_time * 0.5);
+                    
+                    // Grid rings
+                    float ring = sin(d * 40.0 - u_time * 2.0);
+                    ring = smoothstep(0.8, 1.0, ring) * 0.15;
+                    
+                    // Cyber data streams
+                    float wave = sin(uv.x * 10.0 + sin(u_time + uv.y * 5.0)) * 0.5;
+                    float laser = 0.01 / abs(uv.y - wave);
+                    
+                    vec3 col = vec3(0.05, 0.0, 0.15); // Deep purple void
+                    
+                    // Blending cyber themes
+                    col += vec3(0.0, 1.0, 0.8) * sweep * 0.1 * step(d, 1.0); // Radar
+                    col += vec3(0.6, 0.0, 1.0) * ring; // Hex/grid
+                    col += vec3(0.0, 0.8, 1.0) * laser * 0.5; // Data lasers
+                    
+                    // Scanlines
+                    float scanline = sin(st.y * 600.0) * 0.03;
+                    col -= scanline;
+                    
+                    gl_FragColor = vec4(col, 1.0);
+                }
+            \`;
+
+            function createShader(gl, type, source) {
+                const shader = gl.createShader(type);
+                gl.shaderSource(shader, source);
+                gl.compileShader(shader);
+                return shader;
+            }
+
+            const program = gl.createProgram();
+            gl.attachShader(program, createShader(gl, gl.VERTEX_SHADER, vsSource));
+            gl.attachShader(program, createShader(gl, gl.FRAGMENT_SHADER, fsSource));
+            gl.linkProgram(program);
+            gl.useProgram(program);
+
+            const positionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+                -1.0,  1.0,  1.0,  1.0,
+                -1.0, -1.0,  1.0, -1.0,
+            ]), gl.STATIC_DRAW);
+
+            const posLoc = gl.getAttribLocation(program, "aVertexPosition");
+            gl.enableVertexAttribArray(posLoc);
+            gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+            const resLoc = gl.getUniformLocation(program, "u_resolution");
+            const timeLoc = gl.getUniformLocation(program, "u_time");
+
+            function render(time) {
+                time *= 0.001; 
+                if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
+                    canvas.width = canvas.clientWidth;
+                    canvas.height = canvas.clientHeight;
+                    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+                }
+                gl.uniform2f(resLoc, gl.canvas.width, gl.canvas.height);
+                gl.uniform1f(timeLoc, time);
+                gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+                requestAnimationFrame(render);
+            }
+            requestAnimationFrame(render);
+        }
     </script>
 </body>
 </html>
