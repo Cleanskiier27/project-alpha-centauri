@@ -4,9 +4,9 @@
  */
 
 export class AetherUplink {
-    constructor(apiBase = "http://localhost:8000") {
+    constructor(apiBase = "http://localhost:3000") {
         this.apiBase = apiBase;
-        this.status = "DISCONNECTED";
+        this.status = "CONNECTED";
     }
 
     async pulse(agentData) {

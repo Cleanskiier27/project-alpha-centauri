@@ -10,18 +10,20 @@
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <style>
         :root {
-            --primary-bg: #05050a;
-            --accent-blue: #00d2ff;
-            --accent-purple: #9d50bb;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-primary: #e0e0e0;
-            --text-dim: #888;
-            --success: #00ff9d;
-            --danger: #ff4b2b;
-            --warning: #ffb400;
-            --space-gold: #ffcc00;
-            --titan-blue: #0a192f;
+            --primary-bg: #020205;
+            --accent-blue: #00f2ff;
+            --accent-purple: #7000ff;
+            --accent-emerald: #00ff88;
+            --glass-bg: rgba(0, 0, 0, 0.6);
+            --glass-border: rgba(0, 242, 255, 0.2);
+            --text-primary: #fff;
+            --text-dim: #666;
+            --success: var(--accent-emerald);
+            --danger: #ff0044;
+            --warning: #ffcc00;
+            --space-gold: #ffaa00;
+            --titan-blue: #050510;
+            --deck-bg: #0f0f1a;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -39,13 +41,14 @@
             width: 100%;
             height: calc(100% - 50px);
             padding: 20px;
+            background-color: var(--primary-bg);
             background-image: 
-                radial-gradient(circle at var(--nebula-x, 50%) var(--nebula-y, 50%), rgba(0, 210, 255, 0.08), transparent 70%),
-                radial-gradient(circle at var(--nebula-x2, 80%) var(--nebula-y2, 20%), rgba(157, 80, 187, 0.08), transparent 70%),
-                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+                radial-gradient(circle at var(--nebula-x, 50%) var(--nebula-y, 50%), rgba(0, 242, 255, 0.08), transparent 70%),
+                radial-gradient(circle at var(--nebula-x2, 80%) var(--nebula-y2, 20%), rgba(112, 0, 255, 0.08), transparent 70%),
+                linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
             background-size: 100% 100%, 100% 100%, var(--grid-size, 40px) var(--grid-size, 40px), var(--grid-size, 40px) var(--grid-size, 40px);
-            transition: background-position 1s ease-in-out;
+            box-shadow: inset 0 0 100px #000;
         }
 
         #particle-canvas {
@@ -127,37 +130,17 @@
 
         /* Windows */
         .window {
-            position: absolute;
-            background: rgba(15, 15, 25, 0.85);
-            backdrop-filter: blur(25px) saturate(150%);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.5);
-            min-width: 200px;
-            min-height: 100px;
-            z-index: 100;
+            position: absolute; background: var(--glass-bg); backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid var(--glass-border); border-radius: 4px;
+            display: flex; flex-direction: column; box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            min-width: 200px; min-height: 100px; z-index: 100;
         }
-
         .window-header {
-            padding: 10px 15px;
-            background: rgba(255,255,255,0.05);
-            border-bottom: 1px solid var(--glass-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: move;
-            border-radius: 12px 12px 0 0;
+            padding: 8px 15px; background: rgba(0, 242, 255, 0.1); border-bottom: 1px solid var(--glass-border);
+            display: flex; justify-content: space-between; align-items: center;
+            cursor: move; border-radius: 4px 4px 0 0;
         }
-
-        .window-title {
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            color: var(--text-dim);
-            text-transform: uppercase;
-        }
+        .window-title { font-size: 0.75rem; font-weight: 700; color: var(--accent-blue); letter-spacing: 2px; }
 
         .window-controls { display: flex; gap: 8px; }
         .control-btn {
@@ -178,28 +161,14 @@
 
         /* Desktop Icons */
         .desktop-icon {
-            position: absolute !important;
-            width: 75px !important; height: 75px !important;
-            border-radius: 50% !important;
-            background: rgba(5, 5, 10, 0.8) !important;
-            border: 2px solid var(--accent-blue) !important;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 10;
+            position: absolute !important; width: 80px !important; height: 80px !important;
+            border-radius: 0 !important; background: rgba(0,0,0,0.9) !important;
+            border: 1px solid var(--glass-border) !important; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; cursor: pointer;
+            clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
         }
-        .desktop-icon:hover { transform: scale(1.15); box-shadow: 0 0 30px rgba(0, 210, 255, 0.5); }
+        .desktop-icon:hover { border-color: var(--accent-emerald) !important; background: rgba(0,255,136,0.1) !important; }
         .desktop-icon .label {
-            position: absolute;
-            bottom: -30px;
-            font-size: 0.75rem;
-            color: var(--accent-blue);
-            white-space: nowrap;
-            background: rgba(0,0,0,0.8);
-            padding: 2px 8px;
             border-radius: 4px;
         }
 
@@ -286,6 +255,11 @@
             <div class="label">Terminal</div>
         </div>
 
+        <div class="desktop-icon" style="left:15%; top:35%;" onclick="toggleWindow('finance-win')">
+            <div style="font-size: 2rem;">💰</div>
+            <div class="label">Finance</div>
+        </div>
+
         <div class="desktop-icon" style="left:15%; top:50%;" onclick="toggleWindow('star-browser-win')">
             <div style="font-size: 2rem;">🛸</div>
             <div class="label">Star Browser</div>
@@ -294,6 +268,21 @@
         <div class="desktop-icon" style="left:15%; top:70%;" onclick="toggleWindow('career-win')">
             <div style="font-size: 2rem;">🏅</div>
             <div class="label">Agent Career</div>
+        </div>
+
+        <div class="desktop-icon" style="left:85%; top:70%;" onclick="toggleWindow('training-win')">
+            <div style="font-size: 2rem;">📼</div>
+            <div class="label">XKDJ Training</div>
+        </div>
+
+        <div class="desktop-icon" style="left:85%; top:30%;" onclick="toggleWindow('api-win')">
+            <div style="font-size: 2rem;">📚</div>
+            <div class="label">API Ref</div>
+        </div>
+
+        <div class="desktop-icon" style="left:85%; top:70%;" onclick="toggleWindow('training-win')">
+            <div style="font-size: 2rem;">📼</div>
+            <div class="label">XKDJ Training</div>
         </div>
 
         <div class="desktop-icon" style="left:15%; top:20%;" onclick="toggleWindow('funky-win')">
@@ -309,6 +298,21 @@
         <div class="desktop-icon" style="left:85%; top:80%;" onclick="toggleWindow('luna-win')">
             <div style="font-size: 2rem;">♻️</div>
             <div class="label">Recycle Logs</div>
+        </div>
+
+        <div class="desktop-icon" style="left:85%; top:45%;" onclick="toggleWindow('money-win')">
+            <div style="font-size: 2rem;">💸</div>
+            <div class="label">Neural Money</div>
+        </div>
+
+        <div class="desktop-icon" style="left:85%; top:15%;" onclick="toggleWindow('pydecks-win')">
+            <div style="font-size: 2rem;">🎴</div>
+            <div class="label">PyDecks</div>
+        </div>
+
+        <div class="desktop-icon" style="left:85%; top:60%;" onclick="toggleWindow('pydecks-win')">
+            <div style="font-size: 2rem;">📽️</div>
+            <div class="label">PyDecks</div>
         </div>
 
         <!-- Terminal Window -->
@@ -333,23 +337,26 @@
             </div>
         </div>
 
-        <!-- Executives Window -->
-        <div id="exec-win" class="window hidden" style="top:100px; right:100px; width: 400px; height: 300px;">
+        <div id="exec-win" class="window hidden" style="top:100px; right:100px; width: 400px; height: 350px;">
             <div class="window-header">
-                <div class="window-title">EXECUTIVE_POOL_STATUS</div>
+                <div class="window-title">EXECUTIVE_POOL_STATUS (SOURCE: final.git)</div>
                 <div class="window-controls">
                     <div class="control-btn close-btn" onclick="toggleWindow('exec-win')"></div>
                 </div>
             </div>
             <div class="window-content">
                 <div id="exec-list">
-                    <div class="card" style="margin-bottom:10px">
-                        <h4>ARCHITECT</h4>
+                    <div class="card" style="margin-bottom:10px; border-left:4px solid var(--accent-purple)">
+                        <h4 style="display:flex; justify-content:space-between">ARCHITECT <span style="font-size:0.6rem; opacity:0.5">cleanskiier27/final</span></h4>
                         <div class="val" style="color:var(--accent-purple)">STEADY</div>
                     </div>
-                    <div class="card">
-                        <h4>LEAD ENGINEER</h4>
+                    <div class="card" style="margin-bottom:10px; border-left:4px solid var(--accent-blue)">
+                        <h4 style="display:flex; justify-content:space-between">LEAD ENGINEER <span style="font-size:0.6rem; opacity:0.5">cleanskiier27/final</span></h4>
                         <div class="val">ACTIVE</div>
+                    </div>
+                    <div class="card" style="border-left:4px solid var(--success)">
+                        <h4 style="display:flex; justify-content:space-between">SEC_AUDITOR <span style="font-size:0.6rem; opacity:0.5">cleanskiier27/final</span></h4>
+                        <div class="val" style="color:var(--success)">SECURE (VERIFIED)</div>
                     </div>
                 </div>
             </div>
@@ -422,7 +429,7 @@
             <div class="window-content" style="background:#000; padding:0; display:flex; flex-direction:column;">
                 <div style="background:#111; padding:10px; display:flex; gap:10px; align-items:center;">
                     <div style="color:var(--space-gold); font-size:1rem;">▲</div>
-                    <div style="flex:1; background:#222; padding:5px 15px; border-radius:20px; font-family:monospace; color:var(--accent-blue);">https://aerospace.mission.local/telemetry</div>
+                    <div style="flex:1; background:#222; padding:5px 15px; border-radius:20px; font-family:monospace; color:var(--accent-blue);">http://localhost:3000/telemetry</div>
                 </div>
                 <div id="browser-viewport" style="flex:1; padding:20px; color:var(--accent-blue); font-family: 'JetBrains Mono';">
                     <h2 style="color:var(--space-gold)">ORBITAL TELEMETRY STREAM</h2>
@@ -457,6 +464,154 @@
             </div>
         </div>
 
+        <div id="finance-win" class="window hidden" style="top:300px; left:400px; width: 400px; height: 350px;">
+            <div class="window-header" style="background: #1a1a2e; border-bottom: 2px solid var(--success);">
+                <div class="window-title">💰 NEURAL_TREASURY_MGMT</div>
+                <div class="window-controls"><div class="control-btn close-btn" onclick="toggleWindow('finance-win')"></div></div>
+            </div>
+            <div class="window-content">
+                <div class="card" style="border-color:var(--success); margin-bottom:15px;">
+                    <h4 style="color:var(--success)">TELEVISION FUNDING TARGET</h4>
+                    <div class="val" id="funding-amount">$0.00</div>
+                    <div style="font-size:0.7rem; color:var(--text-dim); margin-top:5px;">STATUS: PENDING_APPROVAL</div>
+                </div>
+                <div class="telemetry-grid">
+                    <div class="card"><h4>MEDIA GRANT</h4><div class="val" style="font-size:1rem;">APPROVED</div></div>
+                    <div class="card"><h4>AIRTIME LOCK</h4><div class="val" style="font-size:1rem;">STAGING</div></div>
+                </div>
+                <div style="margin-top:15px; font-size:0.75rem; color:var(--accent-blue)">
+                    > Run 'fund' in terminal to secure capital...
+                </div>
+            </div>
+        </div>
+
+        <div id="thunder-win" class="window hidden" style="top:400px; left:100px; width: 500px; height: 350px;">
+            <div class="window-header" style="background: linear-gradient(to right, #000, #3311ff); border-bottom: 2px solid #00f2ff;">
+                <div class="window-title">⚡ THUNDER_PYTHON://HINTS_V1</div>
+                <div class="window-controls"><div class="control-btn close-btn" onclick="toggleWindow('thunder-win')"></div></div>
+            </div>
+            <div class="window-content" style="background:#050510; font-family:'JetBrains Mono'; font-size:0.85rem;">
+                <div style="color:#00f2ff; margin-bottom:15px;"># Performance Optimization Rolling Like Thunder</div>
+                <div style="color:var(--text-dim); margin-bottom:10px;">
+                    <span style="color:var(--success)">[1] SPEED:</span> Use <code style="color:#fff">list_comp = [x*2 for x in data]</code> instead of loops.
+                </div>
+                <div style="color:var(--text-dim); margin-bottom:10px;">
+                    <span style="color:var(--success)">[2] ASYNC:</span> Use <code style="color:#fff">asyncio.gather(*tasks)</code> for nonstop I/O uplink.
+                </div>
+                <div style="color:var(--text-dim); margin-bottom:10px;">
+                    <span style="color:var(--success)">[3] MULTI:</span> Use <code style="color:#fff">ProcessPoolExecutor</code> to shatter the CPU ceiling.
+                </div>
+                <div style="color:var(--text-dim); margin-bottom:10px;">
+                    <span style="color:var(--success)">[4] DECO:</span> Wrap logic in <code style="color:#fff">@lru_cache</code> for instant memoization.
+                </div>
+                <div style="border-top:1px solid #333; padding-top:10px; margin-top:10px; color:#ffcc00; font-size:0.7rem;">
+                    [READY] Python 3.12+ features rolling out...
+                </div>
+            </div>
+        </div>
+
+        <div id="training-win" class="window hidden" style="top:150px; left:300px; width: 450px; height: 320px;">
+            <div class="window-header" style="background:#222; border-bottom: 2px solid var(--accent-purple);">
+                <div class="window-title">📼 XKDJ_PYTHON_TRAINING_v1.2</div>
+                <div class="window-controls"><div class="control-btn close-btn" onclick="toggleWindow('training-win')"></div></div>
+            </div>
+            <div class="window-content" style="padding:0; overflow:hidden;">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/S9uPNppGsGo?autoplay=1&mute=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <div id="api-win" class="window hidden" style="top:100px; left:400px; width: 600px; height: 500px;">
+            <div class="window-header" style="background:var(--primary-bg)">
+                <div class="window-title">📚 NEURAL_API_REFERENCE</div>
+                <div class="window-controls"><div class="control-btn close-btn" onclick="toggleWindow('api-win')"></div></div>
+            </div>
+            <div class="window-content" style="background:#000; font-family:'JetBrains Mono'; font-size:0.8rem;">
+                <div style="color:var(--accent-blue); padding-bottom:10px; border-bottom:1px solid #222;">SYSTEM_CORE_API // v2.4.1</div>
+                <div style="margin-top:20px;">
+                    <h3 style="color:var(--success)">[AetherOS]</h3>
+                    <code style="color:var(--text-dim)">- registerAgent(name, logic):</code> Bind neural daemon to core.<br>
+                    <code style="color:var(--text-dim)">- emit(event, data):</code> Broadcast to neural bus.<br>
+                    <code style="color:var(--text-dim)">- spawnWindow(id, title):</code> Generate UI node.<br>
+                </div>
+                <div style="margin-top:20px;">
+                    <h3 style="color:var(--accent-purple)">[FastAPI / Litestar]</h3>
+                    <code style="color:var(--text-dim)">- @app.get('/path'):</code> Direct mission downlink.<br>
+                    <code style="color:var(--text-dim)">- uvicorn.run(port=3000):</code> Start host uplink.<br>
+                </div>
+                <div style="margin-top:20px;">
+                    <h3 style="color:var(--space-gold)">[XKDJ Protocol]</h3>
+                    <code style="color:var(--text-dim)">- xkdj.train(agent_id):</code> High-speed training clip.<br>
+                    <code style="color:var(--text-dim)">- thunder.optimize():</code> Shatter Python CPU ceiling.<br>
+                </div>
+                <div style="margin-top:20px;">
+                    <h3 style="color:var(--success)">[Preciseliens Money]</h3>
+                    <code style="color:var(--text-dim)">- import model <url>:</code> Pull neural weights into core.<br>
+                    <code style="color:var(--text-dim)">- money:</code> Launch Finance yield monitor.<br>
+                </div>
+            </div>
+        </div>
+
+        <div id="money-win" class="window hidden" style="top:250px; right:350px; width: 450px; height: 380px;">
+            <div class="window-header" style="background: rgba(0, 255, 202, 0.1); border-bottom: 1px solid #00ffca;">
+                <div class="window-title">💸 PRECISELIENS_MONEY_v1.0</div>
+                <div class="window-controls"><div class="control-btn close-btn" onclick="toggleWindow('money-win')"></div></div>
+            </div>
+            <div class="window-content" style="background:#020205">
+                <div class="card" style="border-color:#00ffca; margin-bottom:15px; background:rgba(0,255,202,0.05)">
+                    <h4 style="color:#00ffca; font-size:0.8rem;">MODEL_SYNC_STATUS</h4>
+                    <div class="val" id="model-id-display" style="font-size:0.9rem">github.com/cleanskiier27/preciseliens-money</div>
+                    <div id="money-status-log" style="font-size:0.75rem; color:var(--text-dim); margin-top:10px;">
+                        [IDLE] Awaiting model initialization...
+                    </div>
+                </div>
+                <div class="telemetry-grid">
+                    <div class="card" style="border-left:4px solid var(--success)"><h4>YIELDS</h4><div class="val" style="color:var(--success)">+14.2%</div></div>
+                    <div class="card" style="border-left:4px solid var(--accent-blue)"><h4>EPOCHS</h4><div class="val">42</div></div>
+                </div>
+                <canvas id="money-chart" style="width:100%; height:100px; margin-top:15px; background:rgba(0,0,0,0.5); border:1px solid #00ffca22;"></canvas>
+            </div>
+        </div>
+
+
+        <div id="pydecks-win" class="window hidden" style="top:50px; left:200px; width: 600px; height: 450px;">
+            <div class="window-header" style="background: rgba(112, 0, 255, 0.1); border-bottom: 2px solid var(--accent-purple);">
+                <div class="window-title">🎴 PYDECKS://AGENT_REPOSITORY</div>
+                <div class="window-controls"><div class="control-btn close-btn" onclick="toggleWindow('pydecks-win')"></div></div>
+            </div>
+            <div class="window-content" style="background:#050510; display:grid; grid-template-columns: 1fr 1fr; gap:15px; padding:20px;">
+                <div class="card pydeck-card" style="border-top: 3px solid var(--accent-blue)">
+                    <h4 style="color:var(--accent-blue)">AETHER_MASTER</h4>
+                    <div style="font-size:0.7rem; color:var(--text-dim); margin:10px 0;">Primary System Architect. Controls the neural bus and window-sharding protocols.</div>
+                    <div style="font-family:monospace; font-size:0.6rem; background:#000; padding:5px;">ROLE: KERNEL_ADMIN</div>
+                </div>
+                <div class="card pydeck-card" style="border-top: 3px solid var(--accent-emerald)">
+                    <h4 style="color:var(--accent-emerald)">FINANCE_AGENT</h4>
+                    <div style="font-size:0.7rem; color:var(--text-dim); margin:10px 0;">Yield optimization specialist. Trained on Preciseliens-Money dataset.</div>
+                    <div style="font-family:monospace; font-size:0.6rem; background:#000; padding:5px;">ROLE: NEURAL_TRADER</div>
+                </div>
+                <div class="card pydeck-card" style="border-top: 3px solid #ffcc00">
+                    <h4 style="color:#ffcc00">STAR_BROWSER</h4>
+                    <div style="font-size:0.7rem; color:var(--text-dim); margin:10px 0;">Orbital telemetry fetcher. Synchronized with Port 3000 mission host.</div>
+                    <div style="font-family:monospace; font-size:0.6rem; background:#000; padding:5px;">ROLE: TELEMETRY_ENGINEER</div>
+                </div>
+                <div class="card pydeck-card" style="border-top: 3px solid var(--danger)">
+                    <h4 style="color:var(--danger)">SEC_AUDITOR</h4>
+                    <div style="font-size:0.7rem; color:var(--text-dim); margin:10px 0;">Security daemon. Verifying workspace integrity and dependabot patches.</div>
+                    <div style="font-family:monospace; font-size:0.6rem; background:#000; padding:5px;">ROLE: DEFENSE_PROTOCOL</div>
+                </div>
+                <!-- Presentation Layer -->
+                <div id="deck-viewport" style="grid-column: span 2; background: var(--deck-bg); padding: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border-top: 1px solid var(--glass-border);">
+                    <h2>PyDecks: Neural Presentations</h2>
+                    <p>The high-fidelity slide deck system for AI Agents.</p>
+                </div>
+                <div style="grid-column: span 2; display: flex; gap: 20px; justify-content: center; padding-bottom: 10px;">
+                    <button onclick="changeSlide(-1)" style="background: transparent; border: 1px solid var(--accent-purple); color: var(--accent-purple); padding: 5px 15px; cursor: pointer; font-size: 0.7rem;">PREV</button>
+                    <button onclick="changeSlide(1)" style="background: transparent; border: 1px solid var(--accent-purple); color: var(--accent-purple); padding: 5px 15px; cursor: pointer; font-size: 0.7rem;">NEXT</button>
+                    <button onclick="fetchDecks()" style="background: transparent; border: 1px solid var(--accent-emerald); color: var(--accent-emerald); padding: 5px 15px; cursor: pointer; font-size: 0.7rem;">REFRESH</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div id="taskbar">
@@ -464,19 +619,27 @@
         <div class="taskbar-icons">
             <div class="taskbar-icon" onclick="toggleWindow('terminal-win')">🐚</div>
             <div class="taskbar-icon" onclick="toggleWindow('exec-win')">🧠</div>
-            <div class="taskbar-icon" onclick="toggleWindow('calc-win')">🧮</div>
+            <div class="taskbar-icon" onclick="toggleWindow('exec-win')">🧠</div>
+            <div class="taskbar-icon" onclick="toggleWindow('pydecks-win')">🎴</div>
             <div class="taskbar-icon" onclick="toggleWindow('asgi-win')">🌐</div>
             <div class="taskbar-icon" onclick="toggleWindow('luna-win')">♻️</div>
             <div class="taskbar-icon" onclick="toggleWindow('funky-win')">🕺</div>
             <div class="taskbar-icon" onclick="toggleWindow('star-browser-win')">🛸</div>
+            <div class="taskbar-icon" onclick="toggleWindow('finance-win')">💰</div>
             <div class="taskbar-icon" onclick="toggleWindow('career-win')">🏅</div>
+            <div class="taskbar-icon" onclick="toggleWindow('thunder-win')">⚡</div>
+            <div class="taskbar-icon" onclick="toggleWindow('training-win')">📼</div>
             <div class="taskbar-icon" onclick="toggleWindow('reader-win')">♾️</div>
         </div>
     </div>
 
     <script>
         // Boot sequence
-        setTimeout(() => document.getElementById('boot-screen').classList.add('hidden'), 2000);
+        setTimeout(() => {
+            document.getElementById('boot-screen').classList.add('hidden');
+            // Auto-run ASGI on Login
+            startASGIGraphics();
+        }, 2000);
 
         function toggleWindow(id) {
             const win = document.getElementById(id);
@@ -498,6 +661,22 @@
 
                 } else if (cmd === 'start host' || cmd === 'host') {
                     startHostGraphics();
+                } else if (cmd === 'fund' || cmd === 'get funding') {
+                    startFundingSequence();
+                } else if (cmd === 'thunder' || cmd === 'python') {
+                    toggleWindow('thunder-win');
+                } else if (cmd === 'pydecks' || cmd === 'decks') {
+                    toggleWindow('pydecks-win');
+                } else if (cmd.startsWith('import model')) {
+                    startModelImport(cmd.split(' ')[2]);
+                } else if (cmd === 'money') {
+                    toggleWindow('money-win');
+                } else if (cmd === 'decks' || cmd === 'pydecks') {
+                    toggleWindow('pydecks-win');
+                } else if (cmd === 'api' || cmd === 'docs') {
+                    toggleWindow('api-win');
+                } else if (cmd === 'training' || cmd === 'xkdj') {
+                    toggleWindow('training-win');
                 } else if (cmd === 'audit' || cmd === 'audit fix') {
                     startAuditGraphics();
                 } else if (cmd === 'funkytown' || cmd === 'funky') {
@@ -528,13 +707,133 @@
             }, 600);
         }
 
+        let currentDeckSlide = 0;
+        let deckSlides = [
+            {h: "PyDecks: Neural Presentations", p: "The high-fidelity slide deck system for AI Agents."}
+        ];
+
+        function fetchDecks() {
+            fetch('http://localhost:3000/decks')
+                .then(r => r.json())
+                .then(data => {
+                    deckSlides = data.slides;
+                    updateDeckView();
+                })
+                .catch(err => console.error("Deck fetch failed:", err));
+        }
+
+        function updateDeckView() {
+            const slide = deckSlides[currentDeckSlide];
+            document.getElementById('deck-viewport').innerHTML = `<h2>${slide.h}</h2><p>${slide.p}</p>`;
+        }
+
+        function changeSlide(dir) {
+            currentDeckSlide = (currentDeckSlide + dir + deckSlides.length) % deckSlides.length;
+            updateDeckView();
+        }
+
+        function updateSecurityStatus() {
+            fetch('http://localhost:3000/security/status')
+                .then(r => r.json())
+                .then(data => {
+                    const statusVal = document.querySelector('#exec-win .card:last-child .val');
+                    if (statusVal) {
+                        statusVal.innerText = `${data.status} (AUDITED)`;
+                        statusVal.style.color = data.status === 'SECURE' ? 'var(--success)' : 'var(--danger)';
+                    }
+                })
+                .catch(err => console.error("Security status fetch failed:", err));
+        }
+
+        // Run fetchers
+        setTimeout(() => {
+            fetchDecks();
+            updateSecurityStatus();
+            // Periodic update
+            setInterval(updateSecurityStatus, 10000);
+        }, 3000);
+
+        let currentDeckSlide = 0;
+        const deckSlides = [
+            "<h2>PyDecks: Neural Presentations</h2><p>The high-fidelity slide deck system for AI Agents.</p>",
+            "<h2>Slide 2: Scalability</h2><p>Multi-agent orchestration requires dynamic context window management.</p>",
+            "<h2>Slide 3: Performance</h2><p>GPU-accelerated rendering for real-time telemetry overlays.</p>"
+        ];
+
+        function changeSlide(dir) {
+            currentDeckSlide = (currentDeckSlide + dir + deckSlides.length) % deckSlides.length;
+            document.getElementById('deck-viewport').innerHTML = deckSlides[currentDeckSlide];
+        }
+
         function startHostGraphics() {
             toggleWindow('star-browser-win');
             const log = document.getElementById('mission-data');
             log.innerHTML = '<span style="color:var(--space-gold)">[LAUNCH] STARTING AEROSPACE MISSION HOST...</span><br>';
+            fetch('http://localhost:3000/telemetry')
+                .then(r => r.json())
+                .then(data => {
+                    log.innerHTML += `> Uplink Established (Port 3000)<br>> Orbital Sync Lock... OK<br><br><span style="color:var(--success)">[HOST ONLINE] MISSION_CONTROL ACTIVE</span><br>`;
+                    log.innerHTML += `<pre style="font-size:0.8rem; margin-top:10px; color:var(--accent-blue)">${JSON.stringify(data, null, 2)}</pre>`;
+                })
+                .catch(() => {
+                    log.innerHTML += '> Uplink Established (Port 3000)<br>> Orbital Sync Lock... OK<br><br><span style="color:var(--success)">[HOST ONLINE] MISSION_CONTROL ACTIVE</span>';
+                    log.innerHTML += '<br><span style="color:var(--danger)">! Telemetry Fetch Error (Check CORS/Server)</span>';
+                });
+        }
+
+        function startModelImport(url) {
+            const out = document.getElementById('term-out');
+            const target = url || 'github.com/cleanskiier27/preciseliens-money';
+            const line = document.createElement('div');
+            line.innerHTML = `<span style="color:var(--space-gold)">[IMPORT] PULLING NEURAL WEIGHTS FROM ${target}...</span>`;
+            out.insertBefore(line, document.getElementById('term-in').parentNode);
+            
             setTimeout(() => {
-                log.innerHTML += '> Uplink Established (Port 8080)<br>> Orbital Sync Lock... OK<br><br><span style="color:var(--success)">[HOST ONLINE] MISSION_CONTROL ACTIVE</span>';
+                const step = document.createElement('div');
+                step.innerHTML = '[OK] SYNCING REPOSITORY...<br>[OK] EXTRACTING AST NODES...<br>[OK] MOUNTING TO CORE';
+                out.insertBefore(step, document.getElementById('term-in').parentNode);
+                toggleWindow('money-win');
+                document.getElementById('money-status-log').innerHTML = `<span style="color:var(--success)">[ACTIVE] Synchronized with ${target}</span>`;
+                animateMoneyChart();
             }, 1000);
+        }
+
+        function animateMoneyChart() {
+            const canvas = document.getElementById('money-chart');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let w = canvas.width, h = canvas.height;
+            let data = Array(20).fill(h/2);
+            setInterval(() => {
+                ctx.clearRect(0,0,w,h);
+                ctx.strokeStyle = '#00ffca';
+                ctx.beginPath();
+                ctx.moveTo(0, data[0]);
+                for(let i=1; i<data.length; i++) {
+                    ctx.lineTo(i * (w/data.length), data[i]);
+                }
+                ctx.stroke();
+                data.shift();
+                data.push(h/2 + (Math.random()-0.5)*30);
+            }, 100);
+        }
+
+        function startFundingSequence() {
+            toggleWindow('finance-win');
+            const amt = document.getElementById('funding-amount');
+            const h = document.getElementById('finance-win').querySelector('.window-title');
+            h.innerHTML = '💰 NEURAL_TREASURY_MGMT [SECURE_LINK]';
+            
+            let val = 0;
+            const iv = setInterval(() => {
+                val += Math.floor(Math.random() * 250000);
+                amt.innerText = `$${val.toLocaleString()}.00`;
+                if(val > 12500000) {
+                    clearInterval(iv);
+                    amt.style.color = 'var(--success)';
+                    amt.innerText = `$12,500,000.00 [GRANTED]`;
+                }
+            }, 50);
         }
 
         function startAuditGraphics() {
