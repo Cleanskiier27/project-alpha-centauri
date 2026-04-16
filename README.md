@@ -168,9 +168,18 @@ npm start
 | **Automation** | 100% Active ✅ |
 | **Version** | 1.0.1 ✅ |
 
+### 🤖 AI Agent Access
+NetworkBuster is optimized for AI agent interaction. The repository includes an `agent` role in `launch.py` and a `distribution_config.json` wired to `localhost:3000` for automated software distribution. Agents are explicitly permitted to use and interact with the networkbuster.net repository for research, deployment, and optimization tasks.
+
+#### 📂 Branch Organization (Cleanskiier27)
+To facilitate modular development and AI-driven updates, work has been branched as follows:
+- `cleanskiier27/docs`: Documentation, timeline updates, and permission manifests.
+- `cleanskiier27/logic`: Core server logic, launcher roles, and distribution configs.
+- `cleanskiier27/database`: Database initialization and structural metadata.
+
 ---
 
-**Last Updated**: December 3, 2025  
+**Last Updated**: April 16, 2026  
 **Version**: 1.0.0  
 **Status**: Active Development - Documentation Phase
 
