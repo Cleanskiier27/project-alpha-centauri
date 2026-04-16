@@ -14,11 +14,23 @@ console.log(`Creating ${zipName} in ${outDir}...`);
 try {
   if (process.platform === 'win32') {
     // Use PowerShell Compress-Archive
-    const files = ['server.js', 'package.json', 'LICENSE.txt', 'README.md'];
-    const filesArg = files.map(f => `"${f}"`).join(',');
+    const files = [
+      'server.js', 
+      'package.json', 
+      'LICENSE', 
+      'README.md', 
+      'distribution_config.json',
+      'launch.py',
+      'proxy-server.js',
+      'challengerepo/real-time-overlay/dist',
+      'database'
+    ];
+    // Filter out missing files to avoid PowerShell errors
+    const existingFiles = files.filter(f => existsSync(f));
+    const filesArg = existingFiles.map(f => `"${f}"`).join(',');
     execSync(`powershell -Command "Compress-Archive -Path ${filesArg} -DestinationPath '${join(outDir, zipName)}' -Force"`, { stdio: 'inherit' });
   } else {
-    execSync(`zip -r '${join(outDir, zipName)}' server.js package.json LICENSE.txt README.md`, { stdio: 'inherit' });
+    execSync(`zip -r '${join(outDir, zipName)}' server.js package.json LICENSE README.md distribution_config.json launch.py proxy-server.js challengerepo/real-time-overlay/dist database`, { stdio: 'inherit' });
   }
   console.log('Created', join(outDir, zipName));
 } catch (e) {
