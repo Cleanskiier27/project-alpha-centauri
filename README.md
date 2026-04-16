@@ -12,10 +12,16 @@
 
 **NetworkBuster** is the competition-winning advanced networking technology platform for space exploration and lunar operations. Featuring cutting-edge real-time visualization, interactive dashboards, and enterprise-grade automation.
 
-### 🎯 Live Demo & Video
-**Visit Now:** https://networkbuster-mez5d7bmv-networkbuster.vercel.app
+### 🎯 Live Demo & Preview
+**Main Website:** https://networkbuster-mez5d7bmv-networkbuster.vercel.app  
+**Project Repository:** https://github.com/Cleanskiier27/finalm2m  
+**Documentation:** https://github.com/Cleanskiier27/DOCS-m2m  
 
 **📺 Watch on YouTube:** https://www.youtube.com/channel/daypirate1/networkbuster
+
+## 🎨 System Preview
+![Component Overview](docs/diagrams/component-overview.svg)
+*Architectural visualization of the NetworkBuster Lunar Recycling & Monitoring System.*
 
 ## 🌐 Global Internet Usage Scope
 
