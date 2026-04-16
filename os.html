@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Coder OS | AI Agent Core</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <style>
+        :root {
+            --primary-bg: #05050a;
+            --accent-blue: #00d2ff;
+            --accent-purple: #9d50bb;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #e0e0e0;
+            --text-dim: #888;
+            --success: #00ff9d;
+            --danger: #ff4b2b;
+            --warning: #ffb400;
+            --space-gold: #ffcc00;
+            --titan-blue: #0a192f;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #desktop {
+            position: relative;
+            width: 100%;
+            height: calc(100% - 50px);
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at var(--nebula-x, 50%) var(--nebula-y, 50%), rgba(0, 210, 255, 0.08), transparent 70%),
+                radial-gradient(circle at var(--nebula-x2, 80%) var(--nebula-y2, 20%), rgba(157, 80, 187, 0.08), transparent 70%),
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, var(--grid-size, 40px) var(--grid-size, 40px), var(--grid-size, 40px) var(--grid-size, 40px);
+            transition: background-position 1s ease-in-out;
+        }
+
+        #particle-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .window {
+            overflow: hidden;
+        }
+        .window::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(0deg, transparent 0%, rgba(0, 210, 255, 0.02) 50%, transparent 100%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            animation: scanline 10s linear infinite;
+            z-index: 1000;
+        }
+        @keyframes scanline {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(100%); }
+        }
+
+        /* Taskbar */
+        #taskbar {
+            height: 50px;
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 10000;
+        }
+
+        .start-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            color: var(--accent-blue);
+        }
+        .start-btn:hover { transform: scale(1.1); }
+
+        .taskbar-icons {
+            display: flex;
+            gap: 10px;
+            margin-left: 20px;
+            flex: 1;
+        }
+
+        .taskbar-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+        }
+        .taskbar-icon:hover { background: rgba(255,255,255,0.1); }
+        .taskbar-icon.active-win { border-bottom: 2px solid var(--accent-blue); }
+
+        /* Windows */
+        .window {
+            position: absolute;
+            background: rgba(15, 15, 25, 0.85);
+            backdrop-filter: blur(25px) saturate(150%);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.5);
+            min-width: 200px;
+            min-height: 100px;
+            z-index: 100;
+        }
+
+        .window-header {
+            padding: 10px 15px;
+            background: rgba(255,255,255,0.05);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .window-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        .window-controls { display: flex; gap: 8px; }
+        .control-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .close-btn { background: #ff5f56; }
+        .min-btn { background: #ffbd2e; }
+        .max-btn { background: #27c93f; }
+
+        .window-content {
+            padding: 15px;
+            flex: 1;
+            overflow: auto;
+        }
+
+        /* Desktop Icons */
+        .desktop-icon {
+            position: absolute !important;
+            width: 75px !important; height: 75px !important;
+            border-radius: 50% !important;
+            background: rgba(5, 5, 10, 0.8) !important;
+            border: 2px solid var(--accent-blue) !important;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10;
+        }
+        .desktop-icon:hover { transform: scale(1.15); box-shadow: 0 0 30px rgba(0, 210, 255, 0.5); }
+        .desktop-icon .label {
+            position: absolute;
+            bottom: -30px;
+            font-size: 0.75rem;
+            color: var(--accent-blue);
+            white-space: nowrap;
+            background: rgba(0,0,0,0.8);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        /* Terminal Style */
+        .terminal-body {
+            background: #000;
+            color: var(--success);
+            font-family: 'JetBrains Mono', monospace;
+            height: 100%;
+            padding: 10px;
+            font-size: 0.9rem;
+        }
+        .terminal-input-row { display: flex; align-items: center; gap: 8px; }
+        .terminal-input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            outline: none;
+            flex: 1;
+            font-family: inherit;
+        }
+
+        /* Grid for telemetry */
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .card h4 { font-size: 0.7rem; color: var(--text-dim); margin-bottom: 5px; }
+        .card .val { font-size: 1.1rem; font-weight: 700; color: var(--accent-blue); }
+
+        /* SVG Neural Connectivity */
+        .neural-link {
+            stroke-dasharray: 10 10;
+            animation: flow 1s linear infinite;
+        }
+        @keyframes flow { to { stroke-dashoffset: 20; } }
+
+        #boot-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; color: var(--success); z-index: 100000;
+            padding: 40px; font-family: 'JetBrains Mono';
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div id="boot-screen">
+        <div>[  OK  ] INITIALIZING NEURAL KERNEL...</div>
+        <div>[  OK  ] MOUNTING AGENT_CORE_FS...</div>
+        <div>[  OK  ] ESTABLISHING UPLINK TO CLEAN_SKIER27...</div>
+        <div>[  OK  ] RESUMING SESSION...</div>
+    </div>
+
+    <div id="desktop">
+        <canvas id="particle-canvas"></canvas>
+        <svg style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0;">
+            <line x1="50%" y1="20%" x2="50%" y2="50%" stroke="var(--accent-blue)" stroke-width="2" class="neural-link" opacity="0.4"/>
+            <line x1="15%" y1="85%" x2="50%" y2="50%" stroke="var(--accent-blue)" stroke-width="2" class="neural-link" opacity="0.4"/>
+            <line x1="85%" y1="20%" x2="50%" y2="50%" stroke="var(--accent-purple)" stroke-width="2" class="neural-link" opacity="0.4"/>
+            <line x1="85%" y1="80%" x2="50%" y2="50%" stroke="var(--success)" stroke-width="2" class="neural-link" opacity="0.4"/>
+        </svg>
+
+        <!-- Desktop Nodes -->
+        <div class="desktop-icon" style="left:50%; top:20%;" onclick="toggleWindow('exec-win')">
+            <div style="font-size: 2rem;">🧠</div>
+            <div class="label">Executives</div>
+        </div>
+
+        <div class="desktop-icon" style="left:15%; top:85%;" onclick="toggleWindow('calc-win')">
+            <div style="font-size: 2rem;">🧮</div>
+            <div class="label">File Calc</div>
+        </div>
+
+        <div class="desktop-icon" style="left:50%; top:50%;" onclick="toggleWindow('terminal-win')">
+            <div style="font-size: 2rem;">🐚</div>
+            <div class="label">Terminal</div>
+        </div>
+
+        <div class="desktop-icon" style="left:15%; top:50%;" onclick="toggleWindow('star-browser-win')">
+            <div style="font-size: 2rem;">🛸</div>
+            <div class="label">Star Browser</div>
+        </div>
+
+        <div class="desktop-icon" style="left:15%; top:70%;" onclick="toggleWindow('career-win')">
+            <div style="font-size: 2rem;">🏅</div>
+            <div class="label">Agent Career</div>
+        </div>
+
+        <div class="desktop-icon" style="left:15%; top:20%;" onclick="toggleWindow('funky-win')">
+            <div style="font-size: 2rem;">🕺</div>
+            <div class="label">Funky Town</div>
+        </div>
+
+        <div class="desktop-icon" style="left:85%; top:20%;" onclick="toggleWindow('asgi-win')">
+            <div style="font-size: 2rem;">🌐</div>
+            <div class="label">ASGI System</div>
+        </div>
+
+        <div class="desktop-icon" style="left:85%; top:80%;" onclick="toggleWindow('luna-win')">
+            <div style="font-size: 2rem;">♻️</div>
+            <div class="label">Recycle Logs</div>
+        </div>
+
+        <!-- Terminal Window -->
+        <div id="terminal-win" class="window" style="top:30%; left:30%; width: 600px; height: 350px;">
+            <div class="window-header">
+                <div class="window-title">AGENT_CLI://CORE</div>
+                <div class="window-controls">
+                    <div class="control-btn min-btn"></div>
+                    <div class="control-btn close-btn" onclick="toggleWindow('terminal-win')"></div>
+                </div>
+            </div>
+            <div class="window-content" style="padding:0">
+                <div class="terminal-body" id="term-out">
+                    <div>Welcome to Network Buster OS [v2.4.0]</div>
+                    <div>Session ID: 0x4B3A8E</div>
+                    <div>Type 'help' for neural commands.</div>
+                    <div class="terminal-input-row">
+                        <span>agent@core:~$</span>
+                        <input type="text" class="terminal-input" id="term-in">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Executives Window -->
+        <div id="exec-win" class="window hidden" style="top:100px; right:100px; width: 400px; height: 300px;">
+            <div class="window-header">
+                <div class="window-title">EXECUTIVE_POOL_STATUS</div>
+                <div class="window-controls">
+                    <div class="control-btn close-btn" onclick="toggleWindow('exec-win')"></div>
+                </div>
+            </div>
+            <div class="window-content">
+                <div id="exec-list">
+                    <div class="card" style="margin-bottom:10px">
+                        <h4>ARCHITECT</h4>
+                        <div class="val" style="color:var(--accent-purple)">STEADY</div>
+                    </div>
+                    <div class="card">
+                        <h4>LEAD ENGINEER</h4>
+                        <div class="val">ACTIVE</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Calc Window -->
+        <div id="calc-win" class="window hidden" style="bottom:100px; left:100px; width: 450px; height: 300px;">
+            <div class="window-header">
+                <div class="window-title">WORKSPACE_INDEXER</div>
+                <div class="window-controls">
+                    <div class="control-btn close-btn" onclick="toggleWindow('calc-win')"></div>
+                </div>
+            </div>
+            <div class="window-content" style="background:#000; font-family:monospace; color:var(--success); font-size:0.8rem;">
+                <div id="calc-log">Run 'calc' to start indexing.</div>
+            </div>
+        </div>
+        
+            <div class="window-content" id="thought-stream" style="background:#000; font-size:0.8rem; font-family:monospace;">
+            </div>
+        </div>
+
+        <div id="asgi-win" class="window hidden" style="top:200px; left:400px; width: 500px; height: 350px;">
+            <div class="window-header">
+                <div class="window-title">GRAPHICS_ASGI_STARTUP</div>
+                <div class="window-controls"><div class="control-btn close-btn" onclick="toggleWindow('asgi-win')"></div></div>
+            </div>
+            <div class="window-content" style="background:#05050a; position: relative; overflow: hidden;">
+                <canvas id="asgi-gl-canvas" style="width:100%; height:120px; background: rgba(0,0,0,0.5); margin-bottom: 10px;"></canvas>
+                <div id="asgi-boot-log" style="font-family: 'JetBrains Mono'; font-size: 0.75rem; color: var(--accent-blue);">
+                    [READY] Uvicorn worker awaiting 'start asgi' signal...
+                </div>
+            </div>
+        </div>
+
+        <div id="luna-win" class="window hidden" style="top:150px; left:250px; width: 450px; height: 350px;">
+            <div class="window-header">
+                <div class="window-title">LUNA_RECYCLE_HISTORY</div>
+                <div class="window-controls"><div class="control-btn close-btn" onclick="toggleWindow('luna-win')"></div></div>
+            </div>
+            <div class="window-content">
+                <table style="width:100%; font-size: 0.8rem; border-collapse: collapse;">
+                    <thead><tr style="color:var(--success); border-bottom:1px solid var(--glass-border); text-align:left;">
+                        <th style="padding:8px">TS</th><th style="padding:8px">TYPE</th><th style="padding:8px">MASS</th><th style="padding:8px">CORE</th>
+                    </tr></thead>
+                    <tbody id="recycle-list" style="color:var(--text-dim)">
+                        <tr><td style="padding:6px">12:04</td><td>PLASTIC</td><td>12.4kg</td><td>ALPHA</td></tr>
+                        <tr><td style="padding:6px">11:58</td><td>METAL</td><td>85.2kg</td><td>BETA</td></tr>
+                        <tr><td style="padding:6px">11:42</td><td>GLASS</td><td>5.1kg</td><td>THETA</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="funky-win" class="window hidden" style="top:250px; left:150px; width: 560px; height: 380px;">
+            <div class="window-header">
+                <div class="window-title">NEURAL_MEDIA://FUNKY_TOWN</div>
+                <div class="window-controls"><div class="control-btn close-btn" onclick="toggleWindow('funky-win')"></div></div>
+            </div>
+            <div class="window-content" style="padding:0; overflow:hidden;">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/s36eQwgPNSE?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <div id="star-browser-win" class="window hidden" style="top:100px; left:100px; width: 800px; height: 500px;">
+            <div class="window-header" style="background: var(--titan-blue);">
+                <div class="window-title">🛸 STAR_BROWSER://MISSION_CONTROL</div>
+                <div class="window-controls"><div class="control-btn close-btn" onclick="toggleWindow('star-browser-win')"></div></div>
+            </div>
+            <div class="window-content" style="background:#000; padding:0; display:flex; flex-direction:column;">
+                <div style="background:#111; padding:10px; display:flex; gap:10px; align-items:center;">
+                    <div style="color:var(--space-gold); font-size:1rem;">▲</div>
+                    <div style="flex:1; background:#222; padding:5px 15px; border-radius:20px; font-family:monospace; color:var(--accent-blue);">https://aerospace.mission.local/telemetry</div>
+                </div>
+                <div id="browser-viewport" style="flex:1; padding:20px; color:var(--accent-blue); font-family: 'JetBrains Mono';">
+                    <h2 style="color:var(--space-gold)">ORBITAL TELEMETRY STREAM</h2>
+                    <hr style="border:0; border-top:1px solid #333; margin:10px 0;">
+                    <div id="mission-data">Loading propulsion metrics...</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="career-win" class="window hidden" style="top:200px; right:200px; width: 450px; height: 400px;">
+            <div class="window-header" style="background: linear-gradient(to right, #222, var(--space-gold));">
+                <div class="window-title" style="color:#000">AGENT BUILDER CAREER</div>
+                <div class="window-controls"><div class="control-btn close-btn" onclick="toggleWindow('career-win')"></div></div>
+            </div>
+            <div class="window-content">
+                <div class="card" style="margin-bottom:20px; border-color:var(--space-gold);">
+                    <h4 style="color:var(--space-gold)">CURRENT RANK: SENIOR NEURAL ARCHITECT</h4>
+                    <div class="val" style="font-size:2rem;">LVL 42</div>
+                    <div style="height:4px; background:#333; margin-top:10px; border-radius:2px;">
+                        <div style="width:75%; height:100%; background:var(--space-gold);"></div>
+                    </div>
+                </div>
+                <div class="telemetry-grid">
+                    <div class="card"><h4>AGENTS BUILT</h4><div class="val">1,240</div></div>
+                    <div class="card"><h4>MISSION SUCCESS</h4><div class="val">99.8%</div></div>
+                </div>
+                <h4 style="margin-top:20px; color:var(--text-dim)">ACTIVE MISSIONS:</h4>
+                <div style="font-size:0.8rem; margin-top:5px; color:var(--accent-blue)">
+                    ● Deploying Neural-Core Framework<br>
+                    ● Synchronizing Star-Browser Telemetry
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="taskbar">
+        <div class="start-btn">⊞</div>
+        <div class="taskbar-icons">
+            <div class="taskbar-icon" onclick="toggleWindow('terminal-win')">🐚</div>
+            <div class="taskbar-icon" onclick="toggleWindow('exec-win')">🧠</div>
+            <div class="taskbar-icon" onclick="toggleWindow('calc-win')">🧮</div>
+            <div class="taskbar-icon" onclick="toggleWindow('asgi-win')">🌐</div>
+            <div class="taskbar-icon" onclick="toggleWindow('luna-win')">♻️</div>
+            <div class="taskbar-icon" onclick="toggleWindow('funky-win')">🕺</div>
+            <div class="taskbar-icon" onclick="toggleWindow('star-browser-win')">🛸</div>
+            <div class="taskbar-icon" onclick="toggleWindow('career-win')">🏅</div>
+            <div class="taskbar-icon" onclick="toggleWindow('reader-win')">♾️</div>
+        </div>
+    </div>
+
+    <script>
+        // Boot sequence
+        setTimeout(() => document.getElementById('boot-screen').classList.add('hidden'), 2000);
+
+        function toggleWindow(id) {
+            const win = document.getElementById(id);
+            win.classList.toggle('hidden');
+        }
+
+        // Terminal logic
+        const termIn = document.getElementById('term-in');
+        const termOut = document.getElementById('term-out');
+
+        termIn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const cmd = termIn.value.toLowerCase().trim();
+                const line = document.createElement('div');
+                line.style.color = 'var(--accent-blue)';
+                line.innerText = `agent@core:~$ ${termIn.value}`;
+                termOut.insertBefore(line, termIn.parentNode);
+                termIn.value = '';
+
+                } else if (cmd === 'start host' || cmd === 'host') {
+                    startHostGraphics();
+                } else if (cmd === 'audit' || cmd === 'audit fix') {
+                    startAuditGraphics();
+                } else if (cmd === 'funkytown' || cmd === 'funky') {
+                    toggleWindow('funky-win');
+                } else if (cmd === 'help') {
+                    const h = document.createElement('div');
+                    h.innerText = 'Commands: help, calc, asgi, funkytown, clear, exit';
+                    termOut.insertBefore(h, termIn.parentNode);
+                }
+            }
+        });
+
+        function startASGIGraphics() {
+            toggleWindow('asgi-win');
+            const log = document.getElementById('asgi-boot-log');
+            log.innerHTML = '[SYSTEM] Initializing Starlite ASGI Graphics...<br>';
+            let steps = ['Mounting routes','Initializing Lifespan','Hooking uvicorn.worker','Starting server process'];
+            let i = 0;
+            const iv = setInterval(() => {
+                if(i < steps.length) {
+                    log.innerHTML += `> ${steps[i]}... DONE<br>`;
+                    i++;
+                } else {
+                    clearInterval(iv);
+                    log.innerHTML += '<br><span style="color:var(--success); font-weight:bold;">[UPLINK] ASGI CORE ACTIVE AT :8000</span>';
+                    animateASGI();
+                }
+            }, 600);
+        }
+
+        function startHostGraphics() {
+            toggleWindow('star-browser-win');
+            const log = document.getElementById('mission-data');
+            log.innerHTML = '<span style="color:var(--space-gold)">[LAUNCH] STARTING AEROSPACE MISSION HOST...</span><br>';
+            setTimeout(() => {
+                log.innerHTML += '> Uplink Established (Port 8080)<br>> Orbital Sync Lock... OK<br><br><span style="color:var(--success)">[HOST ONLINE] MISSION_CONTROL ACTIVE</span>';
+            }, 1000);
+        }
+
+        function startAuditGraphics() {
+            toggleWindow('terminal-win');
+            const out = document.getElementById('term-out');
+            const line = document.createElement('div');
+            line.innerHTML = '<span style="color:var(--danger)">[SEC_AUDITOR] SCANNING FOR VULNERABILITIES...</span>';
+            out.insertBefore(line, document.getElementById('term-in').parentNode);
+            
+            setTimeout(() => {
+                const fix = document.createElement('div');
+                fix.innerHTML = '<span style="color:var(--success)">[FIX FOUND] Patching Aether-Core... Pushing to Git as dependabot[bot]</span>';
+                out.insertBefore(fix, document.getElementById('term-in').parentNode);
+            }, 1500);
+        }
+
+        function animateASGI() {
+            const canvas = document.getElementById('asgi-gl-canvas');
+            const ctx = canvas.getContext('2d');
+            let w = canvas.width, h = canvas.height;
+            let offset = 0;
+            setInterval(() => {
+                ctx.clearRect(0,0,w,h);
+                ctx.strokeStyle = 'var(--accent-blue)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                for(let x=0; x<w; x+=10) {
+                    ctx.lineTo(x, h/2 + Math.sin(x/20 + offset)*20);
+                }
+                ctx.stroke();
+                offset += 0.1;
+            }, 30);
+        }
+
+        function startCalc() {
+            const log = document.getElementById('calc-log');
+            log.innerHTML = '[INDEXING] Starting workspace scan...<br>';
+            toggleWindow('calc-win');
+            let count = 0;
+            const iv = setInterval(() => {
+                count += 150;
+                log.innerHTML += `Scanning node_modules... found ${count} symbols<br>`;
+                if (count > 2000) {
+                    clearInterval(iv);
+                    log.innerHTML += '<span style="color:white">[SUCCESS] INDEX COMPLETE</span>';
+                }
+            }, 60);
+        }
+
+        // Agent Rotation Stream
+        const stream = document.getElementById('thought-stream');
+        const agents = [
+            {n: 'ARCHITECT', i:'🧠', c:'var(--accent-purple)', t:['Designing routes','Expanding core']},
+            {n: 'ENGINEER', i:'⚡', c:'var(--accent-blue)', t:['Refactoring API','Optimizing loops']},
+            {n: 'SEC_AUDITOR', i:'🛡️', c:'var(--danger)', t:['Scanning deps','Verifying PR']}
+        ];
+        let agIdx = 0;
+        setInterval(() => {
+            const ag = agents[agIdx];
+            const p = document.createElement('div');
+            p.innerHTML = `<span style="color:${ag.c}">${ag.i} ${ag.n}:</span> ${ag.t[Math.floor(Math.random()*ag.t.length)]}`;
+            stream.appendChild(p);
+            if (stream.children.length > 50) stream.removeChild(stream.firstChild);
+            stream.parentNode.scrollTop = stream.parentNode.scrollHeight;
+            if (Math.random() > 0.8) agIdx = (agIdx + 1) % agents.length;
+        }, 300);
+
+        // Simple drag support
+        document.querySelectorAll('.window-header').forEach(h => {
+            h.onmousedown = function(e) {
+                const w = h.parentNode;
+                let sx = e.clientX - w.offsetLeft;
+                let sy = e.clientY - w.offsetTop;
+                function move(e) {
+                    w.style.left = e.clientX - sx + 'px';
+                    w.style.top = e.clientY - sy + 'px';
+                }
+                document.addEventListener('mousemove', move);
+                document.onmouseup = () => {
+                    document.removeEventListener('mousemove', move);
+                    document.onmouseup = null;
+                }
+            }
+        });
+
+        // Nonstop Visuals Engine
+        const pCanvas = document.getElementById('particle-canvas');
+        const pCtx = pCanvas.getContext('2d');
+        let pW, pH;
+        const particles = [];
+
+        function initParticles() {
+            pW = pCanvas.width = pCanvas.offsetWidth;
+            pH = pCanvas.height = pCanvas.offsetHeight;
+            for(let i=0; i<60; i++) {
+                particles.push({
+                    x: Math.random() * pW,
+                    y: Math.random() * pH,
+                    s: Math.random() * 2 + 1,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    o: Math.random()
+                });
+            }
+        }
+
+        function drawParticles() {
+            pCtx.clearRect(0,0,pW,pH);
+            particles.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if(p.x < 0) p.x = pW; if(p.x > pW) p.x = 0;
+                if(p.y < 0) p.y = pH; if(p.y > pH) p.y = 0;
+                
+                pCtx.fillStyle = `rgba(0, 210, 255, ${p.o * 0.3})`;
+                pCtx.beginPath();
+                pCtx.arc(p.x, p.y, p.s, 0, Math.PI*2);
+                pCtx.fill();
+            });
+            requestAnimationFrame(drawParticles);
+        }
+
+        window.addEventListener('resize', initParticles);
+        initParticles();
+        drawParticles();
+
+        // Nebula Drift & Grid Pulse
+        let nebulaAngle = 0;
+        setInterval(() => {
+            nebulaAngle += 0.01;
+            const nx = 50 + Math.cos(nebulaAngle) * 20;
+            const ny = 50 + Math.sin(nebulaAngle * 0.8) * 20;
+            const nx2 = 80 + Math.sin(nebulaAngle * 1.2) * 15;
+            const ny2 = 20 + Math.cos(nebulaAngle * 0.9) * 15;
+            const gridSize = 40 + Math.sin(nebulaAngle * 2) * 5;
+
+            const d = document.getElementById('desktop');
+            d.style.setProperty('--nebula-x', `${nx}%`);
+            d.style.setProperty('--nebula-y', `${ny}%`);
+            d.style.setProperty('--nebula-x2', `${nx2}%`);
+            d.style.setProperty('--nebula-y2', `${ny2}%`);
+            d.style.setProperty('--grid-size', `${gridSize}px`);
+        }, 50);
+
+        // Neural Lightning
+        setInterval(() => {
+            if(Math.random() > 0.95) {
+                const svg = document.querySelector('#desktop svg');
+                const bolt = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                const x1 = Math.random() * 100 + "%";
+                const y1 = Math.random() * 100 + "%";
+                const x2 = Math.random() * 100 + "%";
+                const y2 = Math.random() * 100 + "%";
+                
+                bolt.setAttribute("x1", x1); bolt.setAttribute("y1", y1);
+                bolt.setAttribute("x2", x2); bolt.setAttribute("y2", y2);
+                bolt.setAttribute("stroke", "white");
+                bolt.setAttribute("stroke-width", "1");
+                bolt.setAttribute("opacity", "0.8");
+                svg.appendChild(bolt);
+                
+                setTimeout(() => {
+                    bolt.setAttribute("stroke", "var(--accent-blue)");
+                    bolt.setAttribute("stroke-width", "0.5");
+                }, 50);
+                setTimeout(() => svg.removeChild(bolt), 200);
+            }
+        }, 100);
+
+        // Mission Telemetry Mock
+        setInterval(() => {
+            const el = document.getElementById('mission-data');
+            if (el) {
+                const alt = 42000 + Math.floor(Math.random() * 50);
+                const vel = (7.8 + Math.random() * 0.1).toFixed(2);
+                el.innerHTML = `ALTITUDE: ${alt}m<br>VELOCITY: ${vel}km/s<br>FUEL_STABILITY: NOMINAL<br>AGENT_OVERRIDE: STANDBY`;
+            }
+        }, 1000);
+
+    </script>
+</body>
+</html>
