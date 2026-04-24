@@ -15,6 +15,12 @@ from pathlib import Path
 import webbrowser
 import schedule
 
+# Add tools/python to sys.path for moved components
+BASE_DIR = Path(__file__).parent.resolve()
+TOOLS_PATH = BASE_DIR / "tools" / "python"
+if str(TOOLS_PATH) not in sys.path:
+    sys.path.insert(0, str(TOOLS_PATH))
+
 import networkbuster_ascii_art
 
 # Service configuration
@@ -55,7 +61,7 @@ SERVICES = [
     {
         'name': 'Mission Control',
         'port': 5000,
-        'command': 'python nasa_home_base.py',
+        'command': 'tools/python/nasa_home_base.py',
         'type': 'python',
         'critical': True,
         'startup_delay': 6
@@ -63,7 +69,7 @@ SERVICES = [
     {
         'name': 'Network Map',
         'port': 6000,
-        'command': 'python network_map_viewer.py',
+        'command': 'tools/python/network_map_viewer.py',
         'type': 'python',
         'critical': False,
         'startup_delay': 8
@@ -71,7 +77,7 @@ SERVICES = [
     {
         'name': 'Universal Launcher',
         'port': 7000,
-        'command': 'python universal_launcher.py',
+        'command': 'tools/python/universal_launcher.py',
         'type': 'python',
         'critical': False,
         'startup_delay': 10
@@ -79,7 +85,7 @@ SERVICES = [
     {
         'name': 'YouTube Trends',
         'port': 8001,
-        'command': 'python youtube_trends_service.py',
+        'command': 'tools/python/youtube_trends_service.py',
         'type': 'python',
         'critical': False,
         'startup_delay': 11
@@ -87,7 +93,7 @@ SERVICES = [
     {
         'name': 'API Tracer',
         'port': 8000,
-        'command': 'python api_tracer.py',
+        'command': 'tools/python/api_tracer.py',
         'type': 'python',
         'critical': False,
         'startup_delay': 12
@@ -95,7 +101,7 @@ SERVICES = [
     {
         'name': 'Vegas Dome',
         'port': 9000,
-        'command': 'python vegas_dome_renderer.py',
+        'command': 'tools/python/vegas_dome_renderer.py',
         'type': 'python',
         'critical': False,
         'startup_delay': 14
@@ -103,7 +109,7 @@ SERVICES = [
     {
         'name': 'Test Center',
         'port': 4000,
-        'command': 'python networkbuster_test_center.py',
+        'command': 'tools/python/networkbuster_test_center.py',
         'type': 'python',
         'critical': False,
         'startup_delay': 16
@@ -111,10 +117,50 @@ SERVICES = [
     {
         'name': 'Nexus One VM',
         'port': 9001,
-        'command': 'python arch_matrix_vm.py',
+        'command': 'tools/python/arch_matrix_vm.py',
         'type': 'python',
         'critical': False,
         'startup_delay': 18
+    },
+    {
+        'name': 'Autonomous Flight Kernel',
+        'port': 9002,
+        'command': 'tools/python/autonomous_flight_kernel.py',
+        'type': 'python',
+        'critical': False,
+        'startup_delay': 20
+    },
+    {
+        'name': 'AGI Music & Video Host',
+        'port': 4500,
+        'command': 'tools/python/agi_music_video_host.py',
+        'type': 'python',
+        'critical': False,
+        'startup_delay': 22
+    },
+    {
+        'name': 'Push Agent',
+        'port': 4501,
+        'command': 'tools/python/push_agent.py',
+        'type': 'python',
+        'critical': False,
+        'startup_delay': 24
+    },
+    {
+        'name': 'Terrestrial Hub',
+        'port': 3000,
+        'path': '/hub',
+        'type': 'web',
+        'critical': False,
+        'startup_delay': 0
+    },
+    {
+        'name': 'Lunar Mission Control',
+        'port': 3000,
+        'path': '/lunar',
+        'type': 'web',
+        'critical': False,
+        'startup_delay': 0
     }
 ]
 

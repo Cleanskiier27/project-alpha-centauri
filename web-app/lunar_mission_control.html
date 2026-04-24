@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NETWORKBUSTER // LUNAR MISSION CONTROL</title>
+    <style>
+        :root {
+            --lunar-grey: #a0a0a0;
+            --alert-amber: #ffcc00;
+            --void-black: #050505;
+        }
+        body {
+            background-color: var(--void-black);
+            color: var(--lunar-grey);
+            font-family: 'Consolas', 'Courier New', monospace;
+            margin: 0;
+            overflow: hidden;
+            border: 2px solid #333;
+        }
+        .crt-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            pointer-events: none;
+            background-size: 100% 2px, 3px 100%;
+        }
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding: 30px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .site-info h1 { margin: 0; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .grid-system {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            flex-grow: 1;
+        }
+        .module {
+            border: 1px solid #333;
+            padding: 20px;
+            background: rgba(255,255,255,0.02);
+        }
+        .module-header {
+            color: var(--alert-amber);
+            font-weight: bold;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #222;
+        }
+        .telemetry { font-size: 14px; line-height: 1.8; }
+        .latency-bar {
+            height: 5px;
+            background: #222;
+            margin-top: 10px;
+            position: relative;
+        }
+        .latency-fill {
+            height: 100%;
+            background: var(--alert-amber);
+            width: 80%; /* 1.3s mock */
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #222;
+            border: 1px solid var(--alert-amber);
+            color: var(--alert-amber);
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="crt-overlay"></div>
+    <div class="dashboard">
+        <div class="header">
+            <div class="site-info">
+                <h1>SHACKLETON_CRATER_CONTROL</h1>
+                <div>LUNAR_SOUTH_POLE // 89.9° S, 0.0° E</div>
+            </div>
+            <div class="status-info">
+                <div class="status-badge">CRATER_PROTOCOL: ACTIVE</div>
+                <div style="margin-top: 5px; text-align: right;">UPLINK_LATENCY: 1.342s</div>
+            </div>
+        </div>
+        
+        <div class="grid-system">
+            <div class="module">
+                <div class="module-header">[ ATMOSPHERIC_DATA ]</div>
+                <div class="telemetry">
+                    PRESSURE: 1.0e-6 ATM<br>
+                    TEMP_SURFACE: -173°C<br>
+                    RADIATION_LEVEL: MODERATE<br>
+                    OXYGEN_LEVEL: 0.00%
+                </div>
+            </div>
+            <div class="module">
+                <div class="module-header">[ FIREMIND_ASCENSION ]</div>
+                <div class="telemetry">
+                    COGNITIVE_LOAD: 14.2%<br>
+                    AGENT_SYNCS: 4 ACTIVE<br>
+                    MEMORY_POOL: 1.2 PB<br>
+                    VERSION: 1.0.4-ASCENSION
+                </div>
+            </div>
+            <div class="module">
+                <div class="module-header">[ DRONE_FLEET ]</div>
+                <div class="telemetry">
+                    UNIT_001: PATROLLING (PEAK)<br>
+                    UNIT_002: DOCKED (SHACKLETON)<br>
+                    UNIT_003: SCANNING (VOID)<br>
+                    <div class="latency-bar"><div class="latency-fill"></div></div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 20px; font-size: 10px; opacity: 0.5;">
+            CONFIDENTIAL // PROPERTY OF NETWORKBUSTER RESEARCH DIVISION // UNAUTHORIZED ACCESS PROHIBITED
+        </div>
+    </div>
+</body>
+</html>

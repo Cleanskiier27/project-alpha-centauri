@@ -52,8 +52,8 @@ setup(
     entry_points={
         'console_scripts': [
             'networkbuster=networkbuster_launcher:main',
-            'networkbuster-map=network_map_viewer:main',
-            'networkbuster-tracer=api_tracer:main',
+            'networkbuster-map=tools.python.network_map_viewer:main',
+            'networkbuster-tracer=tools.python.api_tracer:main',
         ],
     },
     include_package_data=True,

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NETWORKBUSTER // TERRESTRIAL HUB</title>
+    <style>
+        :root {
+            --durango-blue: #0066ff;
+            --terminal-green: #00ff41;
+            --bg-dark: #0a0a0c;
+        }
+        body {
+            background-color: var(--bg-dark);
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            overflow: hidden;
+        }
+        .hub-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            height: 100vh;
+            padding: 20px;
+            gap: 20px;
+        }
+        .sidebar {
+            border-right: 1px solid rgba(0, 102, 255, 0.3);
+            padding: 20px;
+        }
+        .main-display {
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
+            border: 1px solid var(--durango-blue);
+            position: relative;
+            padding: 40px;
+        }
+        h1 { color: var(--durango-blue); letter-spacing: 5px; text-transform: uppercase; }
+        .telemetry-item { margin: 15px 0; font-family: 'Courier New', Courier, monospace; }
+        .label { color: var(--durango-blue); font-weight: bold; }
+        .value { color: var(--terminal-green); }
+        .map-placeholder {
+            width: 100%;
+            height: 300px;
+            background: #111;
+            border: 1px dashed var(--durango-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #444;
+            margin-top: 20px;
+        }
+        .yolo-status {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            padding: 10px 20px;
+            border: 2px solid #ff0044;
+            color: #ff0044;
+            font-weight: bold;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    </style>
+</head>
+<body>
+    <div class="hub-container">
+        <div class="sidebar">
+            <h1>Durango Uplink</h1>
+            <div class="telemetry-item">
+                <div class="label">LOCATION:</div>
+                <div class="value">DURANGO, CO, US</div>
+            </div>
+            <div class="telemetry-item">
+                <div class="label">COORDINATES:</div>
+                <div class="value">37.2753° N, 107.8801° W</div>
+            </div>
+            <div class="telemetry-item">
+                <div class="label">TIMEZONE:</div>
+                <div class="value" id="localTime">--:--:--</div>
+            </div>
+            <div class="telemetry-item">
+                <div class="label">NETWORK:</div>
+                <div class="value">CHARTER COMMUNICATIONS</div>
+            </div>
+            <div class="map-placeholder">
+                [ TERRESTRIAL_MAP_LAYER_ACTIVE ]
+            </div>
+        </div>
+        <div class="main-display">
+            <h1>System Core Status</h1>
+            <div class="telemetry-item">
+                <div class="label">PORT 3000:</div>
+                <div class="value">ONLINE (Express)</div>
+            </div>
+            <div class="telemetry-item">
+                <div class="label">PORT 4500:</div>
+                <div class="value">ONLINE (AGI Host)</div>
+            </div>
+            <div class="telemetry-item">
+                <div class="label">PORT 9002:</div>
+                <div class="value">ONLINE (Flight Kernel)</div>
+            </div>
+            <div class="yolo-status">YOLO_OVERRIDE: ACTIVE</div>
+        </div>
+    </div>
+    <script>
+        function updateTime() {
+            document.getElementById('localTime').textContent = new Date().toLocaleTimeString();
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
+</body>
+</html>

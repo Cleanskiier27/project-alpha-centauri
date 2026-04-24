@@ -13,8 +13,14 @@ import platform
 import getpass
 from pathlib import Path
 
+# Add tools/python to sys.path for moved components
+TOOLS_PATH = PROJECT_PATH / "tools" / "python"
+if str(TOOLS_PATH) not in sys.path:
+    sys.path.insert(0, str(TOOLS_PATH))
+
 # Import security verification
 try:
+    import security_verification
     from security_verification import UserVerification, SecurityLevel
     SECURITY_ENABLED = True
 except ImportError:

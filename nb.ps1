@@ -3,7 +3,7 @@
 
 function nb-start {
     "Starting NetworkBuster..."
-    & .\.venv\Scripts\python.exe auto_start_service.py
+    & .\.venv\Scripts\python.exe tools\python\auto_start_service.py
 }
 
 function nb-stop {
@@ -19,30 +19,30 @@ function nb-status {
 function nb-map {
     "Opening Network Map..."
     Start-Process http://localhost:6000
-    & .\.venv\Scripts\python.exe network_map_viewer.py
+    & .\.venv\Scripts\python.exe tools\python\network_map_viewer.py
 }
 
 function nb-tracer {
     "Opening API Tracer..."
     Start-Process http://localhost:8000
-    & .\.venv\Scripts\python.exe api_tracer.py
+    & .\.venv\Scripts\python.exe tools\python\api_tracer.py
 }
 
 function nb-backup {
     "Running git backup..."
-    & .\.venv\Scripts\python.exe flash_git_backup.py
+    & .\.venv\Scripts\python.exe tools\python\flash_git_backup.py
 }
 
 function nb-thumbs {
     "Extracting thumbnails..."
-    & .\.venv\Scripts\python.exe extract_thumbnails.py
+    & .\.venv\Scripts\python.exe tools\python\extract_thumbnails.py
     Start-Process network_thumbnails\index.html
 }
 
 function nb-mission {
     "Opening Mission Control..."
     Start-Process http://localhost:5000
-    & .\.venv\Scripts\python.exe nasa_home_base.py
+    & .\.venv\Scripts\python.exe tools\python\nasa_home_base.py
 }
 
 function nb-all {

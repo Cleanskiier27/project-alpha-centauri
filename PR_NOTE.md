@@ -30,3 +30,30 @@ To apply this contribution automatically to upstream (fork + PR):
 - Example (PowerShell): `.	ools\apply-to-upstream.ps1 -Upstream 'https://github.com/Cleanskiier27/Final.git' -Fork 'git@github.com:youruser/Final.git'`
 
 The helper clones upstream, creates a branch, copies contribution files, commits, pushes to your fork, and uses `gh` (if available) to open a PR. If `gh` is not available, push to your fork and open a PR manually.
+
+---
+
+### PULL REQUEST #141: AUTONOMOUS FLIGHT KERNEL
+- **Module**: `autonomous_flight_kernel.py`
+- **Features**: Never-ending self-healing flight loop, strategic thought process.
+- **Port**: 9002
+
+### PULL REQUEST #144: HUB & MISSION CONTROL PORTALS
+- **Routes**: `/hub` (Terrestrial Hub), `/lunar` (Lunar Mission Control)
+- **Features**: 
+  - **Terrestrial Hub**: Durango, CO uplink telemetry, network status, YOLO_OVERRIDE indicator.
+  - **Lunar Mission Control**: Shackleton Crater HUD, atmospheric data, Firemind status, drone fleet tracking.
+- **Integration**: Added to `public-landing.html` and `networkbuster_launcher.py`.
+
+### PULL REQUEST #143: PUSH AGENT INTEGRATION
+- **Module**: `push_agent.py`
+- **Port**: 4501
+- **Features**: Automated public distribution compilation, Git staging, and deployment readiness verification.
+- **Integration**: Added to `networkbuster_launcher.py`.
+
+### PULL REQUEST #142: AGI MUSIC & VIDEO INTEGRATION
+- **Module**: `agi_music_video_host.py`
+- **Visuals**: `agi_cinematic_overlay.html`
+- **Port**: 4500
+- **Features**: Algorithmic music synthesis, cinematic HUD overlay, real-time AGI telemetry.
+- **Integration**: Added to `networkbuster_launcher.py`.

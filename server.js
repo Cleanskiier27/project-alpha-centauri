@@ -67,6 +67,19 @@ const appState = {
   }
 };
 
+// Helper function to add logs
+function addLog(action, details = '') {
+  const timestamp = new Date().toISOString();
+  const logEntry = `[${timestamp}] ${action} ${details}`;
+  if (appState.logs) {
+    appState.logs.push(logEntry);
+    if (appState.logs.length > 50) {
+      appState.logs.shift();
+    }
+  }
+  console.log(logEntry);
+}
+
 // Update uptime
 setInterval(() => {
   appState.uptime = Math.floor((Date.now() - appState.startTime) / 1000);
@@ -506,6 +519,16 @@ app.get('/control-panel', (req, res) => {
 // Root route - Serve Neural Coder OS
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Terrestrial Hub route
+app.get('/hub', (req, res) => {
+  res.sendFile(path.join(__dirname, 'web-app/terrestrial_hub.html'));
+});
+
+// Lunar Mission Control route
+app.get('/lunar', (req, res) => {
+  res.sendFile(path.join(__dirname, 'web-app/lunar_mission_control.html'));
 });
 
 // Home route - Also Serve Neural Coder OS
