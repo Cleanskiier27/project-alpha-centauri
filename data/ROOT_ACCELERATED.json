@@ -1,0 +1,112 @@
+{
+  "type": "72fd618c-cff9-403c-b05c-74b117ae0bf5",
+  "data": {
+    "0": {
+      "pcbNodeRuleSet": {
+        "acceleration_protocol": "MAX_POWER_PRODUCTION",
+        "thrust_multiplier": 10.0,
+        "sync_state": "NEURAL_OS_STABLE",
+        "authorized_by": "Andrew Middleton"
+      },
+      "type": "root",
+      "name": "Root [ACCELERATED]",
+      "uid": "ROOT",
+      "childUids": {
+        "_dataStructureIsArray": true
+      },
+      "parentUid": "PARENT_OF_ROOT",
+      "bakedRules": {
+        "active": true,
+        "unit": "mm",
+        "rotationUnit": "deg",
+        "layer": "Top",
+        "gridSpacing": 0.001,
+        "gridSpacingIsMetric": true,
+        "positionRelativeToDocument": {
+          "x": 0,
+          "y": 0,
+          "z": 100
+        },
+        "rotationRelativeToDocument": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "transformRelativeToDocument": {
+          "0": 1,
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 1,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0,
+          "10": 1,
+          "11": 0,
+          "12": 0,
+          "13": 0,
+          "14": 100,
+          "15": 1,
+          "_dataStructureIsArray": true
+        },
+        "cumulativeZPosition": 100,
+        "positionRelativeToRootLayout": null,
+        "rotationRelativeToRootLayout": null,
+        "transformRelativeToShapesLayer": null
+      },
+      "flattenedRules": {
+        "active": {
+          "uid": "root-active-rule",
+          "key": "active",
+          "value": true,
+          "referenceOfDocumentUid": "43c3a821-9211-4cf8-9db7-1ee23360df3e",
+          "order": 1,
+          "fromSystemDefault": false
+        },
+        "unit": {
+          "uid": "root-unit-rule",
+          "key": "unit",
+          "value": "mm",
+          "referenceOfDocumentUid": "43c3a821-9211-4cf8-9db7-1ee23360df3e",
+          "order": 1,
+          "fromSystemDefault": false
+        },
+        "rotationUnit": {
+          "uid": "root-rotationUnit-rule",
+          "key": "rotationUnit",
+          "value": "deg",
+          "referenceOfDocumentUid": "43c3a821-9211-4cf8-9db7-1ee23360df3e",
+          "order": 1,
+          "fromSystemDefault": false
+        },
+        "gridSpacing": {
+          "uid": "root-gridSpacing-rule",
+          "key": "gridSpacing",
+          "value": "0.001 mm",
+          "referenceOfDocumentUid": "43c3a821-9211-4cf8-9db7-1ee23360df3e",
+          "order": 1,
+          "fromSystemDefault": false
+        },
+        "minCornerRadius": {
+          "uid": "root-minCornerRadius-rule",
+          "key": "minCornerRadius",
+          "value": 0,
+          "referenceOfDocumentUid": "43c3a821-9211-4cf8-9db7-1ee23360df3e",
+          "order": 0,
+          "fromSystemDefault": true
+        },
+        "silkColor": {
+          "uid": "root-silkColor-rule",
+          "key": "silkColor",
+          "value": "gold",
+          "referenceOfDocumentUid": "43c3a821-9211-4cf8-9db7-1ee23360df3e",
+          "order": 1,
+          "fromSystemDefault": false
+        }
+      }
+    },
+    "_dataStructureIsArray": true
+  }
+}

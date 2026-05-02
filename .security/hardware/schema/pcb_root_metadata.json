@@ -1,0 +1,42 @@
+{
+  "type": "72fd618c-cff9-403c-b05c-74b117ae0bf5",
+  "data": {
+    "0": {
+      "pcbNodeRuleSet": {},
+      "type": "root",
+      "name": "Root",
+      "uid": "ROOT",
+      "childUids": {
+        "_dataStructureIsArray": true
+      },
+      "parentUid": "PARENT_OF_ROOT",
+      "bakedRules": {
+        "active": true,
+        "unit": "mm",
+        "rotationUnit": "deg",
+        "layer": "Top",
+        "gridSpacing": 0.01,
+        "gridSpacingIsMetric": true,
+        "positionRelativeToDocument": { "x": 0, "y": 0, "z": 0 },
+        "rotationRelativeToDocument": { "x": 0, "y": 0, "z": 0 },
+        "transformRelativeToDocument": {
+          "0": 1, "1": 0, "2": 0, "3": 0, "4": 0, "5": 1, "6": 0, "7": 0, "8": 0, "9": 0, "10": 1, "11": 0, "12": 0, "13": 0, "14": 0, "15": 1,
+          "_dataStructureIsArray": true
+        },
+        "cumulativeZPosition": 0,
+        "positionRelativeToRootLayout": null,
+        "rotationRelativeToRootLayout": null,
+        "transformRelativeToShapesLayer": null
+      },
+      "flattenedRules": {
+        "active": { "uid": "root-active-rule", "key": "active", "value": true, "referenceOfDocumentUid": "43c3a821-9211-4cf8-9db7-1ee23360df3e", "order": 0, "fromSystemDefault": true },
+        "unit": { "uid": "root-unit-rule", "key": "unit", "value": "mm", "referenceOfDocumentUid": "43c3a821-9211-4cf8-9db7-1ee23360df3e", "order": 0, "fromSystemDefault": true },
+        "rotationUnit": { "uid": "root-rotationUnit-rule", "key": "rotationUnit", "value": "deg", "referenceOfDocumentUid": "43c3a821-9211-4cf8-9db7-1ee23360df3e", "order": 0, "fromSystemDefault": true },
+        "gridSpacing": { "uid": "root-gridSpacing-rule", "key": "gridSpacing", "value": "1 cm", "referenceOfDocumentUid": "43c3a821-9211-4cf8-9db7-1ee23360df3e", "order": 0, "fromSystemDefault": true },
+        "minCornerRadius": { "uid": "root-minCornerRadius-rule", "key": "minCornerRadius", "value": 0, "referenceOfDocumentUid": "43c3a821-9211-4cf8-9db7-1ee23360df3e", "order": 0, "fromSystemDefault": true },
+        "silkColor": { "uid": "root-silkColor-rule", "key": "silkColor", "value": "white", "referenceOfDocumentUid": "43c3a821-9211-4cf8-9db7-1ee23360df3e", "order": 0, "fromSystemDefault": true }
+      }
+    },
+    "_dataStructureIsArray": true
+  }
+}

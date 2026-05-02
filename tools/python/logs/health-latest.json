@@ -1,0 +1,107 @@
+{
+  "timestamp": "2026-04-24T10:31:01.103986",
+  "admin": 0,
+  "cpu": {
+    "usage": 33.7,
+    "cores": 12,
+    "status": "OK"
+  },
+  "memory": {
+    "used_gb": 12.912479400634766,
+    "total_gb": 15.599502563476562,
+    "percent": 82.8,
+    "status": "OK"
+  },
+  "disk": {
+    "C:\\": {
+      "used_gb": 834.723388671875,
+      "total_gb": 934.8719100952148,
+      "percent": 89.3
+    },
+    "D:\\": {
+      "used_gb": 29.109375,
+      "total_gb": 29.109375,
+      "percent": 100.0
+    },
+    "J:\\": {
+      "used_gb": 0.1624755859375,
+      "total_gb": 29.29290771484375,
+      "percent": 0.6
+    }
+  },
+  "ports": {
+    "Web Server": {
+      "port": 3000,
+      "status": "running"
+    },
+    "API Server": {
+      "port": 3001,
+      "status": "running"
+    },
+    "Audio Server": {
+      "port": 3002,
+      "status": "running"
+    }
+  },
+  "node": [
+    {
+      "pid": 17524,
+      "memory_mb": 0.65625,
+      "cpu": 0.0
+    },
+    {
+      "pid": 20212,
+      "memory_mb": 89.72265625,
+      "cpu": 0.0
+    },
+    {
+      "pid": 25272,
+      "memory_mb": 8.40234375,
+      "cpu": 0.0
+    },
+    {
+      "pid": 25748,
+      "memory_mb": 89.69140625,
+      "cpu": 0.0
+    },
+    {
+      "pid": 25816,
+      "memory_mb": 13.125,
+      "cpu": 0.0
+    },
+    {
+      "pid": 26044,
+      "memory_mb": 10.84765625,
+      "cpu": 0.0
+    },
+    {
+      "pid": 28260,
+      "memory_mb": 4.5546875,
+      "cpu": 0.0
+    },
+    {
+      "pid": 30892,
+      "memory_mb": 33.29296875,
+      "cpu": 0.0
+    },
+    {
+      "pid": 31712,
+      "memory_mb": 0.75,
+      "cpu": 0.0
+    },
+    {
+      "pid": 32832,
+      "memory_mb": 232.0234375,
+      "cpu": 0.0
+    },
+    {
+      "pid": 36836,
+      "memory_mb": 277.0,
+      "cpu": 0.0
+    }
+  ],
+  "network": {
+    "localhost": false,
+    "internet": false
+  }
+}

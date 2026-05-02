@@ -19,6 +19,11 @@
 
 **📺 Watch on YouTube:** https://www.youtube.com/channel/daypirate1/networkbuster
 
+### ⚡ Quick Access
+[![Audio Lab](https://img.shields.io/badge/Audio%20Lab-Stream%20MP3%2FMP4-blue?style=for-the-badge&logo=audio-technica)](http://localhost:3002/audio-lab)
+[![AGI Host](https://img.shields.io/badge/AGI%20Host-Cinematic%20Overlay-purple?style=for-the-badge&logo=openai)](http://localhost:4500)
+[![Public Landing](https://img.shields.io/badge/Public%20Landing-Repository-green?style=for-the-badge&logo=github)](public-landing.html)
+
 ## 🎨 System Preview
 ![Component Overview](docs/diagrams/component-overview.svg)
 *Architectural visualization of the NetworkBuster Lunar Recycling & Monitoring System.*

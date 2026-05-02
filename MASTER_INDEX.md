@@ -72,6 +72,13 @@
 | [PUSH-DATACENTRA.md](PUSH-DATACENTRA.md) | Deployment procedures | 10 min | DevOps |
 | push-datacentra.sh | Git automation script | Code review | DevOps |
 
+### 🛰️ Hardware & Modules (🔒 SECURE ACCESS ONLY)
+
+| Document | Purpose | Size | Audience |
+|----------|---------|------|----------|
+| [RESTRICTED] | **Key Programmer PCB & Schematics** | Vaulted | authorized-only |
+| [android/antigravity/README.md](android/antigravity/README.md) | Antigravity module overview | 5 min | All |
+
 ### 📋 Comprehensive Guides
 
 | Document | Purpose | Size | Audience |

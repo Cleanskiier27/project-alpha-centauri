@@ -4,6 +4,7 @@ plugins {
 }
 
 android {
+    namespace "net.networkbuster.antigravity"
     compileSdkVersion 34
 
     defaultConfig {
