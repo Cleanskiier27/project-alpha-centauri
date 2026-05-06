@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace Preview | PRECISELIENS PLLC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #020205;
+            --accent: #00f0ff;
+            --secondary: #9d50bb;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(0, 240, 255, 0.2);
+            --text: #e0e0e0;
+            --success: #00ff9d;
+            --warning: #ffb400;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(0, 240, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 90% 90%, rgba(157, 80, 187, 0.05) 0%, transparent 50%);
+        }
+
+        .container {
+            width: 900px;
+            background: rgba(10, 10, 20, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+        }
+
+        .brand h1 {
+            font-size: 1.5rem;
+            letter-spacing: 4px;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 0 10px var(--accent);
+        }
+
+        .brand p {
+            font-size: 0.8rem;
+            color: var(--accent);
+            opacity: 0.6;
+            margin-top: 5px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .credits {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 10px 20px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .credits-val {
+            color: #fff;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 25px;
+            border-radius: 4px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+            background: rgba(0, 240, 255, 0.02);
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .icon-box {
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .status-tag {
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            border: 1px solid;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .status-available { border-color: var(--success); color: var(--success); }
+        .status-active { border-color: var(--accent); color: var(--accent); }
+        .status-restricted { border-color: #ff3333; color: #ff3333; }
+
+        .card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .card p {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.4);
+            line-height: 1.5;
+            margin-bottom: 25px;
+            height: 40px;
+            overflow: hidden;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent);
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .btn-deploy {
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 6px 15px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-deploy:hover {
+            background: var(--accent);
+            color: #000;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .scanline {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(0, 240, 255, 0.02) 50%, transparent);
+            background-size: 100% 4px;
+            pointer-events: none;
+            animation: scan 10s linear infinite;
+        }
+
+        @keyframes scan {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(100%); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="scanline"></div>
+        <header>
+            <div class="brand">
+                <h1>PRECISELIENS MARKETPLACE</h1>
+                <p>Welcome, Andrew Middleton. Deployment Node: NB-7788-ALPHA | <a href="preciseliens_cinematic.html" style="color: var(--accent); text-decoration: none;">Launch Cinematic Mode</a></p>
+            </div>
+            <div class="credits">
+                <span style="font-size: 0.8rem; opacity: 0.5;">CREDITS:</span>
+                <span class="credits-val">∞.00</span>
+            </div>
+        </header>
+
+        <div class="grid">
+            <!-- Item 1 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon-box">📦</div>
+                    <span class="status-tag status-available">Available</span>
+                </div>
+                <h3>NASA SBIR Payout Package</h3>
+                <p>Final documentation and technical deliverables for M2M milestones. Fulfilling Artemis Accords.</p>
+                <div class="card-footer">
+                    <span class="price">$50,000,000</span>
+                    <button class="btn-deploy">Deploy</button>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon-box">🧠</div>
+                    <span class="status-tag status-active">Active</span>
+                </div>
+                <h3>Preciseliens Neural Sync</h3>
+                <p>Bi-directional telemetry cycles for multi-agent synchronization and deep-level state caching.</p>
+                <div class="card-footer">
+                    <span class="price">2.5 ETH</span>
+                    <button class="btn-deploy">Sync Now</button>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon-box">⚡</div>
+                    <span class="status-tag status-available">Ready</span>
+                </div>
+                <h3>NetworkBuster Suite V2</h3>
+                <p>Advanced network path optimization and real-time monitoring. Includes starlite-core logic.</p>
+                <div class="card-footer">
+                    <span class="price">$9,999.00</span>
+                    <button class="btn-deploy">Upgrade</button>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon-box">🛰️</div>
+                    <span class="status-tag status-restricted">Restricted</span>
+                </div>
+                <h3>Artemis Navigation Data</h3>
+                <p>High-precision star tracking and trajectory data from NASA/ESA planetary ephemeris.</p>
+                <div class="card-footer">
+                    <span class="price">CONTRACT ONLY</span>
+                    <button class="btn-deploy">Request</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <span>License: PRECISELIENS-ENTERPRISE-2026</span>
+            <span style="color: var(--accent);">System Status: Nominal</span>
+        </footer>
+    </div>
+</body>
+</html>

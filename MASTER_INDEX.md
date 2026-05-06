@@ -136,13 +136,14 @@ NetworkBuster/networkbuster.net/
 │   │   └── script.js
 │   ├── blog/                            - Blog (with Andrew's story)
 │   │   └── index.html
-│   └── challengerepo/                   - Challenge & overlay apps
-│       └── real-time-overlay/           - 3D visualization
-│           ├── App.jsx
-│           ├── components/ (4 components)
-│           ├── package.json
-│           ├── vite.config.js
-│           └── index.html
+├── challengerepo/                   - Challenge & overlay apps
+│   └── real-time-overlay/           - 3D visualization & Preciseliens Marketplace
+│       ├── App.jsx                  - Main interface with Preciseliens branding
+│       ├── components/ (5 components) - Added Marketplace.jsx
+│       ├── package.json
+│       ├── vite.config.js
+│       └── index.html               - Updated title: PRECISELIENS PLLC
+
 │
 ├── 📊 Data & Resources
 │   ├── data/

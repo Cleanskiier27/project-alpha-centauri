@@ -5,7 +5,8 @@ import SatGPU from './components/SatGPU'
 import CameraFeed from './components/CameraFeed'
 import ConnectionGraph from './components/ConnectionGraph'
 import ImmersiveReader from './components/ImmersiveReader'
-import { Monitor, Cpu, Map as MapIcon, Video, Eye, Brain } from 'lucide-react'
+import Marketplace from './components/Marketplace'
+import { Monitor, Cpu, Map as MapIcon, Video, Eye, Brain, ShoppingCart } from 'lucide-react'
 
 function App() {
     const [activeTab, setActiveTab] = useState('dashboard');
@@ -23,7 +24,7 @@ function App() {
                 <header className="flex justify-between items-center mb-6 pointer-events-auto">
                     <div className="glass-panel px-4 py-2 flex items-center gap-2">
                         <Monitor className="text-[#00f0ff]" size={20} />
-                        <h1 className="text-xl font-bold tracking-widest text-white glow-text">SYSTEM OVERLAY // V.1.0</h1>
+                        <h1 className="text-xl font-bold tracking-widest text-white glow-text">PRECISELIENS PLLC // MISSION CONTROL</h1>
                     </div>
                     <div className="glass-panel px-4 py-2 text-xs text-[#00f0ff]">
                         SYSTEM CLOCK: {new Date().toLocaleTimeString()}
@@ -53,19 +54,27 @@ function App() {
                         </div>
                     </div>
 
-                    {/* Center Column: Satellite Map */}
+                    {/* Center Column: Satellite Map or Marketplace */}
                     <div className="col-span-6 flex flex-col">
                         <div className="glass-panel p-1 w-full h-full flex flex-col">
-                            <div className="flex items-center justify-between px-3 py-2 bg-black/40 mb-1">
-                                <div className="flex items-center gap-2">
-                                    <MapIcon size={16} className="text-[#00f0ff]" />
-                                    <span className="text-sm font-bold text-[#00f0ff]">SATELLITE LINK</span>
+                            {activeTab === 'marketplace' ? (
+                                <div className="p-6 flex-1 overflow-hidden">
+                                    <Marketplace />
                                 </div>
-                                <div className="text-[10px] text-gray-400">LAT: 51.505 | LNG: -0.090</div>
-                            </div>
-                            <div className="flex-1 relative overflow-hidden rounded border border-white/5">
-                                <SatelliteMap />
-                            </div>
+                            ) : (
+                                <>
+                                    <div className="flex items-center justify-between px-3 py-2 bg-black/40 mb-1">
+                                        <div className="flex items-center gap-2">
+                                            <MapIcon size={16} className="text-[#00f0ff]" />
+                                            <span className="text-sm font-bold text-[#00f0ff]">SATELLITE LINK</span>
+                                        </div>
+                                        <div className="text-[10px] text-gray-400">LAT: 51.505 | LNG: -0.090</div>
+                                    </div>
+                                    <div className="flex-1 relative overflow-hidden rounded border border-white/5">
+                                        <SatelliteMap />
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
 
@@ -95,16 +104,28 @@ function App() {
                                     <span className="text-[#00ff00]">12 MS</span>
                                 </div>
 
+                                {/* Marketplace Toggle */}
+                                <button
+                                    onClick={() => setActiveTab(activeTab === 'marketplace' ? 'dashboard' : 'marketplace')}
+                                    className={`w-full mt-2 p-2 rounded flex items-center justify-center gap-2 transition ${activeTab === 'marketplace'
+                                        ? 'bg-[#00f0ff] text-black'
+                                        : 'bg-white/5 text-[#00f0ff] hover:bg-white/10 border border-[#00f0ff]/30'
+                                        }`}
+                                >
+                                    <ShoppingCart size={14} />
+                                    <span className="text-xs font-bold uppercase tracking-widest">Marketplace</span>
+                                </button>
+
                                 {/* Immersive Reader Toggle */}
                                 <button
                                     onClick={() => setActiveTab(activeTab === 'immersive' ? 'dashboard' : 'immersive')}
-                                    className={`w-full mt-2 p-2 rounded flex items-center justify-center gap-2 transition ${activeTab === 'immersive'
+                                    className={`w-full mt-1 p-2 rounded flex items-center justify-center gap-2 transition ${activeTab === 'immersive'
                                         ? 'bg-[#667eea] text-white'
                                         : 'bg-white/5 text-[#00f0ff] hover:bg-white/10'
                                         }`}
                                 >
                                     <Eye size={14} />
-                                    <span className="text-xs font-bold">IMMERSIVE READER</span>
+                                    <span className="text-xs font-bold uppercase tracking-widest">Immersive Reader</span>
                                 </button>
 
                                 {/* AI Training Toggle */}
@@ -116,7 +137,7 @@ function App() {
                                         }`}
                                 >
                                     <Brain size={14} />
-                                    <span className="text-xs font-bold">{aiTrainingEnabled ? 'AI ON' : 'AI OFF'}</span>
+                                    <span className="text-xs font-bold uppercase tracking-widest">{aiTrainingEnabled ? 'AI ON' : 'AI OFF'}</span>
                                 </button>
                             </div>
                         </div>
@@ -156,3 +177,4 @@ function App() {
 }
 
 export default App
+

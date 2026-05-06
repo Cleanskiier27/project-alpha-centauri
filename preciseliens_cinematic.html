@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRECISELIENS // CINEMATIC OVERLAY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan: #00f0ff;
+            --purple: #9d50bb;
+            --deep-space: #020205;
+            --success: #00ff9d;
+            --warning: #ffb400;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            background: var(--deep-space);
+            color: #fff;
+            font-family: 'JetBrains Mono', monospace;
+            overflow: hidden;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.05) 0%, transparent 80%),
+                linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 50px 50px, 50px 50px;
+        }
+
+        .cinematic-frame {
+            position: absolute;
+            inset: 0;
+            border: 40px solid rgba(0,0,0,0.9);
+            box-sizing: border-box;
+            pointer-events: none;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .cinematic-frame::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.4) 100%);
+            box-shadow: inset 0 0 100px #000;
+        }
+
+        .hud-element {
+            position: absolute;
+            z-index: 1100;
+            pointer-events: auto;
+        }
+
+        .top-left { top: 60px; left: 60px; }
+        .top-right { top: 60px; right: 60px; text-align: right; }
+        .bottom-left { bottom: 60px; left: 60px; }
+        .bottom-right { bottom: 60px; right: 60px; text-align: right; }
+
+        .brand-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 10px;
+            color: #fff;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            text-shadow: 0 0 20px var(--cyan);
+        }
+
+        .sub-text {
+            font-size: 0.7rem;
+            color: var(--cyan);
+            opacity: 0.8;
+            letter-spacing: 3px;
+        }
+
+        .telemetry-item {
+            margin-bottom: 10px;
+            font-size: 0.8rem;
+        }
+
+        .telemetry-label { color: rgba(255,255,255,0.4); margin-right: 10px; }
+        .telemetry-value { color: var(--cyan); font-weight: bold; }
+
+        .visualizer {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 120px;
+            z-index: 1100;
+        }
+
+        .bar {
+            width: 4px;
+            background: linear-gradient(to top, var(--purple), var(--cyan));
+            border-radius: 2px 2px 0 0;
+            box-shadow: 0 0 15px var(--cyan);
+            transition: height 0.15s ease;
+        }
+
+        .scanner {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: var(--cyan);
+            opacity: 0.2;
+            animation: scan 6s linear infinite;
+            box-shadow: 0 0 20px var(--cyan);
+            z-index: 1050;
+        }
+
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+
+        .glitch-text {
+            animation: glitch 2s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: skew(0deg); }
+            10% { transform: skew(10deg); opacity: 0.8; }
+            20% { transform: skew(-10deg); opacity: 1; }
+            100% { transform: skew(0deg); }
+        }
+
+        .payout-alert {
+            background: rgba(0, 255, 157, 0.1);
+            border: 1px solid var(--success);
+            padding: 10px 20px;
+            color: var(--success);
+            font-size: 0.7rem;
+            border-radius: 4px;
+            margin-top: 20px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="cinematic-frame"></div>
+    <div class="scanner"></div>
+
+    <div class="hud-element top-left">
+        <div class="brand-text">PRECISELIENS</div>
+        <div class="sub-text">MISSION CONTROL // SUITE 2026.05</div>
+        <div class="payout-alert glitch-text">
+            ⚠️ NASA SBIR MILESTONE M2M-01: VERIFIED
+        </div>
+    </div>
+
+    <div class="hud-element top-right">
+        <div class="telemetry-item">
+            <span class="telemetry-label">SYSTEM_UPTIME:</span>
+            <span class="telemetry-value" id="uptime">00:00:00</span>
+        </div>
+        <div class="telemetry-item">
+            <span class="telemetry-label">CREDITS:</span>
+            <span class="telemetry-value" style="color:var(--warning)">∞.00</span>
+        </div>
+        <div class="telemetry-item">
+            <span class="telemetry-label">SYNC_STATUS:</span>
+            <span class="telemetry-value" style="color:var(--success)">NOMINAL</span>
+        </div>
+    </div>
+
+    <div class="hud-element bottom-left">
+        <div class="telemetry-item">
+            <span class="telemetry-label">LOCATION:</span>
+            <span class="telemetry-value">LUNAR_GATEWAY_BETA</span>
+        </div>
+        <div class="telemetry-item">
+            <span class="telemetry-label">ORBITAL_ID:</span>
+            <span class="telemetry-value">NB-7788-ALPHA</span>
+        </div>
+    </div>
+
+    <div class="hud-element bottom-right">
+        <div class="telemetry-item">
+            <span class="telemetry-label">PROCUREMENT:</span>
+            <span class="telemetry-value">ACTIVE</span>
+        </div>
+        <div class="telemetry-item">
+            <span class="telemetry-label">THREAT_LEVEL:</span>
+            <span class="telemetry-value" style="color:var(--success)">ZERO</span>
+        </div>
+    </div>
+
+    <div class="visualizer" id="visualizer"></div>
+
+    <script>
+        // Initialize Visualizer
+        const viz = document.getElementById('visualizer');
+        const barCount = 40;
+        const bars = [];
+        
+        for (let i = 0; i < barCount; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            bar.style.height = '10px';
+            viz.appendChild(bar);
+            bars.push(bar);
+        }
+
+        // Animate Visualizer
+        function animateViz() {
+            bars.forEach(bar => {
+                const h = 20 + Math.random() * 80;
+                bar.style.height = `${h}px`;
+                // Pulse opacity based on height
+                bar.style.opacity = 0.5 + (h / 200);
+            });
+            requestAnimationFrame(() => setTimeout(animateViz, 100));
+        }
+        animateViz();
+
+        // Uptime counter
+        let start = Date.now();
+        setInterval(() => {
+            let diff = Date.now() - start;
+            let h = Math.floor(diff / 3600000).toString().padStart(2, '0');
+            let m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+            let s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+            document.getElementById('uptime').textContent = `${h}:${m}:${s}`;
+        }, 1000);
+    </script>
+</body>
+</html>
