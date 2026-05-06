@@ -300,6 +300,11 @@
             <div class="label">Recycle Logs</div>
         </div>
 
+        <div class="desktop-icon" style="left:5%; top:5%;" onclick="toggleWindow('kernel-win')">
+            <div style="font-size: 2rem;">⚙️</div>
+            <div class="label">Kernel Bridge</div>
+        </div>
+
         <div class="desktop-icon" style="left:85%; top:45%;" onclick="toggleWindow('money-win')">
             <div style="font-size: 2rem;">💸</div>
             <div class="label">Neural Money</div>
@@ -1007,7 +1012,7 @@
             }
         }, 100);
 
-        // Mission Telemetry Mock
+        <!-- Mission Telemetry Mock -->
         setInterval(() => {
             const el = document.getElementById('mission-data');
             if (el) {
@@ -1017,6 +1022,49 @@
             }
         }, 1000);
 
+        // Kernel Telemetry Bridge Update
+        setInterval(async () => {
+            try {
+                const res = await fetch('/api/kernel/telemetry');
+                const data = await res.json();
+                const container = document.getElementById('kernel-data');
+                if (container) {
+                    container.innerHTML = `
+                        <div style="color:var(--success); margin-bottom:10px;">> KERNEL_ID: ${data.kernel.kernel_version}</div>
+                        <div>STATUS: ${data.kernel.status}</div>
+                        <div>ACTIVE_NODES: ${data.kernel.active_nodes}</div>
+                        <div>UPTIME: ${data.kernel.uptime}s</div>
+                        <div style="margin-top:10px; color:var(--accent-purple);">THOUGHT: ${data.kernel.thought_process}</div>
+                        <div style="margin-top:5px; font-size:0.6rem; opacity:0.5;">CLEANSKIIER_SYNC: ${data.cleanskiier_sync}</div>
+                    `;
+                    document.getElementById('kernel-cpu').textContent = data.system.cpu_usage + '%';
+                    document.getElementById('cpu-bar').style.width = data.system.cpu_usage + '%';
+                }
+            } catch (e) {}
+        }, 2000);
+
     </script>
+    
+    <!-- Kernel Telemetry Window (Appended) -->
+    <div id="kernel-win" class="window hidden" style="top:250px; left:50px; width: 350px; height: 300px;">
+        <div class="window-header">
+            <div class="window-title">KERNEL_TELEMETRY // CLEANSKIIER_SYNC</div>
+            <div class="window-controls"><div class="control-btn close-btn" onclick="toggleWindow('kernel-win')"></div></div>
+        </div>
+        <div class="window-content" style="background:#000; color:var(--accent-blue); font-family:'JetBrains Mono', monospace; font-size:0.75rem;">
+            <div id="kernel-data" style="padding:15px;">
+                INITIALIZING KERNEL LINK...
+            </div>
+            <div style="padding: 15px; border-top: 1px solid rgba(0,240,255,0.1);">
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                    <span>CPU_LOAD</span>
+                    <span id="kernel-cpu">--%</span>
+                </div>
+                <div style="width:100%; height:4px; background:rgba(255,255,255,0.1);">
+                    <div id="cpu-bar" style="width:0%; height:100%; background:var(--accent-blue);"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

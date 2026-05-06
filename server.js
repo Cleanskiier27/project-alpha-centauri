@@ -51,7 +51,8 @@ const MISSION_PROXIES = {
   '/api/launcher': 'http://localhost:7000',
   '/api/tracer': 'http://localhost:8000',
   '/api/matrix': 'http://localhost:9001',
-  '/api/agi': 'http://localhost:4500'
+  '/api/agi': 'http://localhost:4500',
+  '/api/kernel': 'http://localhost:9002'
 };
 
 Object.entries(MISSION_PROXIES).forEach(([prefix, target]) => {

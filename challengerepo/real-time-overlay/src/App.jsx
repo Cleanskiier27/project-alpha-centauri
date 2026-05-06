@@ -6,7 +6,8 @@ import CameraFeed from './components/CameraFeed'
 import ConnectionGraph from './components/ConnectionGraph'
 import ImmersiveReader from './components/ImmersiveReader'
 import Marketplace from './components/Marketplace'
-import { Monitor, Cpu, Map as MapIcon, Video, Eye, Brain, ShoppingCart } from 'lucide-react'
+import KernelMonitor from './components/KernelMonitor'
+import { Monitor, Cpu, Map as MapIcon, Video, Eye, Brain, ShoppingCart, Activity } from 'lucide-react'
 
 function App() {
     const [activeTab, setActiveTab] = useState('dashboard');
@@ -84,6 +85,11 @@ function App() {
                             <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-4">
                                 <Cpu size={16} className="text-[#00ff00]" />
                                 <h2 className="text-sm font-bold text-[#00ff00]">SYS.METRICS</h2>
+                            </div>
+
+                            {/* Kernel Monitor Integration */}
+                            <div className="mb-4">
+                                <KernelMonitor />
                             </div>
 
                             <div className="h-48 mb-4">
