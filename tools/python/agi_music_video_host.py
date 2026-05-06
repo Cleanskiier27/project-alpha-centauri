@@ -53,7 +53,37 @@ video_engine = AGIVideoEngine()
 
 @app.route('/')
 def home():
-    with open('agi_cinematic_overlay.html', 'r') as f:
+    with open('preciseliens_cinematic.html', 'r') as f:
+        return f.read()
+
+@app.route('/worldview')
+def worldview():
+    # Serve the Satellite Map from the built overlay
+    overlay_path = os.path.join(os.getcwd(), 'challengerepo', 'real-time-overlay', 'dist', 'index.html')
+    if os.path.exists(overlay_path):
+        with open(overlay_path, 'r') as f:
+            return f.read()
+    return "Satellite World View Dist not found. Run 'npm run build' in real-time-overlay.", 404
+
+@app.route('/marketplace')
+def marketplace():
+    with open('MARKETPLACE_EXAMPLE.html', 'r') as f:
+        return f.read()
+
+@app.route('/matrix')
+def matrix():
+    # Proxy or redirect to the Arch Matrix VM (assumes port 9001)
+    return """
+    <html>
+        <body style="margin:0; padding:0; background:#000;">
+            <iframe src="http://localhost:9001" style="width:100%; height:100%; border:none;"></iframe>
+        </body>
+    </html>
+    """
+
+@app.route('/tracking')
+def tracking():
+    with open('world_tracking.html', 'r') as f:
         return f.read()
 
 @app.route('/api/agi/status')

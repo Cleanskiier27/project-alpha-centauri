@@ -34,6 +34,14 @@ const Marketplace = () => {
             price: 'CONTRACT ONLY',
             icon: <Globe className="text-[#00ff9d]" />,
             status: 'RESTRICTED'
+        },
+        {
+            id: 'cloud-storage-100',
+            name: '100GB Reserved Cloud Storage',
+            description: 'Encrypted LRS storage expansion for neural datasets and backups.',
+            price: '$3.88/mo',
+            icon: <Shield className="text-[#00ff9d]" />,
+            status: 'AVAILABLE'
         }
     ];
 

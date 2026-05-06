@@ -9,9 +9,9 @@
 
 | Service | Configuration | Usage | Cost |
 |---------|---|---|---|
-| **Storage Account** | StorageV2, Hot Tier, LRS | 100GB stored | $1.84 |
+| **Storage Account** | StorageV2, Hot Tier, LRS | 200GB stored | $3.68 |
 | **Blob Storage Transactions** | Read/Write operations | 1M ops/month | $0.50 |
-| **File Share** | Premium Tier | 100GB quota | $1.94 |
+| **File Share** | Premium Tier | 200GB quota | $3.88 |
 | **Table Storage** | VisitorMetrics, PerformanceMetrics | 20K writes/day | $0.10 |
 | **Queue Storage** | ai-training-jobs, data-processing | 50K msgs/day | $0.15 |
 | **Container Apps** | 1 vCPU, 2GB RAM, 24/7 | 730 hours | $52.00 |

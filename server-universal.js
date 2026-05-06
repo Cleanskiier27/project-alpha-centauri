@@ -3,6 +3,15 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import os from 'os';
 import { exec } from 'child_process';
+import httpProxy from 'http-proxy';
+
+const proxy = httpProxy.createProxyServer({});
+
+// Proxy error handling
+proxy.on('error', (err, req, res) => {
+  res.status(502).json({ error: 'Proxy target unreachable', details: err.message });
+});
+
 
 // Optional performance packages with fallbacks
 let compression = null;
@@ -77,6 +86,42 @@ app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 // UNLIMITED TOKENS MODE: Rate limiting disabled
 app.use((req, res, next) => {
   next();
+});
+
+// Mission Proxies (Python Services)
+const MISSION_PROXIES = {
+  '/api/mission': 'http://localhost:5000',
+  '/api/map': 'http://localhost:6000',
+  '/api/launcher': 'http://localhost:7000',
+  '/api/tracer': 'http://localhost:8000',
+  '/api/matrix': 'http://localhost:9001',
+  '/api/agi': 'http://localhost:4500'
+};
+
+Object.entries(MISSION_PROXIES).forEach(([prefix, target]) => {
+  app.all(`${prefix}*`, (req, res) => {
+    // If request is for /api/mission/status, we want to proxy to http://localhost:5000/status
+    const targetUrl = req.url.replace(prefix, '') || '/';
+    proxy.web(req, res, { target, ignorePath: true, changeOrigin: true, toProxy: true }, (err) => {
+        // Fallback or error handled by proxy.on('error')
+    });
+  });
+});
+
+// Direct HTML Routes
+const HTML_ROUTES = {
+  '/os': 'os.html',
+  '/security': 'dashboard-security.html',
+  '/music': 'music-studio.html',
+  '/cinematic': 'preciseliens_cinematic.html',
+  '/marketplace': 'MARKETPLACE_EXAMPLE.html',
+  '/tracking': 'world_tracking.html'
+};
+
+Object.entries(HTML_ROUTES).forEach(([route, file]) => {
+  app.get(route, (req, res) => {
+    res.sendFile(path.join(__dirname, file));
+  });
 });
 
 // Application state
@@ -244,6 +289,23 @@ staticPaths.forEach(({ prefix, dir }) => {
 const dashboardPath = path.join(__dirname, 'dashboard/dist/index.html');
 const overlayPath = path.join(__dirname, 'web-app/overlay.html');
 const challengeOverlayPath = path.join(__dirname, 'challengerepo/real-time-overlay/dist/index.html');
+
+// Preciseliens Visualizations
+app.get('/cinematic', (req, res) => {
+  res.sendFile(path.join(__dirname, 'preciseliens_cinematic.html'));
+});
+
+app.get('/marketplace', (req, res) => {
+  res.sendFile(path.join(__dirname, 'MARKETPLACE_EXAMPLE.html'));
+});
+
+app.get('/tracking', (req, res) => {
+  res.sendFile(path.join(__dirname, 'world_tracking.html'));
+});
+
+app.get('/worldview', (req, res) => {
+  res.sendFile(challengeOverlayPath);
+});
 
 // AI Robot endpoint using Azure OpenAI (set AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_KEY, AZURE_OPENAI_DEPLOYMENT)
 app.post('/api/robot', async (req, res) => {

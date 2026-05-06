@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WORLDWIDE TRACKING | PRECISELIENS x NVIDIA x MERCEDES</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        :root {
+            --nvidia: #76b900;
+            --mercedes: #ffffff;
+            --cyan: #00f0ff;
+            --bg: #020205;
+            --glass: rgba(0, 0, 0, 0.7);
+        }
+
+        body, html { margin: 0; padding: 0; height: 100%; background: var(--bg); color: #fff; font-family: 'Outfit', sans-serif; overflow: hidden; }
+
+        #map { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; filter: brightness(0.6) contrast(1.2) saturate(0.8); }
+
+        .overlay { position: absolute; inset: 0; pointer-events: none; z-index: 10; border: 2px solid var(--nvidia); box-shadow: inset 0 0 100px #000; }
+
+        .hud { position: absolute; z-index: 20; pointer-events: auto; }
+
+        .top-bar { top: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between; align-items: center; }
+
+        .glass-panel { background: var(--glass); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); padding: 15px 25px; border-radius: 4px; }
+
+        .brand-unit { display: flex; align-items: center; gap: 20px; }
+        .brand-logo { height: 30px; }
+        .brand-title { font-weight: 800; letter-spacing: 5px; font-size: 1.2rem; }
+
+        .tracking-info { bottom: 40px; left: 40px; width: 350px; }
+        .telemetry-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
+        .label { color: rgba(255,255,255,0.4); }
+        .value { color: var(--nvidia); font-weight: bold; }
+
+        .grid-lines { position: absolute; inset: 0; pointer-events: none; z-index: 5; background-image: 
+            linear-gradient(rgba(118, 185, 0, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(118, 185, 0, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px; }
+
+        .scanline { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--nvidia); opacity: 0.1; animation: scan 8s linear infinite; }
+        @keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
+
+        .mercedes-star { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 150px; height: 150px; opacity: 0.1; pointer-events: none; }
+
+        .marker-pulse { width: 20px; height: 20px; background: var(--nvidia); border-radius: 50%; box-shadow: 0 0 20px var(--nvidia); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
+
+        .routing-overlay { position: absolute; top: 100px; right: 40px; width: 300px; }
+        .route-step { padding: 10px; border-left: 2px solid var(--nvidia); margin-bottom: 10px; background: rgba(0,0,0,0.4); font-size: 0.75rem; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div class="grid-lines"></div>
+    <div class="overlay"></div>
+    <div class="scanline"></div>
+
+    <svg class="mercedes-star" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="white" stroke-width="2"/>
+        <path d="M50 5 L50 50 L10 75 M50 50 L90 75" fill="none" stroke="white" stroke-width="2"/>
+    </svg>
+
+    <div class="hud top-bar">
+        <div class="glass-panel brand-unit">
+            <div class="brand-title">WORLDWIDE TRACKING</div>
+            <div style="width: 2px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+            <div style="font-size: 0.7rem; color: var(--nvidia); letter-spacing: 2px;">POWERED BY NVIDIA DRIVE OS</div>
+        </div>
+        <div class="glass-panel">
+            <span style="color: rgba(255,255,255,0.5);">UNIT:</span>
+            <span style="font-weight: bold; color: var(--mercedes);">MERCEDES-BENZ VISION EQXX [TEST_PHASE]</span>
+        </div>
+    </div>
+
+    <div class="hud tracking-info glass-panel">
+        <h3 style="margin-bottom: 15px; font-size: 0.9rem; letter-spacing: 2px;">REAL-TIME TELEMETRY</h3>
+        <div class="telemetry-row">
+            <span class="label">COORDINATES:</span>
+            <span class="value" id="coords">51.505, -0.090</span>
+        </div>
+        <div class="telemetry-row">
+            <span class="label">VELOCITY:</span>
+            <span class="value">142 KM/H</span>
+        </div>
+        <div class="telemetry-row">
+            <span class="label">COMPUTE_LOAD:</span>
+            <span class="value">12.4% (RTX_4090)</span>
+        </div>
+        <div class="telemetry-row">
+            <span class="label">SAT_LINK:</span>
+            <span class="value" style="color: var(--cyan)">ESTABLISHED</span>
+        </div>
+        <div style="margin-top: 15px; height: 2px; background: var(--nvidia); width: 100%;"></div>
+    </div>
+
+    <div class="hud routing-overlay">
+        <div class="route-step">
+            <div style="color: var(--nvidia); font-weight: bold; margin-bottom: 4px;">NEXT WAYPOINT: GATES_HQ</div>
+            <div style="opacity: 0.6;">Calculating optimal neural path via satellite grid...</div>
+        </div>
+        <div class="route-step" style="opacity: 0.5;">
+            <div style="margin-bottom: 4px;">SUB_ROUTING: LUNAR_RELAY_01</div>
+            <div>Estimated latency: 12ms</div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Map (Google Maps Satellite Style)
+        const map = L.map('map', {
+            center: [51.505, -0.09],
+            zoom: 13,
+            zoomControl: false
+        });
+
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Esri World Imagery'
+        }).addTo(map);
+
+        // Custom Pulsing Marker
+        const customIcon = L.divIcon({
+            className: 'custom-div-icon',
+            html: '<div class="marker-pulse"></div>',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+        });
+
+        const marker = L.marker([51.505, -0.09], { icon: customIcon }).addTo(map);
+
+        // Simulated Tracking
+        let angle = 0;
+        setInterval(() => {
+            angle += 0.01;
+            const lat = 51.505 + Math.sin(angle) * 0.01;
+            const lng = -0.090 + Math.cos(angle) * 0.02;
+            marker.setLatLng([lat, lng]);
+            map.panTo([lat, lng]);
+            document.getElementById('coords').textContent = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+        }, 100);
+    </script>
+</body>
+</html>

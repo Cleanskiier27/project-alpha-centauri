@@ -123,7 +123,7 @@ resource cacheShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2023-
   parent: fileServices
   name: 'cache'
   properties: {
-    shareQuota: 100
+    shareQuota: 200
   }
 }
 
