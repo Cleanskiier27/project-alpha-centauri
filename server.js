@@ -52,11 +52,15 @@ const MISSION_PROXIES = {
   '/api/tracer': 'http://localhost:8000',
   '/api/matrix': 'http://localhost:9001',
   '/api/agi': 'http://localhost:4500',
-  '/api/kernel': 'http://localhost:9002'
+  '/api/kernel': 'http://localhost:9002',
+  '/api/telemetry': 'http://localhost:4432',
+  '/api/lattice': 'http://localhost:4432',
+  '/api/bom': 'http://localhost:4432',
+  '/api/sync': 'http://localhost:4432'
 };
 
 Object.entries(MISSION_PROXIES).forEach(([prefix, target]) => {
-  app.all(`${prefix}*`, (req, res) => {
+  app.use(prefix, (req, res) => {
     proxy.web(req, res, { target, ignorePath: false, changeOrigin: true }, (err) => {
         // Handled by proxy.on('error')
     });
