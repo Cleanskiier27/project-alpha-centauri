@@ -33,6 +33,7 @@
     "show:network-boost": "powershell -ExecutionPolicy Bypass -File scripts/network-boost.ps1",
     "test": "echo No-tests-specified",
     "test:devices": "node tests/test-device-registration.js",
+    "test:stress:devices": "node tests/stress-test-10k-heartbeats.js",
     "test:integration:devices": "node tests/integration/test-e2e-device-registration.js",
     "test:unit:devices": "node tests/unit/test-device-status-transitions.js",
     "worker:device-consumer": "node workers/deviceConsumer.js",
@@ -124,6 +125,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.1.2",
+    "axios": "^1.16.0",
     "vite": "^7.2.7"
   }
 }

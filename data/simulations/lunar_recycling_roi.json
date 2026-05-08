@@ -1,0 +1,86 @@
+{
+  "parameters": {
+    "rate_kg_day": 1,
+    "launch_cost_kg": 333.34,
+    "duration_months": 12
+  },
+  "monthly_data": [
+    {
+      "month": 1,
+      "mass": "30.00",
+      "savings": "10000.20",
+      "cumulativeSavings": "10000.20"
+    },
+    {
+      "month": 2,
+      "mass": "30.00",
+      "savings": "10000.20",
+      "cumulativeSavings": "20000.40"
+    },
+    {
+      "month": 3,
+      "mass": "30.00",
+      "savings": "10000.20",
+      "cumulativeSavings": "30000.60"
+    },
+    {
+      "month": 4,
+      "mass": "30.00",
+      "savings": "10000.20",
+      "cumulativeSavings": "40000.80"
+    },
+    {
+      "month": 5,
+      "mass": "30.00",
+      "savings": "10000.20",
+      "cumulativeSavings": "50001.00"
+    },
+    {
+      "month": 6,
+      "mass": "30.00",
+      "savings": "10000.20",
+      "cumulativeSavings": "60001.20"
+    },
+    {
+      "month": 7,
+      "mass": "30.00",
+      "savings": "10000.20",
+      "cumulativeSavings": "70001.40"
+    },
+    {
+      "month": 8,
+      "mass": "30.00",
+      "savings": "10000.20",
+      "cumulativeSavings": "80001.60"
+    },
+    {
+      "month": 9,
+      "mass": "30.00",
+      "savings": "10000.20",
+      "cumulativeSavings": "90001.80"
+    },
+    {
+      "month": 10,
+      "mass": "30.00",
+      "savings": "10000.20",
+      "cumulativeSavings": "100002.00"
+    },
+    {
+      "month": 11,
+      "mass": "30.00",
+      "savings": "10000.20",
+      "cumulativeSavings": "110002.20"
+    },
+    {
+      "month": 12,
+      "mass": "30.00",
+      "savings": "10000.20",
+      "cumulativeSavings": "120002.40"
+    }
+  ],
+  "totals": {
+    "mass": 360,
+    "savings": 120002.39999999998
+  },
+  "target_met": true
+}

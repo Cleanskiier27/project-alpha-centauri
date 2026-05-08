@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DUAL OPS | SCAN & DEPLOY</title>
+    <style>
+        :root {
+            --bg: #000500;
+            --term-green: #00ff41;
+            --term-dim: #003b0f;
+            --nexus: #00ffff;
+            --alert: #ff003c;
+            --luna: #e0e0e0;
+            --burn: #ff3c00;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Mono', 'Courier New', monospace; }
+
+        body {
+            background: transparent;
+            color: var(--term-green);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .ops-container {
+            width: 400px;
+            height: 400px;
+            border: 2px solid var(--nexus);
+            background: rgba(0, 10, 10, 0.9);
+            position: relative;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.2);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 4px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            border-bottom: 1px solid var(--term-dim);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .dual-status {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card {
+            border: 1px solid var(--term-dim);
+            padding: 5px;
+            text-align: center;
+        }
+
+        .stat-label { font-size: 0.6rem; color: var(--term-dim); }
+        .stat-val { font-size: 0.9rem; font-weight: bold; color: var(--nexus); }
+
+        .network-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+
+        .subsurface-beam {
+            position: absolute;
+            bottom: 0;
+            width: 40px;
+            height: 60px;
+            background: rgba(0, 255, 65, 0.15);
+            left: 50%;
+            transform: translateX(-50%);
+            animation: scan-regolith 2s infinite ease-in-out;
+        }
+
+        @keyframes scan-regolith {
+            0%, 100% { height: 10px; opacity: 0.2; }
+            50% { height: 50px; opacity: 1; }
+        }
+
+        .viz-container {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            margin-top: 5px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid var(--term-dim);
+        }
+
+        .surface {
+            width: 120%;
+            height: 60px;
+            background: #333;
+            border-top: 2px solid var(--luna);
+            position: relative;
+            transform: rotate(-2deg);
+        }
+
+        .shackleton {
+            position: absolute;
+            width: 150px;
+            height: 30px;
+            background: #111;
+            border-radius: 50% 50% 0 0;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-top: 1px solid #444;
+        }
+
+        .orbital-drone {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 10px;
+            height: 10px;
+            background: var(--nexus);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--nexus);
+            animation: move-orbit 10s infinite linear;
+        }
+
+        @keyframes move-orbit {
+            0% { left: -20px; }
+            100% { left: 420px; }
+        }
+
+        .scan-beam {
+            position: absolute;
+            top: 30px;
+            width: 2px;
+            height: 200px;
+            background: linear-gradient(to bottom, var(--nexus), transparent);
+            left: 24px;
+            animation: move-beam 10s infinite linear;
+            opacity: 0.5;
+        }
+
+        @keyframes move-beam {
+            0% { left: -16px; }
+            100% { left: 424px; }
+        }
+
+        .probe-package {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background: var(--luna);
+            box-shadow: 0 0 15px var(--luna);
+            transform: translateX(-50%);
+            border-radius: 2px 2px 0 0;
+        }
+
+        .data-beam {
+            position: absolute;
+            bottom: 70px;
+            width: 1px;
+            height: 300px;
+            background: linear-gradient(to top, var(--nexus), transparent);
+            left: 50%;
+            transform: translateX(-50%);
+            animation: pulse-beam 2s infinite;
+        }
+
+        @keyframes pulse-beam {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .status-footer {
+            margin-top: 10px;
+            border-top: 1px solid var(--term-dim);
+            padding-top: 10px;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .blink { animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+    <div class="ops-container">
+        <div class="header">
+            <span>> SYSTEM_INFRA_ANALYSIS</span>
+            <span class="blink" style="color: var(--term-green);">[ FULL_SYNC_ACTIVE ]</span>
+        </div>
+
+        <div class="dual-status">
+            <div class="stat-card">
+                <div class="stat-label">REGOLITH_DEPTH</div>
+                <div class="stat-val">12.4M (SILICA+)</div>
+            </div>
+            <div class="stat-card" style="border-color: var(--nexus);">
+                <div class="stat-label">NET_COVERAGE</div>
+                <div class="stat-val">850M RADIUS</div>
+            </div>
+        </div>
+
+        <div class="viz-container">
+            <div class="network-grid"></div>
+            <div class="orbital-drone"></div>
+            <div class="scan-beam"></div>
+            
+            <div class="data-beam"></div>
+            <div class="probe-package"></div>
+
+            <div class="surface">
+                <div class="shackleton">
+                    <div class="subsurface-beam"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-footer">
+            <span>ICE_SIGNAL: 82% (PSR-4)</span>
+            <span>HUB_STATUS: NB-LUNA-01</span>
+        </div>
+    </div>
+</body>
+</html>

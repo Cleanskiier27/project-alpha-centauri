@@ -5,6 +5,12 @@ import os from 'os';
 import { exec } from 'child_process';
 import httpProxy from 'http-proxy';
 
+// Operational APIs
+import deviceRouter from './api/devices.js';
+import gpuRouter from './api/gpu-stats.js';
+import aiRouter from './api/ai-requests.js';
+import recycleRouter from './api/recycle.js';
+
 // Optional performance packages with fallbacks
 let compression = null;
 let helmet = null;
@@ -87,6 +93,15 @@ Object.entries(HTML_ROUTES).forEach(([route, file]) => {
 app.get('/worldview', (req, res) => {
   res.sendFile(path.join(__dirname, 'challengerepo/real-time-overlay/dist/index.html'));
 });
+
+// ============================================
+// OPERATIONAL API ENDPOINTS
+// ============================================
+
+app.use('/api/devices', deviceRouter);
+app.use('/api/gpu', gpuRouter);
+app.use('/api/ai', aiRouter);
+app.use('/api/recycle', recycleRouter);
 
 // ============================================
 // STATIC ASSETS & FALLBACKS

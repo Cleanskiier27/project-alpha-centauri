@@ -136,7 +136,7 @@ Where:
 ```
 
 **Example: LEO (Low Earth Orbit)**
-- Altitude: 400 km
+- Altitude: 800 km (LEO Phase 2)
 - Orbital Velocity: 7.67 km/s
 - Orbital Period: 90 minutes
 - Requires: Delta-v ≈ 9.4 km/s from surface

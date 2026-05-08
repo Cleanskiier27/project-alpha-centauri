@@ -1,0 +1,20 @@
+{
+  "id": "1778185928284-5355be52",
+  "topic": "device-registrations.v1",
+  "timestamp": "2026-05-07T20:32:08.284Z",
+  "payload": {
+    "deviceId": "1778185928284-cb4446be",
+    "hardwareIdHash": "3cecc574459b83c8888eaa5543a53d09e1ffb5443d4e1973fc318b3aef9811a7",
+    "model": "NB-LOAD-TESTER-v1",
+    "firmwareVersion": "1.0.0-stress",
+    "location": "LUNAR-SURFACE-BETA",
+    "ts": "2026-05-07T20:32:08.284Z",
+    "initialTelemetry": {
+      "battery": 42,
+      "temp": 48,
+      "heartbeat": true
+    },
+    "source": "api",
+    "traceId": "4ddef640-24fe-4816-a071-35910d7da3e0"
+  }
+}

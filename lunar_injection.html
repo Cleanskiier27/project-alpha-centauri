@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TLI BURN | TRANS-LUNAR INJECTION</title>
+    <style>
+        :root {
+            --bg: #000500;
+            --term-green: #00ff41;
+            --term-dim: #003b0f;
+            --nexus: #00ffff;
+            --burn-orange: #ff6a00;
+            --alert: #ff003c;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Mono', 'Courier New', monospace; }
+
+        body {
+            background: transparent;
+            color: var(--term-green);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .tli-container {
+            width: 400px;
+            height: 400px;
+            border: 2px solid var(--burn-orange);
+            background: rgba(10, 5, 0, 0.9);
+            position: relative;
+            box-shadow: 0 0 30px rgba(255, 106, 0, 0.2);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 4px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            border-bottom: 1px solid var(--term-dim);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .burn-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .burn-val {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--burn-orange);
+            text-shadow: 0 0 15px var(--burn-orange);
+        }
+
+        .burn-unit { font-size: 1rem; color: var(--nexus); }
+
+        .viz-container {
+            position: relative;
+            height: 150px;
+            width: 100%;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .trajectory {
+            width: 500px;
+            height: 500px;
+            border: 1px dashed rgba(255, 106, 0, 0.3);
+            border-radius: 50%;
+            position: absolute;
+            left: -350px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .drone-cluster {
+            position: absolute;
+            left: 140px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .drone {
+            width: 8px;
+            height: 8px;
+            background: var(--nexus);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--nexus);
+            position: relative;
+        }
+
+        .exhaust {
+            position: absolute;
+            right: 10px;
+            width: 40px;
+            height: 4px;
+            background: linear-gradient(to right, var(--burn-orange), transparent);
+            animation: flicker 0.1s infinite;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.8; transform: scaleX(1); }
+            50% { opacity: 1; transform: scaleX(1.2); }
+            100% { opacity: 0.9; transform: scaleX(1.1); }
+        }
+
+        .status-footer {
+            margin-top: auto;
+            border-top: 1px solid var(--term-dim);
+            padding-top: 10px;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .blink { animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .vibration {
+            animation: vibrate 0.05s infinite;
+        }
+        @keyframes vibrate {
+            0% { transform: translate(0,0); }
+            25% { transform: translate(1px, -1px); }
+            50% { transform: translate(-1px, 1px); }
+            75% { transform: translate(1px, 1px); }
+            100% { transform: translate(0,0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="tli-container vibration">
+        <div class="header">
+            <span>> SYSTEM_TLI_BURN</span>
+            <span class="blink" style="color: var(--burn-orange);">[ BURNING ]</span>
+        </div>
+
+        <div class="burn-box">
+            <span class="burn-val">3.14</span>
+            <span class="burn-unit">KM/S DELTA-V</span>
+        </div>
+
+        <div class="viz-container">
+            <div class="trajectory"></div>
+            <div class="drone-cluster">
+                <div class="drone"><div class="exhaust"></div></div>
+                <div class="drone" style="margin-top: 20px;"><div class="exhaust"></div></div>
+                <div class="drone" style="margin-top: -20px;"><div class="exhaust"></div></div>
+            </div>
+        </div>
+
+        <div class="status-footer">
+            <span>VELOCITY: 10.81 KM/S</span>
+            <span>TARGET: LUNA_SYNC</span>
+        </div>
+    </div>
+</body>
+</html>

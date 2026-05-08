@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MINER DEPLOY | RESOURCE EXTRACTION</title>
+    <style>
+        :root {
+            --bg: #000505;
+            --nexus: #00ffff;
+            --term: #00ff41;
+            --miner: #ffaa00;
+            --alert: #ff003c;
+            --surface: rgba(0, 255, 255, 0.03);
+            --border: rgba(0, 255, 255, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Mono', monospace; }
+
+        body {
+            background: transparent;
+            color: #fff;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .miner-container {
+            width: 400px;
+            height: 400px;
+            border: 2px solid var(--miner);
+            background: rgba(10, 5, 0, 0.9);
+            position: relative;
+            box-shadow: 0 0 30px rgba(255, 170, 0, 0.2);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 4px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: var(--miner);
+        }
+
+        .miner-status {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card {
+            border: 1px solid rgba(255, 170, 0, 0.2);
+            padding: 5px;
+            text-align: center;
+            background: rgba(255, 170, 0, 0.05);
+        }
+
+        .stat-label { font-size: 0.6rem; color: rgba(255, 170, 0, 0.6); text-transform: uppercase; }
+        .stat-val { font-size: 0.9rem; font-weight: bold; color: var(--miner); }
+
+        .viz-container {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            margin-top: 5px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid rgba(255, 170, 0, 0.2);
+        }
+
+        .ground {
+            width: 120%;
+            height: 80px;
+            background: #222;
+            border-top: 2px solid #555;
+            position: relative;
+            transform: rotate(-1deg);
+        }
+
+        .resource-pocket {
+            position: absolute;
+            background: radial-gradient(circle, var(--nexus) 0%, transparent 70%);
+            width: 40px;
+            height: 20px;
+            bottom: 20px;
+            left: 60%;
+            opacity: 0.4;
+            animation: glow 2s infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+
+        .miner-unit {
+            position: absolute;
+            bottom: 80px;
+            left: 40%;
+            width: 30px;
+            height: 20px;
+            background: var(--miner);
+            border-radius: 4px 4px 0 0;
+            box-shadow: 0 0 10px var(--miner);
+        }
+
+        .miner-drill {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--miner), transparent);
+            transform: translateX(-50%);
+            animation: drill 0.5s infinite linear;
+        }
+
+        @keyframes drill {
+            0% { height: 10px; }
+            100% { height: 40px; opacity: 0.5; }
+        }
+
+        .extracted-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--nexus);
+            border-radius: 50%;
+            bottom: 80px;
+            left: 40%;
+            animation: extract 3s infinite ease-out;
+        }
+
+        @keyframes extract {
+            0% { transform: translateY(0) scale(0); opacity: 0; }
+            50% { transform: translateY(-40px) translateX(20px) scale(1); opacity: 1; }
+            100% { transform: translateY(-80px) translateX(40px) scale(0); opacity: 0; }
+        }
+
+        .status-footer {
+            margin-top: 10px;
+            border-top: 1px solid rgba(255, 170, 0, 0.2);
+            padding-top: 10px;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: space-between;
+            color: var(--miner);
+        }
+
+        .blink { animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+    <div class="miner-container">
+        <div class="header">
+            <span>> UNIT_MINER_ALPHA</span>
+            <span class="blink">[ EXTRACTING ]</span>
+        </div>
+
+        <div class="miner-status">
+            <div class="stat-card">
+                <div class="stat-label">LOAD_CAPACITY</div>
+                <div class="stat-val">14.2%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">DRILL_DEPTH</div>
+                <div class="stat-val">3.8M</div>
+            </div>
+        </div>
+
+        <div class="viz-container">
+            <div class="extracted-particle"></div>
+            <div class="extracted-particle" style="animation-delay: 1s;"></div>
+            <div class="extracted-particle" style="animation-delay: 2s;"></div>
+
+            <div class="miner-unit">
+                <div class="miner-drill"></div>
+            </div>
+
+            <div class="ground">
+                <div class="resource-pocket"></div>
+            </div>
+        </div>
+
+        <div class="status-footer">
+            <span>RESOURCE: VOLATILE_ICE</span>
+            <span>TEMP: -168°C</span>
+        </div>
+    </div>
+</body>
+</html>
