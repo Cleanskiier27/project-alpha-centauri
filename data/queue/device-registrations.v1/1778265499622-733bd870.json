@@ -1,0 +1,20 @@
+{
+  "id": "1778265499622-733bd870",
+  "topic": "device-registrations.v1",
+  "timestamp": "2026-05-08T18:38:19.622Z",
+  "payload": {
+    "deviceId": "1778265499621-9e2640f8",
+    "hardwareIdHash": "c93e6e93b1dd522ab90efe74c8c07179554a0fe87fae85f7e26fb78d8e667c66",
+    "model": "GALACTIC-BEACON-v14",
+    "firmwareVersion": "14.0.0-galactic",
+    "location": "PROXIMA-CENTAURI-B",
+    "ts": "2026-05-08T18:38:19.621Z",
+    "initialTelemetry": {
+      "latency": 3155,
+      "signalStrength": "0.6879",
+      "galactic_sync": true
+    },
+    "source": "api",
+    "traceId": "849de3e0-ba13-45f7-86f0-34167be664b1"
+  }
+}

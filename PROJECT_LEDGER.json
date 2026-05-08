@@ -75,7 +75,27 @@
       "transaction_id": "NB-MIN-1745500800"
     },
     {
-      "timestamp": "2026-05-07T17:00:00Z",
+      "timestamp": "2026-05-07T16:45:00Z",
+      "amount": -3500.0,
+      "source": "Infrastructure Dev",
+      "description": "Lunar Refinery Hub Construction - Phase 1: Structural Assembly",
+      "transaction_id": "NB-REF-1745500900"
+    },
+    {
+      "timestamp": "2026-05-07T17:15:00Z",
+      "amount": -2200.0,
+      "source": "Infrastructure Dev",
+      "description": "Propellant Storage Tank Fabrication - Additive Manufacturing Cycle",
+      "transaction_id": "NB-FAB-1745501000"
+    },
+    {
+      "timestamp": "2026-05-07T17:30:00Z",
+      "amount": -1800.0,
+      "source": "Propellant Production",
+      "description": "Volatile Liquefaction Sequence - First Liquid Yield Processed",
+      "transaction_id": "NB-LIQ-1745501100"
+    }
+    ],      "timestamp": "2026-05-07T17:00:00Z",
       "amount": -8500.0,
       "source": "Infrastructure Migration",
       "description": "AKS Migration Allocation - The 10,000 Milestone Infrastructure Hardening",

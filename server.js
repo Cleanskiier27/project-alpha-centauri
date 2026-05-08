@@ -10,6 +10,8 @@ import deviceRouter from './api/devices.js';
 import gpuRouter from './api/gpu-stats.js';
 import aiRouter from './api/ai-requests.js';
 import recycleRouter from './api/recycle.js';
+import dtnRouter from './api/interstellar-dtn.js';
+import quantumRouter from './api/quantum-hub.js';
 
 // Optional performance packages with fallbacks
 let compression = null;
@@ -102,6 +104,8 @@ app.use('/api/devices', deviceRouter);
 app.use('/api/gpu', gpuRouter);
 app.use('/api/ai', aiRouter);
 app.use('/api/recycle', recycleRouter);
+app.use('/api/dtn', dtnRouter);
+app.use('/api/quantum', quantumRouter);
 
 // ============================================
 // STATIC ASSETS & FALLBACKS

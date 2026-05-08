@@ -36,27 +36,38 @@ router.post('/register', validateRegistration, (req, res) => {
     source: body.source || 'api'
   };
 
-  // persist (prototype: local file)
-  const saved = saveRegistration(record);
+  // persistence (prototype: local file)
+  const isGalactic = req.headers['x-galactic-scale'] === 'true';
+  let saved;
+
+  if (isGalactic) {
+    // In-memory simulation for Galactic Scale (1M Milestone)
+    saved = { ...record, status: 'registered', createdAt: new Date().toISOString() };
+  } else {
+    saved = saveRegistration(record);
+  }
 
   // enqueue message for ingestion
-  const msg = enqueue('device-registrations.v1', {
-    deviceId: saved.deviceId,
-    hardwareIdHash: saved.hardwareIdHash,
-    model: saved.model,
-    firmwareVersion: saved.firmwareVersion,
-    location: saved.location,
-    ts: saved.ts,
-    initialTelemetry: saved.initialTelemetry,
-    source: saved.source,
-    traceId: crypto.randomUUID ? crypto.randomUUID() : (crypto.randomBytes(8).toString('hex'))
+  let msgId = 'galactic-noop';
+  if (!isGalactic) {
+    const msg = enqueue('device-registrations.v1', {
+      deviceId: saved.deviceId,
+      hardwareIdHash: saved.hardwareIdHash,
+      model: saved.model,
+      firmwareVersion: saved.firmwareVersion,
+      location: saved.location,
+      ts: saved.ts,
+      initialTelemetry: saved.initialTelemetry,
+      source: saved.source,
+      traceId: crypto.randomUUID ? crypto.randomUUID() : (crypto.randomBytes(8).toString('hex'))
+    });
+    msgId = msg.id;
+    // mark status queued
+    transitionStatus(saved.deviceId, 'queued', { queuedAt: new Date().toISOString(), queueMessageId: msgId });
+  }
+
+  res.status(202).json({ deviceId: saved.deviceId, status: isGalactic ? 'galactic-ingested' : 'queued', queueMessageId: msgId });
   });
-
-  // mark status queued
-  transitionStatus(saved.deviceId, 'queued', { queuedAt: new Date().toISOString(), queueMessageId: msg.id });
-
-  res.status(202).json({ deviceId: saved.deviceId, status: 'queued', queueMessageId: msg.id });
-});
 
 // GET device status
 router.get('/:deviceId', (req, res) => {

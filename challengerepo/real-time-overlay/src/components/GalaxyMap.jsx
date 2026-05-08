@@ -66,23 +66,43 @@ const AerospaceCalculations = {
   },
 
   /**
-   * Calculate relativistic effects (time dilation)
+   * Calculate relativistic effects (time dilation and Lorentz sync)
    * @param {number} speed - Speed as fraction of light speed (0-1)
+   * @param {object} coords - Target coordinates {x, y, z}
+   * @param {number} earthTime - Time in years (Earth perspective)
    * @returns {object} Relativistic parameters
    */
-  calculateRelativity(speed) {
+  calculateRelativity(speed, coords = {x: 0, y: 0, z: 0}, earthTime = 0) {
     const beta = speed; // v/c
     const gamma = 1 / Math.sqrt(1 - beta * beta); // Lorentz factor
-    const timeDilation = gamma; // Time dilation factor
-    const massIncrease = gamma; // Relativistic mass increase
-    const lengthContraction = 1 / gamma; // Length contraction
+    
+    // Lorentz transformation simulation (simplified 1D along x-axis for UI)
+    const x_prime = gamma * (coords.x - beta * earthTime);
+    const t_prime = gamma * (earthTime - beta * coords.x);
     
     return {
       beta,
       gamma,
-      timeDilation,
-      massIncrease,
-      lengthContraction
+      timeDilation: gamma,
+      massIncrease: gamma,
+      lengthContraction: 1 / gamma,
+      lorentzSync: {
+        x_prime: x_prime.toFixed(4),
+        t_prime: t_prime.toFixed(4),
+        status: 'LORENTZ_SYNCED'
+      }
+    };
+  },
+
+  /**
+   * Calculate stellar drift (Gaia DR3 simulation)
+   */
+  calculateDrift(star, years) {
+    const pm_x = 0.000005; // Base simulated proper motion (ly/year)
+    return {
+      x: (star.x + pm_x * years).toFixed(6),
+      y: (star.y + (pm_x * 0.6) * years).toFixed(6),
+      z: (star.z - (pm_x * 0.4) * years).toFixed(6)
     };
   },
 
@@ -395,12 +415,14 @@ export const GalaxyMap = () => {
     
     const speedKmS = AerospaceCalculations.SPEEDS.LIGHT_SPEED * travelSpeed;
     const travelTime = AerospaceCalculations.calculateTravelTime(distanceKm, speedKmS);
-    const relativity = AerospaceCalculations.calculateRelativity(travelSpeed);
+    const relativity = AerospaceCalculations.calculateRelativity(travelSpeed, targetStar, travelTime.years);
+    const drift = AerospaceCalculations.calculateDrift(targetStar, travelTime.years);
 
     return {
       distance: { lightYears: distanceLY.toFixed(2), km: distanceKm.toExponential(2) },
       travelTime,
       relativity,
+      drift,
       speed: { kmS: speedKmS.toFixed(2), percentC: (travelSpeed * 100).toFixed(1) }
     };
   };
@@ -553,6 +575,21 @@ export const GalaxyMap = () => {
                 Time Dilation: {travelCalcs.relativity.timeDilation.toFixed(3)}x<br/>
                 Length Contraction: {(travelCalcs.relativity.lengthContraction * 100).toFixed(1)}%<br/>
                 Mass Increase: {((travelCalcs.relativity.massIncrease - 1) * 100).toFixed(1)}%
+                
+                <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid #663300' }}>
+                  <strong>⚛️ LORENTZ SYNC:</strong><br/>
+                  Target x': {travelCalcs.relativity.lorentzSync.x_prime} ly<br/>
+                  Arrival t': {travelCalcs.relativity.lorentzSync.t_prime} years<br/>
+                  Status: <span style={{ color: '#00ff00' }}>{travelCalcs.relativity.lorentzSync.status}</span>
+                </div>
+
+                <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid #663300' }}>
+                  <strong>🧭 STELLAR DRIFT:</strong><br/>
+                  Arrival X: {travelCalcs.drift.x}<br/>
+                  Arrival Y: {travelCalcs.drift.y}<br/>
+                  Arrival Z: {travelCalcs.drift.z}<br/>
+                  (Corrected for proper motion)
+                </div>
               </div>
             )}
           </div>

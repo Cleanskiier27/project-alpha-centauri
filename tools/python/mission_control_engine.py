@@ -48,20 +48,34 @@ class AerospaceCalculations:
     @staticmethod
     def calculate_fuel_requirements(delta_v: float, isp: float) -> Dict:
         """
-        Tsiolkovsky rocket equation
+        Tsiolkovsky rocket equation with overflow protection for relativistic speeds
         :param delta_v: Change in velocity (km/s)
         :param isp: Specific impulse (seconds)
         :return: Mass ratio and fuel requirements
         """
         g0 = 0.00981  # Standard gravity in km/s^2
         exhaust_velocity = isp * g0
-        mass_ratio = math.exp(delta_v / exhaust_velocity)
         
-        return {
-            "mass_ratio": round(mass_ratio, 3),
-            "fuel_fraction": round((mass_ratio - 1) / mass_ratio * 100, 2),
-            "feasibility": "High" if mass_ratio < 20 else "Moderate" if mass_ratio < 100 else "Theoretical (Exotic)"
-        }
+        try:
+            exponent = delta_v / exhaust_velocity
+            if exponent > 700: # Threshold for standard double overflow
+                return {
+                    "mass_ratio": "INTERSTELLAR_OVERFLOW",
+                    "fuel_fraction": 100.0,
+                    "feasibility": "Theoretical (Requires Exotic Matter/Warp)"
+                }
+            mass_ratio = math.exp(exponent)
+            return {
+                "mass_ratio": round(mass_ratio, 3),
+                "fuel_fraction": round((mass_ratio - 1) / mass_ratio * 100, 2),
+                "feasibility": "High" if mass_ratio < 20 else "Moderate" if mass_ratio < 100 else "Theoretical (Exotic)"
+            }
+        except OverflowError:
+            return {
+                "mass_ratio": "INTERSTELLAR_OVERFLOW",
+                "fuel_fraction": 100.0,
+                "feasibility": "Theoretical (Requires Exotic Matter/Warp)"
+            }
 
 class GalaxyDatabase:
     """Star database for interstellar navigation"""
@@ -131,6 +145,55 @@ class GalaxyDatabase:
             (s1['z'] - s2['z'])**2
         )
 
+class RelativisticPathfinder:
+    """Advanced pathfinding using Lorentz transformations and galactic drift compensation"""
+    
+    @staticmethod
+    def lorentz_transform(x: float, y: float, z: float, t: float, v: float, direction: str = 'x') -> Dict:
+        """
+        Apply Lorentz transformation to coordinates and time
+        :param v: Velocity as fraction of c (0-1)
+        """
+        gamma = 1 / math.sqrt(1 - v**2) if v < 1 else 1e9
+        
+        # Simulating transform along a specific axis
+        if direction == 'x':
+            x_prime = gamma * (x - v * t)
+            y_prime = y
+            z_prime = z
+        elif direction == 'y':
+            x_prime = x
+            y_prime = gamma * (y - v * t)
+            z_prime = z
+        else:
+            x_prime = x
+            y_prime = y
+            z_prime = gamma * (z - v * t)
+            
+        t_prime = gamma * (t - v * x) # Simplified 1D time component
+        
+        return {
+            "coords_prime": {"x": round(x_prime, 6), "y": round(y_prime, 6), "z": round(z_prime, 6)},
+            "time_prime": round(t_prime, 6),
+            "gamma": round(gamma, 6)
+        }
+
+    @staticmethod
+    def calculate_drift(star_data: Dict, years: float) -> Dict:
+        """
+        Calculate stellar drift based on proper motion (Gaia DR3 simulation)
+        """
+        # Simulated proper motion in ly/year (extremely small)
+        pm_x = star_data.get('pm_x', 0.000005)
+        pm_y = star_data.get('pm_y', 0.000003)
+        pm_z = star_data.get('pm_z', -0.000002)
+        
+        return {
+            "x": round(star_data['x'] + (pm_x * years), 6),
+            "y": round(star_data['y'] + (pm_y * years), 6),
+            "z": round(star_data['z'] + (pm_z * years), 6)
+        }
+
 class SustainabilityOptimizer:
     """AI-powered sustainability and energy optimization engine"""
     
@@ -178,6 +241,7 @@ class MissionControlEngine:
         self.galaxy = GalaxyDatabase()
         self.eco = SustainabilityOptimizer()
         self.wealth_physics = WealthPhysicsEngine()
+        self.pathfinder = RelativisticPathfinder()
         
     def analyze_wealth_mission(self, net_worth: float, percentile: float, strategy: str) -> Dict:
         """
@@ -208,19 +272,40 @@ class MissionControlEngine:
         return self.active_missions.get(mission_id)
     
     def calculate_interstellar_path(self, origin: str, destination: str, speed: float) -> Dict:
-        distance = self.galaxy.calculate_distance(origin, destination)
-        travel = self.physics.calculate_travel_time(distance, speed)
+        """
+        Calculate path with Relativistic Hardening
+        """
+        s1 = self.galaxy.get_star(origin)
+        s2 = self.galaxy.get_star(destination)
         
-        # Eco optimization for the trip
+        if not s1 or not s2:
+            return {"error": "Invalid star ID"}
+
+        # 1. Base Distance
+        base_distance = self.galaxy.calculate_distance(origin, destination)
+        
+        # 2. Travel Time (Earth vs Traveler)
+        travel = self.physics.calculate_travel_time(base_distance, speed)
+        
+        # 3. Lorentz Sync
+        # Syncing origin (Sol) at t=0 to destination coordinates at arrival time
+        transform = self.pathfinder.lorentz_transform(s2['x'], s2['y'], s2['z'], travel['earth_time_years'], speed)
+        
+        # 4. Stellar Drift Correction (Target position upon arrival)
+        corrected_dest = self.pathfinder.calculate_drift(s2, travel['earth_time_years'])
+        
+        # 5. Eco optimization
         fuel = self.physics.calculate_fuel_requirements(speed * SPEED_OF_LIGHT, 3000) # Ion drive isp
         
         return {
             "origin": origin,
             "destination": destination,
-            "distance_ly": round(distance, 2),
+            "distance_ly": round(base_distance, 2),
             "travel_metrics": travel,
+            "relativistic_sync": transform,
+            "drift_corrected_destination": corrected_dest,
             "fuel_metrics": fuel,
-            "eco_rating": "A" if speed < 0.5 else "B" if speed < 0.8 else "C"
+            "galactic_status": "LORENTZ_SYNCED"
         }
 
 # Singleton instance

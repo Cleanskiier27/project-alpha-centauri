@@ -34,6 +34,7 @@
     "test": "echo No-tests-specified",
     "test:devices": "node tests/test-device-registration.js",
     "test:stress:devices": "node tests/stress-test-10k-heartbeats.js",
+    "test:stress:galactic": "node tests/stress-test-1m-beacons.js",
     "test:integration:devices": "node tests/integration/test-e2e-device-registration.js",
     "test:unit:devices": "node tests/unit/test-device-status-transitions.js",
     "worker:device-consumer": "node workers/deviceConsumer.js",
