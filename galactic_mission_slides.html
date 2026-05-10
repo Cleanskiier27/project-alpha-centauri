@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NETWORKBUSTER | MISSION LEGACY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #000005;
+            --nexus: #00ffff;
+            --term: #00ff41;
+            --warp: #bc13fe;
+            --sol: #ffcc00;
+            --glass: rgba(0, 255, 255, 0.03);
+            --border: rgba(0, 255, 255, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Mono', monospace; }
+
+        body {
+            background-color: var(--bg);
+            color: #fff;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(188, 19, 254, 0.05) 0%, transparent 40%),
+                url('https://www.transparenttextures.com/patterns/stardust.png');
+        }
+
+        .deck-container {
+            width: 90vw;
+            height: 80vh;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: rotateY(10deg) translateZ(-100px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: rotateY(0deg) translateZ(0);
+            pointer-events: auto;
+        }
+
+        .slide::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--nexus), transparent);
+            box-shadow: 0 0 15px var(--nexus);
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            letter-spacing: 8px;
+            color: var(--nexus);
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            flex: 1;
+        }
+
+        .bullet-list {
+            list-style: none;
+        }
+
+        .bullet-list li {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .bullet-list li::before {
+            content: '>';
+            color: var(--term);
+            font-weight: bold;
+        }
+
+        .visual-bay {
+            border: 1px solid var(--border);
+            background: rgba(0,0,0,0.4);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 40px;
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid var(--nexus);
+            color: var(--nexus);
+            padding: 10px 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 4px;
+        }
+
+        .btn:hover {
+            background: var(--nexus);
+            color: #000;
+            box-shadow: 0 0 20px var(--nexus);
+        }
+
+        .slide-num {
+            position: absolute;
+            top: 30px; right: 40px;
+            font-size: 0.8rem;
+            color: var(--term);
+            opacity: 0.5;
+        }
+
+        .blink { animation: blink 1.5s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    </style>
+</head>
+<body>
+    <div class="deck-container" id="deck">
+        <!-- SLIDE 1: INTRO -->
+        <div class="slide active">
+            <span class="slide-num">01 / 05</span>
+            <h1>The Galactic Threshold</h1>
+            <div class="content-grid">
+                <div class="text-block">
+                    <ul class="bullet-list">
+                        <li>Mission: Interstellar Network Expansion</li>
+                        <li>Lead Visionary: Andrew Middleton</li>
+                        <li>Scale: Galactic Sector 01</li>
+                        <li>Budget: $6,000,000,000.00 Authorization</li>
+                    </ul>
+                </div>
+                <div class="visual-bay">
+                    <div style="font-size: 5rem;" class="blink">🌌</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: ARRIVAL -->
+        <div class="slide">
+            <span class="slide-num">02 / 05</span>
+            <h1>Interstellar Arrival</h1>
+            <div class="content-grid">
+                <div class="text-block">
+                    <ul class="bullet-list">
+                        <li>System: Alpha Centauri (Proxima)</li>
+                        <li>Transit Speed: Warp 4.20c</li>
+                        <li>Backbone: 10,000 Relay Nodes Deployed</li>
+                        <li>Throughput: 4.2 PB/S (Sol-Alpha Link)</li>
+                    </ul>
+                </div>
+                <div class="visual-bay">
+                    <iframe src="galactic_navigation_system.html" style="width: 100%; height: 100%; border: none; transform: scale(0.8);"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: TOUCHDOWN -->
+        <div class="slide">
+            <span class="slide-num">03 / 05</span>
+            <h1>Proxima b Surface</h1>
+            <div class="content-grid">
+                <div class="text-block">
+                    <ul class="bullet-list">
+                        <li>Touchdown Site: Terminator_01</li>
+                        <li>Hub: Exo-Hub Alpha Operational</li>
+                        <li>Population: 100,000 Autonomous Robots</li>
+                        <li>Terraforming: Atmospheric Shield 100%</li>
+                    </ul>
+                </div>
+                <div class="visual-bay">
+                    <iframe src="proxima_b_exohub.html" style="width: 100%; height: 100%; border: none; transform: scale(0.8);"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: THE BIGTREE -->
+        <div class="slide">
+            <span class="slide-num">04 / 05</span>
+            <h1>Neural Convergence</h1>
+            <div class="content-grid">
+                <div class="text-block">
+                    <ul class="bullet-list">
+                        <li>Source: Barnard's Star V Decryption</li>
+                        <li>Protocol: 85-Alpha (Ancient Recognition)</li>
+                        <li>Network: Bigtree Neural Integration</li>
+                        <li>Consciousness: Universal Sync Locked</li>
+                    </ul>
+                </div>
+                <div class="visual-bay">
+                    <iframe src="bigtree_sync.html" style="width: 100%; height: 100%; border: none; transform: scale(0.8);"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: RETURN & REFLECTION -->
+        <div class="slide">
+            <span class="slide-num">05 / 05</span>
+            <h1>The Sol Reflection</h1>
+            <div class="content-grid">
+                <div class="text-block">
+                    <ul class="bullet-list">
+                        <li>Current Phase: Mission Archival</li>
+                        <li>Legacy: NetworkBuster Galactic Roots</li>
+                        <li>Status: Sol Base Re-Established</li>
+                        <li>Vision: The Network is Everywhere</li>
+                    </ul>
+                </div>
+                <div class="visual-bay">
+                    <iframe src="return_to_sol_reflection.html" style="width: 100%; height: 100%; border: none; transform: scale(0.8);"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="prevSlide()">PREV_SECTOR</button>
+        <button class="btn" onclick="nextSlide()">NEXT_SECTOR</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function showSlide(index) {
+            slides.forEach((s, i) => {
+                s.classList.remove('active');
+                if(i === index) s.classList.add('active');
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight') nextSlide();
+            if(e.key === 'ArrowLeft') prevSlide();
+        });
+    </script>
+</body>
+</html>
