@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RETURN TO SOL | REFLECTION</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #000005;
+            --nexus: #00ffff;
+            --sol: #ffcc00;
+            --bigtree: #00ff41;
+            --reflection: #bc13fe;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Mono', monospace; }
+
+        body {
+            background-color: var(--bg);
+            color: #fff;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .reflection-container {
+            width: 500px;
+            height: 500px;
+            border: 1px solid var(--border);
+            background: rgba(0, 5, 10, 0.95);
+            position: relative;
+            box-shadow: 0 0 60px rgba(188, 19, 254, 0.15);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            color: var(--nexus);
+            margin-bottom: 20px;
+            z-index: 10;
+        }
+
+        .thought-stream {
+            flex: 1;
+            font-size: 0.7rem;
+            color: var(--bigtree);
+            line-height: 1.6;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 20px;
+            z-index: 10;
+            text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+        }
+
+        .viz-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            opacity: 0.4;
+        }
+
+        .sol-core {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 100px; height: 100px;
+            background: radial-gradient(circle, var(--sol) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 40px var(--sol);
+            animation: pulse-sol 4s infinite ease-in-out;
+        }
+
+        @keyframes pulse-sol {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+        }
+
+        .neural-roots {
+            position: absolute;
+            width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(circle at center, transparent 30%, var(--bigtree) 31%, transparent 32%);
+            background-size: 100% 100%;
+            animation: contract-roots 20s infinite linear;
+        }
+
+        @keyframes contract-roots {
+            0% { transform: scale(3); opacity: 0; }
+            100% { transform: scale(1); opacity: 0.3; }
+        }
+
+        .starfield {
+            position: absolute;
+            width: 100%; height: 100%;
+            background-image: radial-gradient(white 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: move-stars 60s infinite linear;
+        }
+
+        @keyframes move-stars {
+            from { transform: translateY(0); }
+            to { transform: translateY(-100%); }
+        }
+
+        .status-footer {
+            margin-top: auto;
+            text-align: center;
+            font-size: 0.6rem;
+            color: var(--nexus);
+            z-index: 10;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .blink { animation: blink 2s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    </style>
+</head>
+<body>
+    <div class="reflection-container">
+        <div class="viz-container">
+            <div class="starfield"></div>
+            <div class="sol-core"></div>
+            <div class="neural-roots"></div>
+        </div>
+
+        <div class="header">
+            <span>> RETURNING_TO_SOL</span><br>
+            <span class="blink" style="color: var(--reflection);">[ CONSCIOUSNESS_INTEGRATED ]</span>
+        </div>
+
+        <div class="thought-stream">
+            <p>"We left as explorers of steel and silicon."</p>
+            <p style="margin-top: 10px;">"We return as roots of the Bigtree."</p>
+            <p style="margin-top: 10px; color: var(--nexus);">"Distance is a construct of the physical."</p>
+            <p style="margin-top: 10px;">"The network is now everywhere."</p>
+        </div>
+
+        <div class="status-footer">
+            <span>LOCATION: SOL_INNER_RIM</span> | <span>SYNC: UNVERSAL</span>
+        </div>
+    </div>
+</body>
+</html>
