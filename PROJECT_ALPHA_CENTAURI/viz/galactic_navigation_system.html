@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GALACTIC NAV | INTERSTELLAR HUD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #000005;
+            --nexus: #00ffff;
+            --warp: #bc13fe;
+            --term: #00ff41;
+            --alert: #ff003c;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Mono', monospace; }
+
+        body {
+            background: transparent;
+            color: #fff;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .galactic-container {
+            width: 450px;
+            height: 450px;
+            border: 2px solid var(--nexus);
+            background: rgba(0, 0, 10, 0.9);
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.2);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .starfield {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #111, #000);
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .warp-lines {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 1000px; height: 1000px;
+            background: repeating-conic-gradient(from 0deg, transparent 0deg, var(--warp) 1deg, transparent 2deg);
+            transform: translate(-50%, -50%);
+            opacity: 0.1;
+            animation: rotate-warp 20s linear infinite;
+        }
+
+        @keyframes rotate-warp {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .nav-reticle {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px; height: 200px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .reticle-cross {
+            position: absolute;
+            width: 100%; height: 100%;
+            animation: spin 10s linear infinite;
+        }
+
+        .reticle-cross::before, .reticle-cross::after {
+            content: '';
+            position: absolute;
+            background: var(--nexus);
+        }
+
+        .reticle-cross::before { width: 100%; height: 1px; top: 50%; }
+        .reticle-cross::after { height: 100%; width: 1px; left: 50%; }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .target-box {
+            position: absolute;
+            border: 1px solid var(--alert);
+            width: 40px; height: 40px;
+            top: 30%; left: 60%;
+            animation: move-target 8s infinite alternate ease-in-out;
+        }
+
+        @keyframes move-target {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-50px, 40px); }
+        }
+
+        .header {
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            color: var(--nexus);
+            margin-top: 10px;
+            z-index: 10;
+        }
+
+        .metrics {
+            margin-top: auto;
+            margin-bottom: 20px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .warp-val { font-size: 2rem; font-weight: bold; color: var(--warp); text-shadow: 0 0 15px var(--warp); }
+        .warp-label { font-size: 0.6rem; opacity: 0.7; letter-spacing: 2px; }
+
+        .blink { animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .ui-scanner {
+            position: absolute;
+            top: 0; width: 100%; height: 2px;
+            background: var(--nexus);
+            opacity: 0.2;
+            animation: scan 4s linear infinite;
+        }
+
+        @keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
+    </style>
+</head>
+<body>
+    <div class="galactic-container">
+        <div class="starfield" id="stars"></div>
+        <div class="warp-lines"></div>
+        <div class="ui-scanner"></div>
+
+        <div class="header">
+            <span>> INTERSTELLAR_TRANSIT_ACTIVE</span><br>
+            <span class="blink" style="color: var(--warp);">[ WARP_JUMP_IN_PROGRESS ]</span>
+        </div>
+
+        <div class="nav-reticle">
+            <div class="reticle-cross" style="animation-duration: 2s;"></div>
+            <div class="target-box" style="top: 50%; left: 50%; transform: translate(-50%, -50%); border-color: var(--term);">
+                <div style="position: absolute; top: -15px; font-size: 0.5rem; color: var(--term);">DESTINATION: ALPHA_CENTAURI_SYSTEM</div>
+            </div>
+        </div>
+
+        <div class="metrics">
+            <span class="warp-val" style="color: var(--nexus);">Warp 4.20</span><br>
+            <span class="warp-label">TRANSIT_PHASE_A_ACTIVE</span>
+        </div>
+    </div>
+
+    <script>
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = Math.random() * 3 + 'px';
+            star.style.height = star.style.width;
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+    </script>
+</body>
+</html>
