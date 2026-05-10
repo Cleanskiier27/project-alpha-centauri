@@ -1,0 +1,58 @@
+{
+  "account_owner": "Andrew Middleton",
+  "organization": "NetworkBuster Galactic Division",
+  "balance": 1000000000.0,
+  "currency": "USD",
+  "routing_history": [
+    {
+      "timestamp": "2026-05-07T18:00:00Z",
+      "amount": 999996000.0,
+      "source": "Interstellar Research Council / Galactic Federation",
+      "description": "The Galactic Threshold Authorization - Billion Dollar Interstellar Grant",
+      "transaction_id": "NB-GAL-1000000000"
+    },
+    {
+      "timestamp": "2026-05-07T18:15:00Z",
+      "amount": -5500000.0,
+      "source": "Warp Logistics",
+      "description": "Alpha Centauri Jump Sequence - Antimatter Injection & Field Collapse",
+      "transaction_id": "NB-JUMP-1745501200"
+    },
+    {
+      "timestamp": "2026-05-07T18:20:00Z",
+      "amount": -250000.0,
+      "source": "Communication Ops",
+      "description": "Deep Space Relay Sync Scheduled - Post-Arrival Sequence",
+      "transaction_id": "NB-RELAY-SCHED"
+    },
+    {
+      "timestamp": "2026-05-07T18:45:00Z",
+      "amount": -150000000.0,
+      "source": "Galactic Infrastructure",
+      "description": "Interstellar Mesh Backbone Expansion - Deployment of 10k Relay Nodes",
+      "transaction_id": "NB-MESH-DEPLOY"
+    },
+    {
+      "timestamp": "2026-05-07T19:00:00Z",
+      "amount": -45000000.0,
+      "source": "Deep Space Research",
+      "description": "Deep Space Signal Processing Suite - Neighborhood Sector Analysis",
+      "transaction_id": "NB-SIG-1745501300"
+    },
+    {
+      "timestamp": "2026-05-07T19:15:00Z",
+      "amount": -85000000.0,
+      "source": "Galactic Cryptanalysis",
+      "description": "Sector 02 Decryption Sequence - Brute-Forcing 1024-EXA Crypto Strength",
+      "transaction_id": "NB-CRYP-1745501400"
+    },
+    {
+      "timestamp": "2026-05-07T19:30:00Z",
+      "amount": -250000000.0,
+      "source": "Surface Operations",
+      "description": "Proxima b Exo-Hub Deployment - Atmospheric Entry & Surface Hardening",
+      "transaction_id": "NB-EXO-DEPLOY"
+    }
+  ],
+  "status": "ACTIVE"
+}

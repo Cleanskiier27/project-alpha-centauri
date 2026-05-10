@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLANETARY SCAN | PROXIMA B</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #000005;
+            --nexus: #00ffff;
+            --bio: #00ff41;
+            --gas: #bc13fe;
+            --border: rgba(0, 255, 255, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Mono', monospace; }
+
+        body {
+            background: transparent;
+            color: #fff;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .scan-container {
+            width: 450px;
+            height: 450px;
+            border: 2px solid var(--bio);
+            background: rgba(0, 10, 5, 0.95);
+            position: relative;
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.1);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .planet-limb {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 70% 30%, #222, #000);
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            top: 20%;
+            left: -50px;
+            box-shadow: inset 0 0 50px rgba(0, 255, 65, 0.1);
+        }
+
+        .atmosphere-layer {
+            position: absolute;
+            width: 620px;
+            height: 620px;
+            border-radius: 50%;
+            border: 10px solid rgba(0, 255, 255, 0.1);
+            top: calc(20% - 10px);
+            left: -60px;
+            animation: breathe 4s infinite ease-in-out;
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.02); }
+        }
+
+        .scan-beam {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: var(--nexus);
+            left: 50%;
+            top: 0;
+            box-shadow: 0 0 15px var(--nexus);
+            animation: sweep 4s infinite linear;
+        }
+
+        @keyframes sweep {
+            0% { left: 0; }
+            100% { left: 100%; }
+        }
+
+        .data-overlay {
+            position: relative;
+            z-index: 10;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .bio-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 220px;
+        }
+
+        .metric {
+            background: rgba(0,0,0,0.6);
+            border: 1px solid var(--border);
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .m-label { font-size: 0.55rem; color: var(--bio); opacity: 0.7; }
+        .m-val { font-size: 0.9rem; font-weight: bold; color: var(--nexus); }
+
+        .header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            color: var(--bio);
+            margin-bottom: 10px;
+        }
+
+        .blink { animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    </style>
+</head>
+<body>
+    <div class="scan-container">
+        <div class="atmosphere-layer"></div>
+        <div class="planet-limb"></div>
+        <div class="scan-beam"></div>
+
+        <div class="data-overlay">
+            <div class="header">
+                > PLANETARY_BIO_SCAN<br>
+                <span class="blink">[ ANALYSIS_IN_PROGRESS ]</span>
+            </div>
+
+            <div class="bio-metrics">
+                <div class="metric">
+                    <div class="m-label">O2_CONCENTRATION</div>
+                    <div class="m-val">18.4%</div>
+                </div>
+                <div class="metric">
+                    <div class="m-label">CH4_ANOMALY</div>
+                    <div class="m-val">DETECTED</div>
+                </div>
+                <div class="metric">
+                    <div class="m-label">H2O_VAPOR</div>
+                    <div class="m-val">HIGH_ALT</div>
+                </div>
+                <div class="metric">
+                    <div class="m-label">BIO_PROBABILITY</div>
+                    <div class="m-val" style="color: var(--bio);">92.4%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

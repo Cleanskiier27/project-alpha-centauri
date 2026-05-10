@@ -1,105 +1,29 @@
 {
   "account_owner": "Andrew Middleton",
-  "organization": "NetworkBuster Research Division",
-  "balance": 4000.0,
+  "organization": "NetworkBuster Galactic Division",
+  "balance": 3750000000.0,
   "currency": "USD",
   "routing_history": [
     {
-      "timestamp": "2026-04-24T12:00:00Z",
-      "amount": 5236.0,
-      "source": "SBIR Ignite Program / NASA",
-      "description": "M2M-01 Milestone Payout - Phase 12 Completion & Root Acceleration",
-      "transaction_id": "NB-RT-1745496000"
+      "timestamp": "2026-05-07T22:00:00Z",
+      "amount": -750000000.0,
+      "source": "Terraforming Ops",
+      "description": "Large-Scale Terraforming Sequence & 1k Swarm Test Deployment",
+      "transaction_id": "NB-TERRA-01"
     },
     {
-      "timestamp": "2026-05-07T14:30:00Z",
-      "amount": 7264.0,
-      "source": "NetworkBuster Venture Growth",
-      "description": "Nexus Tier Escalation - Chapter 13 Drone Swarm Activation",
-      "transaction_id": "NB-RT-1745500000"
+      "timestamp": "2026-05-07T22:30:00Z",
+      "amount": -1500000000.0,
+      "source": "Planetary Defense & Industry",
+      "description": "Atmospheric Shielding Deployment & 100k Mass Swarm Activation",
+      "transaction_id": "NB-SWARM-MASS"
     },
     {
-      "timestamp": "2026-05-07T14:45:00Z",
-      "amount": 0.0,
-      "source": "System Security",
-      "description": "GATES Protocol Stress Test - Command Injection Blocked",
-      "transaction_id": "NB-ST-1745500100"
-    },
-    {
-      "timestamp": "2026-05-07T15:00:00Z",
-      "amount": 0.0,
-      "source": "System Recovery",
-      "description": "Recovery Protocol Success - Telemetry Signal Restored",
-      "transaction_id": "NB-RC-1745500200"
-    },
-    {
-      "timestamp": "2026-05-07T15:15:00Z",
-      "amount": -850.0,
-      "source": "Mission Logistics",
-      "description": "TLI Burn Delta-V Expenditure - 3.14 km/s Propulsion Tax",
-      "transaction_id": "NB-TLI-1745500300"
-    },
-    {
-      "timestamp": "2026-05-07T15:30:00Z",
-      "amount": -450.0,
-      "source": "Mission Logistics",
-      "description": "LOI Capture Burn - 0.85 km/s Deceleration",
-      "transaction_id": "NB-LOI-1745500400"
-    },
-    {
-      "timestamp": "2026-05-07T15:45:00Z",
-      "amount": -1200.0,
-      "source": "Mission Logistics",
-      "description": "Dual Ops: Multi-Spectral Scan & Surface Probe Deployment",
-      "transaction_id": "NB-DUAL-1745500500"
-    },
-    {
-      "timestamp": "2026-05-07T16:00:00Z",
-      "amount": 0.0,
-      "source": "Surface Operations",
-      "description": "Touchdown Confirmed - Surface Data Link Established",
-      "transaction_id": "NB-SUR-1745500600"
-    },
-    {
-      "timestamp": "2026-05-07T16:15:00Z",
-      "amount": -650.0,
-      "source": "Infrastructure Dev",
-      "description": "Deep Regolith Analysis & Wide-Area Connectivity Mapping",
-      "transaction_id": "NB-INF-1745500700"
-    },
-    {
-      "timestamp": "2026-05-07T16:30:00Z",
-      "amount": -1500.0,
-      "source": "Resource Extraction",
-      "description": "Autonomous Miner Alpha Deployment - Extraction Sequence Start",
-      "transaction_id": "NB-MIN-1745500800"
-    },
-    {
-      "timestamp": "2026-05-07T16:45:00Z",
-      "amount": -3500.0,
-      "source": "Infrastructure Dev",
-      "description": "Lunar Refinery Hub Construction - Phase 1: Structural Assembly",
-      "transaction_id": "NB-REF-1745500900"
-    },
-    {
-      "timestamp": "2026-05-07T17:15:00Z",
-      "amount": -2200.0,
-      "source": "Infrastructure Dev",
-      "description": "Propellant Storage Tank Fabrication - Additive Manufacturing Cycle",
-      "transaction_id": "NB-FAB-1745501000"
-    },
-    {
-      "timestamp": "2026-05-07T17:30:00Z",
-      "amount": -1800.0,
-      "source": "Propellant Production",
-      "description": "Volatile Liquefaction Sequence - First Liquid Yield Processed",
-      "transaction_id": "NB-LIQ-1745501100"
-    }
-    ],      "timestamp": "2026-05-07T17:00:00Z",
-      "amount": -8500.0,
-      "source": "Infrastructure Migration",
-      "description": "AKS Migration Allocation - The 10,000 Milestone Infrastructure Hardening",
-      "transaction_id": "NB-AKS-1745500900"
+      "timestamp": "2026-05-07T23:00:00Z",
+      "amount": -500000000.0,
+      "source": "Special Operations",
+      "description": "Shield Bypass Protocol - Quantum Tunneling Infiltrator Deployment",
+      "transaction_id": "NB-BYPASS-01"
     }
   ],
   "status": "ACTIVE"

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIGTREE SYNC | NEURAL ROOT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #000500;
+            --nexus: #00ffff;
+            --root: #00ff41;
+            --core: #bc13fe;
+            --border: rgba(0, 255, 65, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Mono', monospace; }
+
+        body {
+            background: transparent;
+            color: #fff;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .bigtree-container {
+            width: 450px;
+            height: 450px;
+            border: 2px solid var(--root);
+            background: rgba(0, 15, 5, 0.95);
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 255, 65, 0.2);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 8px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: var(--root);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .sync-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .metric {
+            background: rgba(0, 255, 65, 0.05);
+            border: 1px solid var(--border);
+            padding: 10px;
+            text-align: center;
+        }
+
+        .m-label { font-size: 0.55rem; color: var(--root); opacity: 0.7; text-transform: uppercase; }
+        .m-val { font-size: 0.9rem; font-weight: bold; color: var(--nexus); }
+
+        .viz-container {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: rgba(0,0,0,0.4);
+            border-radius: 4px;
+        }
+
+        .tree-root {
+            position: absolute;
+            width: 2px;
+            background: linear-gradient(to top, var(--root), transparent);
+            transform-origin: bottom center;
+            animation: grow 4s infinite ease-out;
+        }
+
+        @keyframes grow {
+            0% { height: 0; opacity: 0.5; }
+            100% { height: 150px; opacity: 0; transform: scaleX(2); }
+        }
+
+        .neural-core {
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, var(--core) 0%, transparent 70%);
+            border-radius: 50%;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 0 30px var(--core);
+            animation: pulse-core 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-core {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .data-filament {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: rotate-filament 10s linear infinite;
+        }
+
+        @keyframes rotate-filament {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .status-footer {
+            margin-top: 20px;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: space-between;
+            color: var(--root);
+        }
+
+        .blink { animation: blink 1.5s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    </style>
+</head>
+<body>
+    <div class="bigtree-container">
+        <div class="header">
+            <span>> NEURAL_SYNC_PROTOCOL</span>
+            <span class="blink">[ 85-ALPHA_ACTIVE ]</span>
+        </div>
+
+        <div class="sync-metrics">
+            <div class="metric">
+                <div class="m-label">ROOT_ACCELERATION</div>
+                <div class="m-val">4.2 TB/S²</div>
+            </div>
+            <div class="metric">
+                <div class="m-label">NEURAL_DENSITY</div>
+                <div class="m-val">98.4%</div>
+            </div>
+        </div>
+
+        <div class="viz-container" id="viz">
+            <div class="neural-core"></div>
+            <div class="data-filament"></div>
+            <div class="data-filament" style="animation-duration: 15s; transform: rotate(45deg);"></div>
+            <div class="data-filament" style="animation-duration: 20s; transform: rotate(-45deg);"></div>
+        </div>
+
+        <div class="status-footer">
+            <span>NETWORK: BARNARD_V_CORE</span>
+            <span>STATUS: SYNCHRONIZING</span>
+        </div>
+    </div>
+
+    <script>
+        const viz = document.getElementById('viz');
+        function createRoot() {
+            const root = document.createElement('div');
+            root.className = 'tree-root';
+            const angle = Math.random() * 360;
+            root.style.transform = `rotate(${angle}deg)`;
+            root.style.bottom = '50%';
+            root.style.left = '50%';
+            viz.appendChild(root);
+            setTimeout(() => root.remove(), 4000);
+        }
+        setInterval(createRoot, 200);
+    </script>
+</body>
+</html>

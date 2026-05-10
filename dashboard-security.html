@@ -3,515 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NetworkBuster | Mission Control Dashboard</title>
+    <title>NetworkBuster | GALACTIC COMMAND</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #000505;
+            --bg: #000005;
             --nexus: #00ffff;
             --term: #00ff41;
+            --warp: #bc13fe;
             --alert: #ff003c;
             --warning: #ffaa00;
             --surface: rgba(0, 255, 255, 0.03);
             --border: rgba(0, 255, 255, 0.2);
-            --glass: blur(12px);
+            --glass: blur(15px);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background-color: var(--bg);
             background-image: 
-                radial-gradient(circle at 20% 30%, rgba(0, 255, 255, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(0, 255, 65, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(188, 19, 254, 0.05) 0%, transparent 70%),
                 url('https://www.transparenttextures.com/patterns/stardust.png');
             color: #e0f2f1;
             font-family: 'Space Mono', monospace;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
-        /* --- UI SCANNERS --- */
-        .ui-line {
-            position: fixed;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--nexus), transparent);
-            top: 50%;
-            opacity: 0.1;
-            pointer-events: none;
-            z-index: 100;
-        }
-
-        /* --- HEADER --- */
         header {
-            padding: 20px 40px;
+            padding: 25px 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--border);
             backdrop-filter: var(--glass);
-            background: rgba(0, 5, 5, 0.8);
+            background: rgba(0, 0, 10, 0.8);
             z-index: 10;
         }
 
         .brand h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
-            letter-spacing: 4px;
+            font-size: 1.8rem;
+            letter-spacing: 6px;
             color: var(--nexus);
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            text-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
         }
 
-        .mission-clock {
+        .galactic-status {
             display: flex;
-            gap: 20px;
+            gap: 30px;
             font-size: 0.8rem;
-            color: var(--term);
+            color: var(--warp);
         }
 
-        .clock-item {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-        }
+        .status-item { display: flex; flex-direction: column; align-items: flex-end; }
+        .status-label { font-size: 0.6rem; opacity: 0.6; text-transform: uppercase; color: var(--nexus); }
 
-        .clock-label { font-size: 0.6rem; opacity: 0.6; text-transform: uppercase; }
-
-        /* --- MAIN LAYOUT --- */
         main {
             display: grid;
-            grid-template-columns: 350px 1fr 350px;
-            gap: 20px;
-            padding: 20px;
+            grid-template-columns: 380px 1fr 380px;
+            gap: 25px;
+            padding: 25px;
             flex: 1;
+            overflow: hidden;
         }
 
         .panel {
             background: var(--surface);
             backdrop-filter: var(--glass);
             border: 1px solid var(--border);
-            border-radius: 4px;
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
             position: relative;
             overflow: hidden;
         }
 
-        .panel::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 2px;
-            background: var(--nexus);
-            box-shadow: 0 0 10px var(--nexus);
+        .panel::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--nexus), transparent);
         }
 
         .panel-title {
-            padding: 10px 15px;
+            padding: 12px 20px;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             letter-spacing: 2px;
             text-transform: uppercase;
-            border-bottom: 1px solid var(--border);
             background: rgba(0, 255, 255, 0.05);
-            display: flex;
-            justify-content: space-between;
-        }
-
-        /* --- LEFT PANEL: SECURITY --- */
-        .security-status {
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
             border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between;
         }
 
-        .status-indicator {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            border: 2px solid var(--term);
-            box-shadow: 0 0 15px var(--term);
-            animation: pulse 2s infinite;
+        .hud-container {
+            display: flex; flex-direction: column; gap: 25px; height: 100%;
         }
 
-        @keyframes pulse {
-            0% { box-shadow: 0 0 5px var(--term); }
-            50% { box-shadow: 0 0 20px var(--term); }
-            100% { box-shadow: 0 0 5px var(--term); }
+        .hud-main {
+            flex: 1; border: 1px solid var(--border); background: rgba(0,0,0,0.6);
+            border-radius: 8px; position: relative;
         }
 
-        .status-text h3 { font-size: 1rem; color: var(--nexus); }
-        .status-text p { font-size: 0.7rem; opacity: 0.7; }
+        .hud-main iframe { width: 100%; height: 100%; border: none; }
 
-        .alerts-log {
-            flex: 1;
-            padding: 10px;
-            overflow-y: auto;
-            font-size: 0.7rem;
+        .galactic-metrics {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;
         }
 
-        .alert-entry {
-            padding: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            margin-bottom: 5px;
-            border-left: 2px solid var(--warning);
-            background: rgba(255, 170, 0, 0.05);
+        .metric-card {
+            background: rgba(0, 255, 255, 0.02); border: 1px solid var(--border);
+            padding: 15px; text-align: center; border-radius: 4px;
         }
 
-        .alert-entry.critical {
-            border-left-color: var(--alert);
-            background: rgba(255, 0, 60, 0.05);
+        .metric-val { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; color: var(--nexus); }
+        .metric-label { font-size: 0.55rem; opacity: 0.5; text-transform: uppercase; margin-top: 5px; }
+
+        .scrolling-log { flex: 1; padding: 15px; overflow-y: auto; font-size: 0.7rem; }
+        .log-entry { 
+            padding: 10px; border-left: 2px solid var(--nexus); 
+            background: rgba(0, 255, 255, 0.03); margin-bottom: 10px;
         }
+        .log-entry.warp { border-left-color: var(--warp); background: rgba(188, 19, 254, 0.03); }
 
-        /* --- CENTER PANEL: MISSION HUD --- */
-        .mission-hud {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        .ledger-panel {
+            padding: 20px; border-top: 1px solid var(--border);
+            background: rgba(188, 19, 254, 0.05);
         }
+        .balance-huge { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; color: var(--term); text-shadow: 0 0 10px var(--term); }
 
-        .hud-frame {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            position: relative;
-        }
-
-        .hud-frame iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .performance-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .gauge-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 15px;
-            text-align: center;
-        }
-
-        .gauge-val {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
-            color: var(--nexus);
-            margin-bottom: 5px;
-        }
-
-        .gauge-label { font-size: 0.6rem; opacity: 0.6; text-transform: uppercase; }
-
-        /* --- RIGHT PANEL: TIMELINE --- */
-        .timeline-feed {
-            flex: 1;
-            padding: 10px;
-            overflow-y: auto;
-        }
-
-        .timeline-entry {
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 4px;
-            margin-bottom: 15px;
-            border-left: 2px solid var(--nexus);
-            font-size: 0.75rem;
-        }
-
-        .entry-time { color: var(--term); font-weight: bold; margin-bottom: 5px; display: block; }
-
-        .ledger-summary {
-            padding: 20px;
-            background: rgba(0, 255, 65, 0.05);
-            border-top: 1px solid var(--border);
-        }
-
-        .ledger-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            font-size: 0.8rem;
-        }
-
-        .balance-val { color: var(--term); font-weight: bold; font-size: 1rem; }
-
-        /* --- FOOTER --- */
         footer {
-            padding: 10px 40px;
-            border-top: 1px solid var(--border);
-            backdrop-filter: var(--glass);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.7rem;
+            padding: 15px 50px; border-top: 1px solid var(--border);
+            backdrop-filter: var(--glass); display: flex; justify-content: space-between;
+            font-size: 0.7rem; align-items: center;
         }
 
-        .controls .btn {
-            background: transparent;
-            border: 1px solid var(--nexus);
-            color: var(--nexus);
-            padding: 5px 15px;
-            cursor: pointer;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.6rem;
-            margin-right: 10px;
-            transition: 0.3s;
+        .btn {
+            background: transparent; border: 1px solid var(--nexus); color: var(--nexus);
+            padding: 6px 18px; cursor: pointer; font-family: 'Orbitron', sans-serif;
+            font-size: 0.65rem; transition: 0.3s; margin-left: 10px;
         }
+        .btn:hover { background: var(--nexus); color: #000; box-shadow: 0 0 15px var(--nexus); }
 
-        .controls .btn:hover {
-            background: var(--nexus);
-            color: #000;
-            box-shadow: 0 0 10px var(--nexus);
-        }
-
-        .controls .btn-danger {
-            border-color: var(--alert);
-            color: var(--alert);
-        }
-
-        .controls .btn-danger:hover {
-            background: var(--alert);
-            color: #fff;
-            box-shadow: 0 0 10px var(--alert);
-        }
-
-        /* Scrollbar styling */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--nexus); }
-
-        .blink { animation: blink 1s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .blink { animation: blink 1.5s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
     </style>
 </head>
 <body>
-    <div class="ui-line"></div>
-
     <header>
         <div class="brand">
             <h1>NETWORKBUSTER</h1>
         </div>
-        <div class="mission-clock">
-            <div class="clock-item">
-                <span class="clock-label">Local Time</span>
-                <span id="localTime">00:00:00</span>
+        <div class="galactic-status">
+            <div class="status-item">
+                <span class="status-label">Current Sector</span>
+                <span>INTERSTELLAR_VOID_01</span>
             </div>
-            <div class="clock-item">
-                <span class="clock-label">Mission Elapsed</span>
-                <span id="met">00:00:00</span>
+            <div class="status-item">
+                <span class="status-label">Warp Velocity</span>
+                <span style="color: var(--warp);">4.20c</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Galactic Sync</span>
+                <span class="blink" style="color: var(--warning);">TRANSITING</span>
             </div>
         </div>
     </header>
 
     <main>
-        <!-- LEFT: SECURITY -->
         <section class="panel">
             <div class="panel-title">
-                <span>Security Matrix</span>
-                <span class="blink">● LIVE</span>
+                <span>Interstellar Feed</span>
+                <span class="blink" style="color: var(--alert);">DUAL_TRACK</span>
             </div>
-            <div class="security-status">
-                <div class="status-indicator" id="securityIndicator">🟢</div>
-                <div class="status-text">
-                    <h3 id="securityLevel">SAFE</h3>
-                    <p id="threatCount">0 Threats Detected</p>
+            <div class="scrolling-log">
+                <div class="log-entry warp" style="border-left-color: var(--alert); background: rgba(255, 0, 60, 0.05);">
+                    <strong>[DECRYPTION_ACTIVE]</strong><br>MAX POWER re-routed. Brute-forcing Sector 02 (1024-EXA).
                 </div>
-            </div>
-            <div class="alerts-log" id="alertsList">
-                <div class="loading">Initializing logs...</div>
-            </div>
-        </section>
-
-        <!-- CENTER: MISSION HUD -->
-        <section class="mission-hud">
-            <div class="hud-frame">
-                <iframe src="lunar_refinery_construction.html" id="missionFrame"></iframe>
-            </div>
-            <div class="performance-grid">
-                <div class="gauge-card">
-                    <div class="gauge-val" id="memVal">0.0%</div>
-                    <div class="gauge-label">Memory</div>
+                <div class="log-entry">
+                    <strong>[DESCENT_STATUS]</strong><br>Touchdown on Proxima b imminent. 12 km and closing.
                 </div>
-                <div class="gauge-card">
-                    <div class="gauge-val" id="threatVal">0</div>
-                    <div class="gauge-label">Threats</div>
-                </div>
-                <div class="gauge-card">
-                    <div class="gauge-val" id="ipVal">0</div>
-                    <div class="gauge-label">Blocked IPs</div>
+                <div class="log-entry">
+                    <strong>[THERMAL_ALERT]</strong><br>Decryption cluster at 842°C. Cooling systems at 100%.
                 </div>
             </div>
         </section>
 
-        <!-- RIGHT: TIMELINE & LEDGER -->
+        <section class="hud-container">
+            <div class="hud-main">
+                <iframe src="shield_bypass_deployment.html"></iframe>
+            </div>
+            <div class="galactic-metrics">
+                <div class="metric-card">
+                    <div class="metric-val">1.2 LY</div>
+                    <div class="metric-label">Signal Distance</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-val">0.85c</div>
+                    <div class="metric-label">Warp Speed</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-val">94.2%</div>
+                    <div class="metric-label">Field Integrity</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-val">0</div>
+                    <div class="metric-label">Threats (LY)</div>
+                </div>
+            </div>
+        </section>
+
         <section class="panel">
             <div class="panel-title">
-                <span>Timeline Feed</span>
-                <span>UTC</span>
+                <span>Galactic Ledger</span>
+                <span>USD</span>
             </div>
-            <div class="timeline-feed" id="timelineList">
-                <div class="loading">Syncing timeline...</div>
+            <div class="scrolling-log" id="timelineList">
+                <div style="opacity: 0.5; padding: 20px; text-align: center;">Syncing galactic timeline...</div>
             </div>
-            <div class="ledger-summary">
-                <div class="ledger-row">
-                    <span>Account Owner</span>
-                    <span>A. Middleton</span>
-                </div>
-                <div class="ledger-row">
-                    <span>Total Balance</span>
-                    <span class="balance-val">$12,500.00</span>
-                </div>
+            <div class="ledger-panel">
+                <div class="status-label">Available Galactic Funds</div>
+                <div class="balance-huge">$1,000,000,000.00</div>
             </div>
         </section>
     </main>
 
     <footer>
-        <div class="system-health">
-            <span>CORE_SYNC: ACTIVE</span> | <span>KERNEL: V1.0.1</span> | <span id="uptime">UPTIME: 00:00:00</span>
-        </div>
+        <div>CORE_AUTH: MIDDLETON_A | KERNEL: G-1.0 | <span id="uptime">UPTIME: 00:00:00</span></div>
         <div class="controls">
-            <button class="btn" onclick="refreshAll()">Refresh Matrix</button>
-            <button class="btn" onclick="exportTimeline()">Data Export</button>
-            <button class="btn btn-danger" onclick="clearAlerts()">Clear Logs</button>
+            <button class="btn" onclick="location.reload()">Refresh Sector</button>
+            <button class="btn">Warp Jump</button>
         </div>
     </footer>
 
     <script>
-        const SECURITY_API = 'http://localhost:3006/api/security';
-        const TIMELINE_API = 'http://localhost:3007/api/timeline';
         const startTime = Date.now();
-
-        // --- CLOCKS ---
-        function updateClocks() {
-            const now = new Date();
-            document.getElementById('localTime').textContent = now.toLocaleTimeString();
-            
+        function updateClock() {
             const elapsed = Math.floor((Date.now() - startTime) / 1000);
             const h = Math.floor(elapsed / 3600).toString().padStart(2, '0');
             const m = Math.floor((elapsed % 3600) / 60).toString().padStart(2, '0');
             const s = (elapsed % 60).toString().padStart(2, '0');
-            document.getElementById('met').textContent = `${h}:${m}:${s}`;
             document.getElementById('uptime').textContent = `UPTIME: ${h}:${m}:${s}`;
         }
-        setInterval(updateClocks, 1000);
-
-        // --- DATA FETCHING ---
-        async function fetchSecurityStatus() {
-            try {
-                const response = await fetch(`${SECURITY_API}/status`);
-                const data = await response.json();
-
-                const indicator = document.getElementById('securityIndicator');
-                indicator.textContent = data.status;
-                indicator.style.borderColor = data.level === 'SAFE' ? 'var(--term)' : 'var(--alert)';
-                indicator.style.boxShadow = `0 0 15px ${data.level === 'SAFE' ? 'var(--term)' : 'var(--alert)'}`;
-                
-                document.getElementById('securityLevel').textContent = data.level;
-                document.getElementById('threatCount').textContent = `${data.statistics.totalThreats} Threats Detected`;
-                document.getElementById('threatVal').textContent = data.statistics.totalThreats;
-                document.getElementById('ipVal').textContent = data.statistics.blockedIPs;
-            } catch (error) {
-                document.getElementById('securityLevel').textContent = 'OFFLINE';
-            }
-        }
-
-        async function fetchAmberAlerts() {
-            try {
-                const response = await fetch(`${SECURITY_API}/amber-alerts`);
-                const data = await response.json();
-                const alertsList = document.getElementById('alertsList');
-                
-                if (data.alerts.length === 0) {
-                    alertsList.innerHTML = '<div style="opacity: 0.5; padding: 20px; text-align: center;">No active threats in log.</div>';
-                } else {
-                    alertsList.innerHTML = data.alerts.slice(0, 10).map(alert => `
-                        <div class="alert-entry ${alert.level === 'CRITICAL' ? 'critical' : ''}">
-                            <div style="font-weight: bold; margin-bottom: 3px;">[${alert.type}]</div>
-                            <div>Source: ${alert.source.ip || 'Unknown'}</div>
-                            <div style="opacity: 0.6; font-size: 0.6rem;">${new Date(alert.timestamp).toLocaleTimeString()}</div>
-                        </div>
-                    `).join('');
-                }
-            } catch (error) {}
-        }
-
-        async function fetchTimeline() {
-            try {
-                const response = await fetch(`${TIMELINE_API}/past?limit=10`);
-                const data = await response.json();
-                const timelineList = document.getElementById('timelineList');
-                
-                if (data.events.length === 0) {
-                    timelineList.innerHTML = '<div style="opacity: 0.5; padding: 20px; text-align: center;">No events recorded.</div>';
-                } else {
-                    timelineList.innerHTML = data.events.map(event => `
-                        <div class="timeline-entry">
-                            <span class="entry-time">${new Date(event.timestamp).toLocaleTimeString()}</span>
-                            <strong>${event.type}</strong>
-                            <div style="opacity: 0.7; margin-top: 5px;">${JSON.stringify(event.data).substring(0, 60)}...</div>
-                        </div>
-                    `).join('');
-                }
-            } catch (error) {}
-        }
-
-        async function updatePerformance() {
-            try {
-                const response = await fetch(`${TIMELINE_API}/present`);
-                const data = await response.json();
-                if (data.snapshot) {
-                    const memPercent = ((data.snapshot.system.memory.used / data.snapshot.system.memory.total) * 100).toFixed(1);
-                    document.getElementById('memVal').textContent = `${memPercent}%`;
-                }
-            } catch (error) {}
-        }
-
-        async function refreshAll() {
-            await Promise.all([
-                fetchSecurityStatus(),
-                fetchAmberAlerts(),
-                fetchTimeline(),
-                updatePerformance()
-            ]);
-        }
-
-        async function clearAlerts() {
-            if (!confirm('Authorize log clearance?')) return;
-            try {
-                await fetch(`${SECURITY_API}/alerts/clear`, { method: 'POST' });
-                refreshAll();
-            } catch (error) {
-                alert('Clearance failed.');
-            }
-        }
-
-        function exportTimeline() {
-            window.open(`${TIMELINE_API}/export?format=json`, '_blank');
-        }
-
-        // Initial load & Intervals
-        refreshAll();
-        setInterval(refreshAll, 5000);
+        setInterval(updateClock, 1000);
     </script>
 </body>
 </html>

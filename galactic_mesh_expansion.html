@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GALACTIC MESH | INFRASTRUCTURE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #000008;
+            --nexus: #00ffff;
+            --mesh: #00ff41;
+            --node: #fff;
+            --alert: #ff003c;
+            --surface: rgba(0, 255, 65, 0.05);
+            --border: rgba(0, 255, 65, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Mono', monospace; }
+
+        body {
+            background: transparent;
+            color: #fff;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .mesh-container {
+            width: 450px;
+            height: 450px;
+            border: 1px solid var(--border);
+            background: rgba(0, 5, 5, 0.95);
+            position: relative;
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.1);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 8px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--mesh);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .mesh-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            border: 1px solid var(--border);
+            padding: 8px;
+            text-align: center;
+            background: rgba(0, 255, 65, 0.02);
+        }
+
+        .stat-label { font-size: 0.55rem; color: rgba(0, 255, 65, 0.5); text-transform: uppercase; }
+        .stat-val { font-size: 0.8rem; font-weight: bold; color: var(--mesh); }
+
+        .viz-container {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            border: 1px solid var(--border);
+            background: rgba(0,0,0,0.4);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mesh-grid {
+            position: absolute;
+            width: 200%; height: 200%;
+            background-image: radial-gradient(var(--mesh) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.1;
+            transform: rotate(15deg);
+        }
+
+        .relay-node {
+            width: 6px; height: 6px;
+            background: var(--node);
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 0 10px var(--node);
+        }
+
+        .node-pulse {
+            position: absolute;
+            width: 20px; height: 20px;
+            border: 1px solid var(--mesh);
+            border-radius: 50%;
+            transform: translate(-7px, -7px);
+            animation: pulse-node 2s infinite;
+        }
+
+        @keyframes pulse-node {
+            0% { transform: translate(-7px, -7px) scale(0.5); opacity: 1; }
+            100% { transform: translate(-7px, -7px) scale(2.5); opacity: 0; }
+        }
+
+        .signal-beam {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, var(--mesh), transparent);
+            opacity: 0.4;
+            transform-origin: left center;
+        }
+
+        .status-footer {
+            margin-top: 20px;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: space-between;
+            color: var(--mesh);
+        }
+
+        .blink { animation: blink 1.5s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    </style>
+</head>
+<body>
+    <div class="mesh-container">
+        <div class="header">
+            <span>> GALACTIC_MESH_EXPANSION</span>
+            <span class="blink">[ DEPLOYING_NODES ]</span>
+        </div>
+
+        <div class="mesh-stats">
+            <div class="stat-card">
+                <div class="stat-label">ACTIVE_NODES</div>
+                <div class="stat-val">1,240</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">LATENCY_MS</div>
+                <div class="stat-val">0.0004</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">THROUGHPUT</div>
+                <div class="stat-val">4.2 PB/S</div>
+            </div>
+        </div>
+
+        <div class="viz-container" id="viz">
+            <div class="mesh-grid"></div>
+        </div>
+
+        <div class="status-footer">
+            <span>BACKBONE: SOL_ALPHA_LINK</span>
+            <span>INTEGRITY: 99.98%</span>
+        </div>
+    </div>
+
+    <script>
+        const viz = document.getElementById('viz');
+        const nodes = [];
+
+        function createNode(x, y) {
+            const container = document.createElement('div');
+            container.style.left = x + 'px';
+            container.style.top = y + 'px';
+            container.style.position = 'absolute';
+            
+            const node = document.createElement('div');
+            node.className = 'relay-node';
+            
+            const pulse = document.createElement('div');
+            pulse.className = 'node-pulse';
+            
+            container.appendChild(node);
+            container.appendChild(pulse);
+            viz.appendChild(container);
+            return { x, y, el: container };
+        }
+
+        // Generate initial mesh nodes
+        for(let i=0; i<8; i++) {
+            const x = Math.random() * (viz.offsetWidth - 20) + 10;
+            const y = Math.random() * (viz.offsetHeight - 20) + 10;
+            nodes.push(createNode(x, y));
+        }
+
+        // Draw connections
+        nodes.forEach((n1, i) => {
+            nodes.slice(i+1).forEach(n2 => {
+                const dist = Math.hypot(n1.x - n2.x, n1.y - n2.y);
+                if(dist < 150) {
+                    const beam = document.createElement('div');
+                    beam.className = 'signal-beam';
+                    const angle = Math.atan2(n2.y - n1.y, n2.x - n1.x);
+                    beam.style.width = dist + 'px';
+                    beam.style.left = n1.x + 3 + 'px';
+                    beam.style.top = n1.y + 3 + 'px';
+                    beam.style.transform = `rotate(${angle}rad)`;
+                    viz.appendChild(beam);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SECTOR 02 | DECRYPTION</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050000;
+            --nexus: #00ffff;
+            --decrypt: #ff003c;
+            --term: #00ff41;
+            --border: rgba(255, 0, 60, 0.5);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Mono', monospace; }
+
+        body {
+            background: transparent;
+            color: #fff;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .decrypt-container {
+            width: 450px;
+            height: 450px;
+            border: 3px solid var(--decrypt);
+            background: rgba(20, 0, 0, 0.98);
+            position: relative;
+            box-shadow: 0 0 60px rgba(255, 0, 60, 0.4);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 8px;
+            animation: vibrate 0.05s infinite;
+        }
+
+        @keyframes vibrate {
+            0% { transform: translate(0,0); }
+            50% { transform: translate(1px, -1px); }
+            100% { transform: translate(0,0); }
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--decrypt);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .bit-stream {
+            flex: 1;
+            width: 100%;
+            background: rgba(0,0,0,0.8);
+            border: 1px solid var(--border);
+            padding: 15px;
+            overflow: hidden;
+            font-size: 0.6rem;
+            color: var(--decrypt);
+            word-break: break-all;
+            position: relative;
+        }
+
+        .thermal-alert {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--decrypt);
+            opacity: 0.1;
+            z-index: 10;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            border: 1px solid var(--border);
+            padding: 8px;
+            text-align: center;
+            background: rgba(255, 0, 60, 0.1);
+        }
+
+        .stat-label { font-size: 0.55rem; color: var(--decrypt); opacity: 0.7; }
+        .stat-val { font-size: 0.9rem; font-weight: bold; color: var(--nexus); }
+
+        .status-footer {
+            margin-top: 15px;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: space-between;
+            color: var(--decrypt);
+        }
+
+        .blink { animation: blink 0.5s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+    </style>
+</head>
+<body>
+    <div class="decrypt-container">
+        <div class="thermal-alert blink">OVERHEAT_WARNING</div>
+        <div class="header">
+            <span>> SECTOR_02_UNLEASHED</span>
+            <span class="blink">[ MAX_POWER_ACTIVE ]</span>
+        </div>
+
+        <div class="bit-stream" id="bitStream"></div>
+
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-label">COMPUTATIONAL_LOAD</div>
+                <div class="stat-val">1.2 YOTTAFLOPS</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">DECRYPTION_RATE</div>
+                <div class="stat-val" id="compVal">14.2%</div>
+            </div>
+        </div>
+
+        <div class="status-footer">
+            <span>CORE_TEMP: 842°C</span>
+            <span>PHASE: SINGULARITY</span>
+        </div>
+    </div>
+
+    <script>
+        const stream = document.getElementById('bitStream');
+        const comp = document.getElementById('compVal');
+        let progress = 14.2;
+
+        function updateStream() {
+            let bits = "";
+            for(let i=0; i<600; i++) {
+                bits += Math.floor(Math.random() * 2);
+            }
+            stream.innerText = bits;
+            
+            // Accelerated progress
+            progress += Math.random() * 2.5;
+            if (progress > 100) progress = 100;
+            comp.innerText = progress.toFixed(1) + "%";
+            
+            if (progress >= 100) {
+                document.querySelector('.thermal-alert').innerText = "DECRYPTION_COMPLETE";
+                document.querySelector('.thermal-alert').style.opacity = "1";
+            }
+        }
+
+        setInterval(updateStream, 50);
+    </script>
+</body>
+</html>

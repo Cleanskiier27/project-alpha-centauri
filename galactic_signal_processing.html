@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGNAL PROCESSING | DEEP SPACE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #000005;
+            --nexus: #00ffff;
+            --signal: #ff3c00;
+            --term: #00ff41;
+            --border: rgba(0, 255, 255, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Mono', monospace; }
+
+        body {
+            background: transparent;
+            color: #fff;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .signal-container {
+            width: 450px;
+            height: 450px;
+            border: 2px solid var(--signal);
+            background: rgba(10, 0, 0, 0.95);
+            position: relative;
+            box-shadow: 0 0 40px rgba(255, 60, 0, 0.2);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 8px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--signal);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .spectrogram {
+            flex: 1;
+            width: 100%;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 60, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            padding: 10px;
+        }
+
+        .freq-bar {
+            flex: 1;
+            background: var(--signal);
+            animation: bounce 0.5s infinite ease-in-out alternate;
+            opacity: 0.7;
+        }
+
+        @keyframes bounce {
+            0% { height: 10%; opacity: 0.3; }
+            100% { height: 90%; opacity: 1; }
+        }
+
+        .anomalies-list {
+            margin-top: 20px;
+            height: 100px;
+            overflow-y: auto;
+            font-size: 0.65rem;
+            border-top: 1px solid var(--border);
+            padding-top: 10px;
+        }
+
+        .anomaly-entry {
+            padding: 5px;
+            border-left: 2px solid var(--nexus);
+            background: rgba(0, 255, 255, 0.05);
+            margin-bottom: 5px;
+        }
+
+        .status-footer {
+            margin-top: 15px;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: space-between;
+            color: var(--nexus);
+        }
+
+        .blink { animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+    <div class="signal-container">
+        <div class="header">
+            <span>> DEEP_SPACE_SIGNAL_PROC</span>
+            <span class="blink">[ LISTENING ]</span>
+        </div>
+
+        <div class="spectrogram" id="spectrogram">
+            <!-- Dynamic bars -->
+        </div>
+
+        <div class="anomalies-list" id="anomalies">
+            <div class="anomaly-entry">SYNCING_WITH_NEIGHBORING_SECTOR_02...</div>
+        </div>
+
+        <div class="status-footer">
+            <span>BANDWIDTH: 12.4 THz</span>
+            <span>ENCRYPTION: ANALYZING</span>
+        </div>
+    </div>
+
+    <script>
+        const spec = document.getElementById('spectrogram');
+        for(let i=0; i<30; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'freq-bar';
+            bar.style.animationDelay = (Math.random() * 2) + 's';
+            bar.style.animationDuration = (0.2 + Math.random() * 0.5) + 's';
+            spec.appendChild(bar);
+        }
+
+        const anomalies = document.getElementById('anomalies');
+        const types = ["PULSE_DETECTION", "ENCRYPTED_MESS_NODE", "NATURAL_RADIO_BURST", "CARRIER_SYNC_ERR"];
+        
+        setInterval(() => {
+            const type = types[Math.floor(Math.random() * types.length)];
+            const div = document.createElement('div');
+            div.className = 'anomaly-entry';
+            div.innerHTML = `<strong>[${type}]</strong>: ${Math.random().toString(16).substring(2, 10).toUpperCase()}`;
+            anomalies.prepend(div);
+            if(anomalies.children.length > 5) anomalies.lastChild.remove();
+        }, 3000);
+    </script>
+</body>
+</html>
