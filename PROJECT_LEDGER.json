@@ -1,7 +1,7 @@
 {
   "account_owner": "Andrew Middleton",
   "organization": "NetworkBuster Galactic Division",
-  "balance": 3750000000.0,
+  "balance": 4250000000.0,
   "currency": "USD",
   "routing_history": [
     {
@@ -24,6 +24,13 @@
       "source": "Special Operations",
       "description": "Shield Bypass Protocol - Quantum Tunneling Infiltrator Deployment",
       "transaction_id": "NB-BYPASS-01"
+    },
+    {
+      "timestamp": "2026-05-10T10:00:00Z",
+      "amount": 500000000.0,
+      "source": "Founder Personal Asset Trust",
+      "description": "Founder's Strategic Investment - Phase 14 Acceleration Capital Injection",
+      "transaction_id": "NB-FND-INVEST-500M"
     }
   ],
   "status": "ACTIVE"
