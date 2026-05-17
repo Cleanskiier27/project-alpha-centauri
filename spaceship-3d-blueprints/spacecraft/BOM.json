@@ -1,0 +1,78 @@
+{
+  "project": "NBS-1 Data Voyager",
+  "version": "1.0.0",
+  "bom": [
+    {
+      "pn": "PN-NBS1-CM-001",
+      "label": "Command Module",
+      "qty": 1,
+      "category": "Structural"
+    },
+    {
+      "pn": "PN-NBS1-HS-001",
+      "label": "Habitat Section",
+      "qty": 1,
+      "category": "Structural"
+    },
+    {
+      "pn": "PN-NBS1-CB-001",
+      "label": "Cargo Bay",
+      "qty": 1,
+      "category": "Structural"
+    },
+    {
+      "pn": "PN-NBS1-PM-001",
+      "label": "Propulsion Module",
+      "qty": 1,
+      "category": "Structural"
+    },
+    {
+      "pn": "PN-NBS1-ENG-ME50",
+      "label": "Main Engine (ME-50)",
+      "qty": 4,
+      "category": "Propulsion"
+    },
+    {
+      "pn": "PN-NBS1-RCS-THR",
+      "label": "RCS Thruster",
+      "qty": 24,
+      "category": "Propulsion"
+    },
+    {
+      "pn": "PN-NBS1-TANK-CH4",
+      "label": "Fuel Tank (Methane)",
+      "qty": 1,
+      "category": "Propulsion"
+    },
+    {
+      "pn": "PN-NBS1-TANK-LOX",
+      "label": "Oxidizer Tank (Oxygen)",
+      "qty": 1,
+      "category": "Propulsion"
+    },
+    {
+      "pn": "PN-NBS1-AV-CPU",
+      "label": "Flight Computer",
+      "qty": 1,
+      "category": "Avionics"
+    },
+    {
+      "pn": "PN-NBS1-NAV-STR",
+      "label": "Star Tracker",
+      "qty": 1,
+      "category": "Navigation"
+    },
+    {
+      "pn": "PN-NBS1-COM-HGA",
+      "label": "High-Gain Antenna",
+      "qty": 1,
+      "category": "Communications"
+    },
+    {
+      "pn": "PN-NBS1-PWR-SOL",
+      "label": "Solar Array",
+      "qty": 4,
+      "category": "Power"
+    }
+  ]
+}

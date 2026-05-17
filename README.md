@@ -212,6 +212,14 @@ Notes:
 - To test locally on Windows see `scripts/test-local-build.ps1` (requires Node, npm, Git, NSIS, and optionally ImageMagick).  
 - For CI, add a job that runs `npm run dist:zip`, `npm run dist:nsis` (on windows), archives `dist/` as release artifacts, and tags the release in GitHub.  
 
+### 🛠️ Development Tools
+- **NPM Wormhole:** A unified bridge that starts all critical services (Main Server, AI Gateway, Proxy) concurrently. Designed for seamless M2M (Moon-to-Mars) environment integration.
+  - Run: `npm run wormhole`
+  - VS Code: Use the "npm: wormhole" task.
+- **Neural Coder OS:** Quick launch for the immersive Agent Core dashboard.
+  - Run: `npm run neural-os`
+  - VS Code: Use the "npm: neural coder os" task.
+
 ---
 
 **Contributing:** See `CONTRIBUTING.md` for guidelines on releases and artifact verification.

@@ -24,11 +24,11 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "proxy:3000": "PROXY_PORT=3000 node proxy-server.js",
-    "proxy:8080": "PROXY_PORT=8080 node proxy-server.js",
-    "proxy": "PROXY_PORT=3000 node proxy-server.js",
+    "proxy:3000": "node proxy-server.js",
+    "proxy:8080": "node proxy-server.js",
+    "proxy": "node proxy-server.js",
     "all": "concurrently \"npm start\" \"npm run proxy:3000\"",
-    "build": "npm install",
+    "build": "vite build",
     "apply:network-boost": "powershell -ExecutionPolicy Bypass -File scripts/network-boost.ps1 -Apply -Confirm:$false",
     "show:network-boost": "powershell -ExecutionPolicy Bypass -File scripts/network-boost.ps1",
     "test": "echo No-tests-specified",
@@ -90,7 +90,9 @@
     "network:optimize": "node scripts/network-path-optimizer.js",
     "network:optimize:apply": "node scripts/network-path-optimizer.js --apply",
     "network:report": "node scripts/network-path-optimizer.js --report",
-    "start:with-ai": "concurrently \"npm start\" \"npm run ai:gateway\" \"npm run proxy\""
+    "start:with-ai": "concurrently \"npm start\" \"npm run ai:gateway\" \"npm run proxy\"",
+    "wormhole": "concurrently \"npm start\" \"npm run ai:gateway\" \"npm run proxy\"",
+    "neural-os": "start http://localhost:3000/os"
   },
   "engines": {
     "node": "24.x",

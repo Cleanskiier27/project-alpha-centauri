@@ -62,45 +62,45 @@ Mass (fueled): 138,000 kg
 
 ### Key Specifications
 
-| System | Specification |
-|--------|---------------|
-| **Crew Capacity** | 6 personnel + 2 pilots |
-| **Cargo Capacity** | 25,000 kg to lunar orbit |
-| **Propulsion** | Methalox (CH₄/LOX) engines |
-| **Thrust** | 4 × 50 kN = 200 kN total |
-| **ISP** | 380s vacuum, 330s sea level |
-| **Delta-V** | 8,500 m/s fully fueled |
-| **Endurance** | 30 days independent |
-| **Life Support** | Closed-loop ECLSS for 45 days |
+| System | Specification | Part Number |
+|--------|---------------|-------------|
+| **Crew Capacity** | 6 personnel + 2 pilots | [PN-NBS1-CM-001] |
+| **Cargo Capacity** | 25,000 kg to lunar orbit | [PN-NBS1-CB-001] |
+| **Propulsion** | Methalox (CH₄/LOX) engines | [PN-NBS1-ENG-ME50] |
+| **Thrust** | 4 × 50 kN = 200 kN total | [PN-NBS1-ENG-ME50] |
+| **ISP** | 380s vacuum, 330s sea level | - |
+| **Delta-V** | 8,500 m/s fully fueled | - |
+| **Endurance** | 30 days independent | [PN-NBS1-HS-001] |
+| **Life Support** | Closed-loop ECLSS for 45 days | [PN-NBS1-SYS-ECLSS] |
 
 ---
 
-## 🛰️ PROPULSION SYSTEM
+## 🛰️ PROPULSION SYSTEM [PN-NBS1-PM-001]
 
-### Main Engines (4× NetworkBuster ME-50)
+### Main Engines (4× NetworkBuster ME-50) [PN-NBS1-ENG-ME50]
 - **Type:** Methalox rocket engines
 - **Thrust:** 50 kN each (200 kN total)
 - **Throttle Range:** 40-100%
 - **Gimbal:** ±15° for attitude control
 - **Restart Capability:** Unlimited in space
 
-### Reaction Control System (RCS)
+### Reaction Control System (RCS) [PN-NBS1-RCS-THR]
 - **Thrusters:** 24 × 500N cold gas (nitrogen)
 - **Placement:** 6 per quadrant for 6-DOF control
 - **Propellant:** 1,000 kg nitrogen
 
 ### Fuel Tanks
-- **Main Tank:** 80,000 kg liquid methane (CH₄)
-- **Oxidizer Tank:** 40,000 kg liquid oxygen (LOX)
+- **Main Tank:** 80,000 kg liquid methane (CH₄) [PN-NBS1-TANK-CH4]
+- **Oxidizer Tank:** 40,000 kg liquid oxygen (LOX) [PN-NBS1-TANK-LOX]
 - **Ratio:** 2:1 fuel to oxidizer
 - **Tank Material:** Carbon fiber composite, cryo-rated
 - **Pressure:** 3.5 MPa nominal
 
 ---
 
-## 💻 AVIONICS & COMPUTING
+## 💻 AVIONICS & COMPUTING [PN-NBS1-AV-CPU]
 
-### Flight Computer
+### Flight Computer [PN-NBS1-AV-CPU]
 - **Primary:** Triple-redundant ARM64 processors
 - **Clock Speed:** 2.5 GHz per core
 - **RAM:** 128 GB ECC
@@ -108,8 +108,8 @@ Mass (fueled): 138,000 kg
 - **OS:** Custom real-time Linux kernel
 
 ### Navigation
-- **Star Tracker:** 10 arcsec accuracy
-- **IMU:** Ring laser gyroscope + accelerometers
+- **Star Tracker:** 10 arcsec accuracy [PN-NBS1-NAV-STR]
+- **IMU:** Ring laser gyroscope + accelerometers [PN-NBS1-NAV-IMU]
 - **GPS Receiver:** Earth orbit only
 - **Deep Space Network:** Ka-band comms for position
 
@@ -121,15 +121,15 @@ Mass (fueled): 138,000 kg
 
 ---
 
-## 📡 COMMUNICATIONS
+## 📡 COMMUNICATIONS [PN-NBS1-AD-001]
 
-### Primary Antenna (High-Gain)
+### Primary Antenna (High-Gain) [PN-NBS1-COM-HGA]
 - **Type:** 2.5m parabolic dish
 - **Frequency:** Ka-band (26-40 GHz)
 - **Data Rate:** 100 Mbps to Earth/Moonbase
 - **Range:** 400,000 km (Earth-Moon)
 
-### Backup Antenna (Omni)
+### Backup Antenna (Omni) [PN-NBS1-COM-LGA]
 - **Type:** Omnidirectional patch array
 - **Frequency:** S-band (2-4 GHz)
 - **Data Rate:** 1 Mbps
@@ -142,9 +142,9 @@ Mass (fueled): 138,000 kg
 
 ---
 
-## 🏠 CREW HABITAT
+## 🏠 CREW HABITAT [PN-NBS1-HS-001]
 
-### Command Module
+### Command Module [PN-NBS1-CM-001]
 - **Cockpit:** 2 pilot seats with full flight controls
 - **Instruments:** 5× 4K touchscreen displays
 - **Windows:** 4 large viewports with electrochromic tinting
@@ -157,7 +157,7 @@ Mass (fueled): 138,000 kg
 - **Exercise:** Resistance bands, treadmill (lunar gravity sim)
 - **Storage:** Personal lockers, 2 m³ per crew member
 
-### Environmental Control
+### Environmental Control [PN-NBS1-SYS-ECLSS]
 - **Temperature:** 20-24°C
 - **Pressure:** 101.3 kPa (1 atm)
 - **Atmosphere:** 78% N₂, 21% O₂
@@ -166,7 +166,7 @@ Mass (fueled): 138,000 kg
 
 ---
 
-## 📦 CARGO BAY
+## 📦 CARGO BAY [PN-NBS1-CB-001]
 
 ### Dimensions
 - **Length:** 15 meters
@@ -175,7 +175,7 @@ Mass (fueled): 138,000 kg
 - **Payload Capacity:** 25,000 kg to lunar orbit
 
 ### Cargo Types
-- **Server Racks:** Standard 42U racks (modified for launch loads)
+- **Server Racks:** Standard 42U racks (modified for launch loads) [PN-NBS1-PL-RACK]
 - **Life Support Supplies:** O₂ tanks, water, food
 - **Spare Parts:** Replacement modules for Moonbase
 - **Scientific Equipment:** Research payloads
@@ -184,19 +184,19 @@ Mass (fueled): 138,000 kg
 ### Loading
 - **Access:** Clamshell doors (2× hinged panels)
 - **Mechanism:** Hydraulic actuators
-- **Cranes:** 2× robotic arms (5-DOF each) for orbital cargo handling
+- **Cranes:** 2× robotic arms (5-DOF each) for orbital cargo handling [PN-NBS1-PL-ROB]
 
 ---
 
 ## ⚡ POWER SYSTEMS
 
-### Primary Power
+### Primary Power [PN-NBS1-PWR-SOL]
 - **Solar Panels:** 4× deployable arrays (8 kW total)
 - **Efficiency:** 32% multi-junction cells
 - **Area:** 50 m² total
 - **Orientation:** Sun-tracking gimbal
 
-### Backup Power
+### Backup Power [PN-NBS1-PWR-BAT]
 - **Batteries:** 200 kWh lithium-ion banks
 - **Duration:** 72 hours at reduced load
 - **Recharge Time:** 24 hours from solar
