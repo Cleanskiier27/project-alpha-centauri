@@ -28,7 +28,8 @@ if (compression) app.use(compression());
 if (helmet) app.use(helmet());
 
 // Required middleware
-app.use(express.json({ limit: '1mb' }));
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 
 // Performance: Load specs with error handling
 let specsCache = null;
@@ -55,7 +56,33 @@ function loadSpecs() {
 // Load specs on startup
 loadSpecs();
 
-// Routes
+// ============================================
+// MOUNT SUB-ROUTERS (Formal Building Blocks)
+// ============================================
+
+const subRouters = [
+  { path: '/api/devices', file: './devices.js' },
+  { path: '/api/dtn', file: './interstellar-dtn.js' },
+  { path: '/api/quantum', file: './quantum-hub.js' },
+  { path: '/api/ai', file: './ai-requests.js' },
+  { path: '/api/gpu', file: './gpu-stats.js' },
+  { path: '/api/recycle', file: './recycle.js' }
+];
+
+for (const { path: routePath, file } of subRouters) {
+  try {
+    const { default: router } = await import(file);
+    app.use(routePath, router);
+    console.log(`✓ Mounted router: ${routePath} from ${file}`);
+  } catch (err) {
+    console.warn(`⚠️  Failed to mount router ${routePath}:`, err.message);
+  }
+}
+
+// ============================================
+// CORE ROUTES
+// ============================================
+
 app.get('/api/specs', (req, res) => {
   res.set('Cache-Control', 'public, max-age=300');
   
@@ -90,7 +117,8 @@ app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
-    uptime: process.uptime()
+    uptime: process.uptime(),
+    galactic_sync: true
   });
 });
 
@@ -105,19 +133,20 @@ app.get('/api/health/detailed', (req, res) => {
     memory: {
       heapUsed: Math.round(memUsage.heapUsed / 1024 / 1024),
       heapTotal: Math.round(memUsage.heapTotal / 1024 / 1024)
-    }
+    },
+    routers: subRouters.map(r => r.path)
   });
 });
 
 // 404 handler
 app.use((req, res) => {
-  res.status(404).json({ error: 'Not found' });
+  res.status(404).json({ error: 'Not found', path: req.path });
 });
 
 // Error handler
 app.use((err, req, res, next) => {
   console.error('Error:', err.message);
-  res.status(500).json({ error: 'Internal server error' });
+  res.status(500).json({ error: 'Internal server error', details: err.message });
 });
 
 // Start server
@@ -127,7 +156,8 @@ const server = app.listen(PORT, '0.0.0.0', () => {
   if (compression) console.log(`   ✓ Compression enabled`);
   if (helmet) console.log(`   ✓ Security headers enabled`);
   console.log(`   ✓ Health checks: /health, /api/health/detailed`);
-  console.log(`   ✓ Specs: /api/specs\n`);
+  console.log(`   ✓ Specs: /api/specs`);
+  console.log(`   ✓ Galactic Routers: ${subRouters.length} paths registered\n`);
 });
 
 // Graceful shutdown
@@ -138,3 +168,4 @@ process.on('SIGTERM', () => {
     process.exit(0);
   });
 });
+

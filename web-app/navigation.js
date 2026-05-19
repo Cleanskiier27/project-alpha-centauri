@@ -36,9 +36,9 @@ const NAVIGATION = {
   // API Endpoints
   api: {
     health: { path: '/api/health', label: 'Health Check', method: 'GET', port: 3000 },
-    specs: { path: '/api/specs', label: 'System Specs', method: 'GET', port: 3001 },
-    audioStream: { path: '/api/audio/stream/create', label: 'Audio Stream', method: 'POST', port: 3002 },
-    audioSynth: { path: '/api/audio/synthesize', label: 'Synthesize', method: 'POST', port: 3002 },
+    specs: { path: '/api/specs', label: 'System Specs', method: 'GET' },
+    audioStream: { path: '/api/audio/stream/create', label: 'Audio Stream', method: 'POST' },
+    audioSynth: { path: '/api/audio/synthesize', label: 'Synthesize', method: 'POST' },
     authLogin: { path: '/api/auth/login', label: 'Login', method: 'POST', port: 3003 },
     authSignup: { path: '/api/auth/signup', label: 'Sign Up', method: 'POST', port: 3003 },
     authDocs: { path: '/api/docs', label: 'API Docs', method: 'GET', port: 3003 }

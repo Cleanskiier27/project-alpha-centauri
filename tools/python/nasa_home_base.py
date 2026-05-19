@@ -104,6 +104,20 @@ if FLASK_AVAILABLE:
         manager = StrategicWealthManager()
         return jsonify(manager.get_collective_telemetry())
 
+    @app.route('/api/mission/path', methods=['POST'])
+    def api_mission_path():
+        try:
+            from mission_control_engine import engine as mc_engine
+            data = request.json or {}
+            origin = data.get('origin', 'sol')
+            destination = data.get('destination', 'proxima')
+            speed = float(data.get('speed', 0.5))
+            
+            result = mc_engine.calculate_interstellar_path(origin, destination, speed)
+            return jsonify(result)
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
     MISSION_CONTROL_HTML = """
     <!DOCTYPE html>
     <html lang="en">

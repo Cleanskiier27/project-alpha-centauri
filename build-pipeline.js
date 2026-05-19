@@ -9,7 +9,7 @@ import { spawn, execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 
-const PROJECT_PATH = 'C:\\Users\\daypi\\OneDrive\\Desktop\\networkbuster.net';
+const PROJECT_PATH = process.cwd();
 
 class BuildPipeline {
   constructor() {

@@ -72,8 +72,13 @@ const AI_BRAIN = {
         'AI World immersive overlay',
         'Satellite mapping visualization',
         'USB flash upgrade system',
-        'Docker containerization support'
+        'Docker containerization support',
+        'Antigravity Matter Compiler integration'
       ]
+    },
+    antigravity: {
+      keywords: ['antigravity', 'matter', 'compiler', 'key', 'hardware'],
+      info: 'The Antigravity module provides Matter Compiler logic for secure hardware key initialization and quantum-safe synchronization.'
     },
     lunar: {
       keywords: ['lunar', 'moon', 'space', 'recycling', 'regolith', 'challenge'],

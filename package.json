@@ -92,7 +92,10 @@
     "network:report": "node scripts/network-path-optimizer.js --report",
     "start:with-ai": "concurrently \"npm start\" \"npm run ai:gateway\" \"npm run proxy\"",
     "wormhole": "concurrently \"npm start\" \"npm run ai:gateway\" \"npm run proxy\"",
-    "neural-os": "start http://localhost:3000/os"
+    "neural-os": "start http://localhost:3000/os",
+    "finance:mine": "node scripts/personal-miner.js",
+    "finance:main": "node scripts/personal-miner.js",
+    "hotkeys:start": "powershell -WindowStyle Hidden -File scripts/hotkey-listener.ps1"
   },
   "engines": {
     "node": "24.x",

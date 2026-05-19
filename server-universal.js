@@ -88,33 +88,44 @@ app.use((req, res, next) => {
   next();
 });
 
-// Mission Proxies (Python Services)
+// Mission Proxies (Python & Node Services)
 const MISSION_PROXIES = {
-  '/api/mission': 'http://localhost:5000',
-  '/api/map': 'http://localhost:6000',
-  '/api/launcher': 'http://localhost:7000',
-  '/api/tracer': 'http://localhost:8000',
-  '/api/matrix': 'http://localhost:9001',
-  '/api/agi': 'http://localhost:4500'
+  // Python/Internal services - Remove prefix
+  '/api/mission': { target: 'http://localhost:5000', rewrite: true },
+  '/api/map': { target: 'http://localhost:6000', rewrite: true },
+  '/api/launcher': { target: 'http://localhost:7000', rewrite: true },
+  '/api/tracer': { target: 'http://localhost:8000', rewrite: true },
+  '/api/matrix': { target: 'http://localhost:9001', rewrite: true },
+  '/api/agi': { target: 'http://localhost:4500', rewrite: true },
+  // Node/External services - Keep prefix (Port 3001 Gateway)
+  '/api/specs': { target: 'http://localhost:3001', rewrite: false },
+  '/api/devices': { target: 'http://localhost:3001', rewrite: false },
+  '/api/dtn': { target: 'http://localhost:3001', rewrite: false },
+  '/api/quantum': { target: 'http://localhost:3001', rewrite: false },
+  '/api/ai': { target: 'http://localhost:3001', rewrite: false },
+  '/api/gpu': { target: 'http://localhost:3001', rewrite: false },
+  '/api/recycle': { target: 'http://localhost:3001', rewrite: false },
+  '/api/audio': { target: 'http://localhost:3002', rewrite: false }
 };
 
-Object.entries(MISSION_PROXIES).forEach(([prefix, target]) => {
+Object.entries(MISSION_PROXIES).forEach(([prefix, config]) => {
   app.all(`${prefix}*`, (req, res) => {
-    // If request is for /api/mission/status, we want to proxy to http://localhost:5000/status
-    const targetUrl = req.url.replace(prefix, '') || '/';
-    proxy.web(req, res, { target, ignorePath: true, changeOrigin: true, toProxy: true }, (err) => {
-        // Fallback or error handled by proxy.on('error')
+    if (config.rewrite) {
+      req.url = req.url.replace(prefix, '') || '/';
+    }
+    proxy.web(req, res, { target: config.target, changeOrigin: true }, (err) => {
+        // Fallback handled by proxy.on('error')
     });
   });
 });
 
 // Direct HTML Routes
 const HTML_ROUTES = {
-  '/os': 'os.html',
+  '/os': 'cinematics/os.html',
   '/security': 'dashboard-security.html',
   '/music': 'music-studio.html',
-  '/cinematic': 'preciseliens_cinematic.html',
-  '/marketplace': 'MARKETPLACE_EXAMPLE.html',
+  '/cinematic': 'cinematics/preciseliens_cinematic.html',
+  '/marketplace': 'cinematics/MARKETPLACE_EXAMPLE.html',
   '/tracking': 'world_tracking.html'
 };
 
@@ -292,11 +303,11 @@ const challengeOverlayPath = path.join(__dirname, 'challengerepo/real-time-overl
 
 // Preciseliens Visualizations
 app.get('/cinematic', (req, res) => {
-  res.sendFile(path.join(__dirname, 'preciseliens_cinematic.html'));
+  res.sendFile(path.join(__dirname, 'cinematics/preciseliens_cinematic.html'));
 });
 
 app.get('/marketplace', (req, res) => {
-  res.sendFile(path.join(__dirname, 'MARKETPLACE_EXAMPLE.html'));
+  res.sendFile(path.join(__dirname, 'cinematics/MARKETPLACE_EXAMPLE.html'));
 });
 
 app.get('/tracking', (req, res) => {

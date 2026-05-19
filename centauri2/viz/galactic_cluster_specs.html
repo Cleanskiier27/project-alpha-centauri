@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLUSTER SYNC | PROJECT SPECS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #000005;
+            --nexus: #00ffff;
+            --spec: #ffaa00;
+            --term: #00ff41;
+            --border: rgba(255, 170, 0, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Mono', monospace; }
+
+        body {
+            background: transparent;
+            color: #fff;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .cluster-container {
+            width: 450px;
+            height: 450px;
+            border: 2px solid var(--spec);
+            background: rgba(10, 5, 0, 0.95);
+            position: relative;
+            box-shadow: 0 0 50px rgba(255, 170, 0, 0.2);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 8px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--spec);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .spec-scroller {
+            flex: 1;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            overflow: hidden;
+            font-size: 0.6rem;
+            color: var(--term);
+            position: relative;
+        }
+
+        .data-stream {
+            animation: scroll-up 20s linear infinite;
+        }
+
+        @keyframes scroll-up {
+            from { transform: translateY(100%); }
+            to { transform: translateY(-100%); }
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            border: 1px solid var(--border);
+            padding: 8px;
+            text-align: center;
+            background: rgba(255, 170, 0, 0.05);
+        }
+
+        .stat-label { font-size: 0.55rem; color: var(--spec); opacity: 0.7; }
+        .stat-val { font-size: 0.9rem; font-weight: bold; color: var(--nexus); }
+
+        .status-footer {
+            margin-top: 15px;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: space-between;
+            color: var(--spec);
+        }
+
+        .blink { animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    </style>
+</head>
+<body>
+    <div class="cluster-container">
+        <div class="header">
+            <span>> CLUSTER_SPEC_INFUSION</span>
+            <span class="blink">[ UPLOADING ]</span>
+        </div>
+
+        <div class="spec-scroller">
+            <div class="data-stream">
+                MISSION_ID: GALACTIC_NEXUS<br>
+                ARCHITECT: ANDREW_MIDDLETON<br>
+                VALUATION: $6,000,000,000.00<br>
+                MESH_THROUGHPUT: 4.2 PB/S<br>
+                ROBOT_SWARM: 100,000 UNITS<br>
+                SHIELD_INTEGRITY: 100.0%<br>
+                NEURAL_SYNC: 85-ALPHA<br>
+                BIGTREE_STATUS: RECOGNIZED<br>
+                LOCATION: SECTOR_01_PROXIMA<br>
+                GRANT_STATUS: AUTHORIZED<br>
+                CONSCIOUSNESS: 100%_SYNC<br>
+                VERSION: G-1.0_BASELINE
+            </div>
+        </div>
+
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-label">CLUSTER_INTEGRITY</div>
+                <div class="stat-val">99.99%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">SYNC_NODES</div>
+                <div class="stat-val">1,240 / 1,240</div>
+            </div>
+        </div>
+
+        <div class="status-footer">
+            <span>CORE: BIGTREE_MATRIX</span>
+            <span>STATUS: SYNCED</span>
+        </div>
+    </div>
+</body>
+</html>

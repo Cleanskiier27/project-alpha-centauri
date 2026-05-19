@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: networkbuster-overlay
+  labels:
+    app: networkbuster
+    component: overlay
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: networkbuster
+      component: overlay
+  template:
+    metadata:
+      labels:
+        app: networkbuster
+        component: overlay
+    spec:
+      containers:
+      - name: overlay
+        image: networkbusterlo25gft5nqwzg.azurecr.io/networkbuster-overlay:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: networkbuster-overlay-svc
+spec:
+  selector:
+    app: networkbuster
+    component: overlay
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: ClusterIP

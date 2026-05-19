@@ -5,7 +5,8 @@
  */
 
 const AudioBridge = {
-    AUDIO_SERVER: 'http://localhost:3002',
+    // Use relative path for proxying through Port 3000
+    AUDIO_SERVER: '/api/audio',
     currentStreamId: null,
     
     // Initialize a shared audio session

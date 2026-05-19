@@ -120,7 +120,7 @@ const KNOWLEDGE_BASE = {
     patterns: ['what is networkbuster', 'about', 'tell me about', 'what do you do', 'what is this'],
     responses: [
       "NetworkBuster is a multi-server ecosystem featuring web services, APIs, audio streaming, and AI-powered tools. We specialize in lunar recycling technology and real-time data visualization.",
-      "I'm part of the NetworkBuster platform - a comprehensive system with web servers (port 3000), APIs (port 3001), audio streaming (port 3002), and authentication services (port 3003)."
+      "I'm part of the NetworkBuster platform - a unified system accessible via port 3000, which proxies requests to specialized services like API (3001) and audio streaming (3002)."
     ]
   },
   servers: {

@@ -7,7 +7,8 @@ import ConnectionGraph from './components/ConnectionGraph'
 import ImmersiveReader from './components/ImmersiveReader'
 import Marketplace from './components/Marketplace'
 import KernelMonitor from './components/KernelMonitor'
-import { Monitor, Cpu, Map as MapIcon, Video, Eye, Brain, ShoppingCart, Activity } from 'lucide-react'
+import TemporalDashboard from './components/TemporalDashboard'
+import { Monitor, Cpu, Map as MapIcon, Video, Eye, Brain, ShoppingCart, Activity, Navigation } from 'lucide-react'
 
 function App() {
     const [activeTab, setActiveTab] = useState('dashboard');
@@ -33,17 +34,17 @@ function App() {
                 </header>
 
                 {/* Main Content Grid */}
-                <main className="flex-1 grid grid-cols-12 gap-6 pointer-events-auto">
+                <main className="flex-1 grid grid-cols-12 gap-6 pointer-events-auto overflow-hidden">
 
                     {/* Left Column: Camera Feeds + GPU Stats */}
-                    <div className="col-span-3 flex flex-col gap-4">
-                        <div className="glass-panel p-2 flex-1 flex flex-col gap-4">
+                    <div className="col-span-3 flex flex-col gap-4 overflow-hidden">
+                        <div className="glass-panel p-2 flex-1 flex flex-col gap-4 overflow-hidden">
                             <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-2">
                                 <Video size={16} className="text-[#ff003c]" />
                                 <h2 className="text-sm font-bold text-[#ff003c]">LIVE FEEDS</h2>
                             </div>
 
-                            <div className="grid grid-rows-2 gap-4 flex-1">
+                            <div className="grid grid-rows-2 gap-4 flex-1 min-h-0">
                                 <CameraFeed id="01" fps={30} quality="SD" />
                                 <CameraFeed id="02" fps={60} quality="HD" />
                             </div>
@@ -55,12 +56,16 @@ function App() {
                         </div>
                     </div>
 
-                    {/* Center Column: Satellite Map or Marketplace */}
-                    <div className="col-span-6 flex flex-col">
-                        <div className="glass-panel p-1 w-full h-full flex flex-col">
+                    {/* Center Column: Satellite Map or Marketplace or Galactic */}
+                    <div className="col-span-6 flex flex-col overflow-hidden">
+                        <div className="glass-panel p-1 w-full h-full flex flex-col overflow-hidden">
                             {activeTab === 'marketplace' ? (
                                 <div className="p-6 flex-1 overflow-hidden">
                                     <Marketplace />
+                                </div>
+                            ) : activeTab === 'galactic' ? (
+                                <div className="flex-1 overflow-hidden">
+                                    <TemporalDashboard />
                                 </div>
                             ) : (
                                 <>
@@ -80,8 +85,8 @@ function App() {
                     </div>
 
                     {/* Right Column: Analytics & Status */}
-                    <div className="col-span-3 flex flex-col gap-4">
-                        <div className="glass-panel p-4 flex-1">
+                    <div className="col-span-3 flex flex-col gap-4 overflow-hidden">
+                        <div className="glass-panel p-4 flex-1 flex flex-col overflow-hidden">
                             <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-4">
                                 <Cpu size={16} className="text-[#00ff00]" />
                                 <h2 className="text-sm font-bold text-[#00ff00]">SYS.METRICS</h2>
@@ -96,7 +101,7 @@ function App() {
                                 <ConnectionGraph />
                             </div>
 
-                            <div className="space-y-2 text-xs">
+                            <div className="space-y-2 text-xs overflow-y-auto pr-1">
                                 <div className="flex justify-between p-2 bg-white/5 rounded">
                                     <span className="text-gray-400">UPLINK</span>
                                     <span className="text-[#00f0ff]">450 MBPS</span>
@@ -110,10 +115,22 @@ function App() {
                                     <span className="text-[#00ff00]">12 MS</span>
                                 </div>
 
+                                {/* Galactic Dashboard Toggle */}
+                                <button
+                                    onClick={() => setActiveTab(activeTab === 'galactic' ? 'dashboard' : 'galactic')}
+                                    className={`w-full mt-2 p-2 rounded flex items-center justify-center gap-2 transition ${activeTab === 'galactic'
+                                        ? 'bg-[#00f0ff] text-black'
+                                        : 'bg-white/5 text-[#00f0ff] hover:bg-white/10 border border-[#00f0ff]/30'
+                                        }`}
+                                >
+                                    <Navigation size={14} />
+                                    <span className="text-xs font-bold uppercase tracking-widest">Galactic</span>
+                                </button>
+
                                 {/* Marketplace Toggle */}
                                 <button
                                     onClick={() => setActiveTab(activeTab === 'marketplace' ? 'dashboard' : 'marketplace')}
-                                    className={`w-full mt-2 p-2 rounded flex items-center justify-center gap-2 transition ${activeTab === 'marketplace'
+                                    className={`w-full mt-1 p-2 rounded flex items-center justify-center gap-2 transition ${activeTab === 'marketplace'
                                         ? 'bg-[#00f0ff] text-black'
                                         : 'bg-white/5 text-[#00f0ff] hover:bg-white/10 border border-[#00f0ff]/30'
                                         }`}
@@ -183,4 +200,5 @@ function App() {
 }
 
 export default App
+
 

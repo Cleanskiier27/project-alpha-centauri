@@ -139,23 +139,21 @@ NetworkBuster/networkbuster.net/
 │   ├── ai-training-pipeline.py          ⭐ NEW - ML infrastructure
 │   └── configs/                         - Training configs
 │
-├── 🌐 Web Applications (3 folders)
-│   ├── web-app/                         - Main application
-│   │   ├── index.html
-│   │   ├── styles.css
-│   │   └── script.js
-│   ├── blog/                            - Blog (with Andrew's story)
-│   │   └── index.html
-├── challengerepo/                   - Challenge & overlay apps
-│   └── real-time-overlay/           - 3D visualization & Preciseliens Marketplace
-│       ├── App.jsx                  - Main interface with Preciseliens branding
-│       ├── components/ (5 components) - Added Marketplace.jsx
-│       ├── package.json
-│       ├── vite.config.js
-│       └── index.html               - Updated title: PRECISELIENS PLLC
-
+├── 📊 Reports (New Location)
+│   ├── reports/10000_HEARTBEAT_VALIDATION_REPORT.md
+│   ├── reports/MASTER_10000_EXECUTION_REPORT.md
+│   ├── reports/PHASE_12_COMPLETION_REPORT.md
+│   ├── reports/PHASE_14_FINAL_EXECUTION_REPORT.md
+│   └── reports/SECURITY-CHECK-REPORT.md
 │
-├── 📊 Data & Resources
+├── 🎬 Cinematics (New Location)
+│   ├── cinematics/os.html
+│   ├── cinematics/lunar_mission_combined.html
+│   ├── cinematics/proxima_b_landing.html
+│   └── cinematics/galactic_navigation_system.html
+│
+├── 🏗️ Infrastructure (5 files)
+
 │   ├── data/
 │   │   └── system-specifications.json
 │   └── docs/

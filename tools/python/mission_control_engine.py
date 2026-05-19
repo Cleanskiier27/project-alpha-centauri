@@ -77,6 +77,56 @@ class AerospaceCalculations:
                 "feasibility": "Theoretical (Requires Exotic Matter/Warp)"
             }
 
+    @staticmethod
+    def calculate_orbital_mechanics(mass_kg: float, radius_km: float) -> Dict:
+        """
+        Calculate circular orbital velocity and escape velocity
+        """
+        G_CONST = 6.67430e-11
+        r_meters = radius_km * 1000
+        
+        v_orbital = math.sqrt((G_CONST * mass_kg) / r_meters)
+        v_escape = math.sqrt(2) * v_orbital
+        
+        return {
+            "circular_orbital_velocity_kms": round(v_orbital / 1000, 3),
+            "escape_velocity_kms": round(v_escape / 1000, 3),
+            "orbital_period_hours": round((2 * math.pi * r_meters) / v_orbital / 3600, 2)
+        }
+
+    @staticmethod
+    def assess_habitability(star_type: str, planet_mass_earth: float, distance_au: float) -> Dict:
+        """
+        Assess habitability based on star type, gravity, and temperature zone
+        """
+        # Simplified habitability zones (AU) based on spectral type
+        zones = {
+            'G': (0.9, 1.5),  # Sol-like
+            'K': (0.4, 0.9),  # Orange dwarf
+            'M': (0.1, 0.4),  # Red dwarf
+            'A': (2.0, 5.0)   # Blue-white
+        }
+        
+        s_type = star_type[0].upper()
+        min_au, max_au = zones.get(s_type, (0.5, 2.0))
+        
+        in_zone = min_au <= distance_au <= max_au
+        gravity = planet_mass_earth # Simplified: Mass ~ Surface Gravity for rocky
+        
+        score = 0
+        if in_zone: score += 50
+        if 0.5 <= gravity <= 1.5: score += 30
+        if 0.8 <= distance_au <= 1.2 and s_type == 'G': score += 20
+        
+        status = "Paradise" if score >= 90 else "Favorable" if score >= 70 else "Challenging" if score >= 40 else "Hostile"
+        
+        return {
+            "habitability_score": score,
+            "status": status,
+            "surface_gravity_g": round(gravity, 2),
+            "in_habitable_zone": in_zone
+        }
+
 class GalaxyDatabase:
     """Star database for interstellar navigation"""
     
@@ -92,12 +142,13 @@ class GalaxyDatabase:
         },
         'proxima': {
             'name': 'Proxima Centauri',
-            'type': 'Red Dwarf',
+            'type': 'Red Dwarf (M)',
             'x': 1.3, 'y': 0.8, 'z': -0.9,
             'distance': 4.24,
             'planets': ['Proxima b', 'Proxima d', 'Proxima c'],
             'habitable': True,
-            'population': 5
+            'population': 5,
+            'pm_x': 0.000003, 'pm_y': -0.000007, 'pm_z': 0.000001
         },
         'sirius': {
             'name': 'Sirius A',
@@ -144,6 +195,17 @@ class GalaxyDatabase:
             (s1['y'] - s2['y'])**2 + 
             (s1['z'] - s2['z'])**2
         )
+
+    @staticmethod
+    def parallax_to_distance(arcseconds: float) -> float:
+        """
+        Convert parallax angle (arcseconds) to distance in light-years
+        1 parsec = 3.26156 light-years
+        """
+        if arcseconds <= 0: return 0.0
+        parsecs = 1 / arcseconds
+        return parsecs * 3.26156
+
 
 class RelativisticPathfinder:
     """Advanced pathfinding using Lorentz transformations and galactic drift compensation"""
