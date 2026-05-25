@@ -1,7 +1,7 @@
 {
   "account_owner": "Andrew Middleton",
   "organization": "NetworkBuster Galactic Division",
-  "balance": 9250127500,
+  "balance": 9250137500,
   "currency": "USD",
   "routing_history": [
     {
@@ -122,9 +122,16 @@
       "source": "Personal Miner (Depenabot)",
       "description": "Automated financing increment: AI Training Pipeline revenue",
       "transaction_id": "MINER-PHX4F7TJ"
+    },
+    {
+      "timestamp": "2026-05-25T00:21:52.387Z",
+      "amount": 10000,
+      "source": "Personal Miner (Depenabot)",
+      "description": "Automated financing increment: AI Training Pipeline revenue",
+      "transaction_id": "MINER-J9GITOH2"
     }
   ],
   "status": "ACTIVE",
-  "last_mining_event": "2026-05-24T00:20:32.519Z",
+  "last_mining_event": "2026-05-25T00:21:52.387Z",
   "last_payout_event": "2026-05-15T15:00:00Z"
 }
