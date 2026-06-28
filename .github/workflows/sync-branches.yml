@@ -6,6 +6,9 @@ on:
       - main
       - bigtree
 
+permissions:
+  contents: write
+
 jobs:
   sync:
     runs-on: ubuntu-latest
