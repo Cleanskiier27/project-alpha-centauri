@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROXIMA B | TERRAFORMING HUD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #000005;
+            --nexus: #00ffff;
+            --terra: #00ff41;
+            --swarm: #ffaa00;
+            --alert: #ff003c;
+            --border: rgba(0, 255, 65, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Mono', monospace; }
+
+        body {
+            background: transparent;
+            color: #fff;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .terra-container {
+            width: 450px;
+            height: 450px;
+            border: 2px solid var(--terra);
+            background: rgba(0, 10, 5, 0.95);
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 255, 65, 0.2);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 8px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: var(--terra);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .atmo-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card {
+            border: 1px solid var(--border);
+            padding: 5px;
+            text-align: center;
+            background: rgba(0, 255, 65, 0.05);
+        }
+
+        .stat-label { font-size: 0.55rem; color: rgba(0, 255, 65, 0.6); text-transform: uppercase; }
+        .stat-val { font-size: 0.9rem; font-weight: bold; color: var(--nexus); }
+
+        .viz-container {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            border: 1px solid var(--border);
+            background: rgba(0,0,0,0.6);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .planet-glow {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #333, #000);
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.3);
+            position: relative;
+            animation: grow-atmo 20s infinite alternate ease-in-out;
+        }
+
+        @keyframes grow-atmo {
+            0% { box-shadow: 0 0 20px rgba(0, 255, 65, 0.2); }
+            100% { box-shadow: 0 0 80px rgba(0, 255, 65, 0.6); }
+        }
+
+        .swarm-pixel {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--swarm);
+            border-radius: 50%;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .conscious-link {
+            position: absolute;
+            top: 10px; right: 10px;
+            display: flex; align-items: center; gap: 5px;
+            font-size: 0.6rem; color: var(--nexus);
+        }
+
+        .status-footer {
+            margin-top: 15px;
+            border-top: 1px solid var(--border);
+            padding-top: 10px;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: space-between;
+            color: var(--terra);
+        }
+
+        .blink { animation: blink 1.5s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    </style>
+</head>
+<body>
+    <div class="terra-container">
+        <div class="header">
+            <span>> TERRAFORM_GRID_01</span>
+            <span class="blink">[ ACTIVE ]</span>
+        </div>
+
+        <div class="conscious-link">
+            <div class="blink" style="width: 6px; height: 6px; background: var(--nexus); border-radius: 50%;"></div>
+            VISIONARY_SYNC: 100%
+        </div>
+
+        <div class="atmo-stats">
+            <div class="stat-card">
+                <div class="stat-label">SHIELD_INTEGRITY</div>
+                <div class="stat-val">100.0%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">SWARM_UNITS</div>
+                <div class="stat-val">100,000 / 100K</div>
+            </div>
+        </div>
+
+        <div class="viz-container" id="viz">
+            <div class="planetary-shield"></div>
+            <div class="planet-glow"></div>
+            <!-- Swarm pixels injected by JS -->
+        </div>
+
+        <div class="status-footer">
+            <span>PHASE: MASS_TERRAFORMING</span>
+            <span>TEMP: -140°C (RAPID_WARMING)</span>
+        </div>
+    </div>
+
+    <script>
+        const viz = document.getElementById('viz');
+        for(let i=0; i<100; i++) {
+            const p = document.createElement('div');
+            p.className = 'swarm-pixel';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.top = Math.random() * 100 + '%';
+            p.style.animation = `float ${2 + Math.random() * 5}s infinite ease-in-out`;
+            viz.appendChild(p);
+        }
+
+        // Add float animation keyframes
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes float {
+                0%, 100% { transform: translate(0, 0); opacity: 0.4; }
+                50% { transform: translate(${(Math.random()-0.5)*50}px, ${(Math.random()-0.5)*50}px); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

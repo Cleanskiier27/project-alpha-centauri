@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXO-HUB | FULLY OPERATIONAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #000505;
+            --nexus: #00ffff;
+            --construct: #ffaa00;
+            --safe: #00ff41;
+            --border: rgba(0, 255, 65, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Mono', monospace; }
+
+        body {
+            background: transparent;
+            color: #fff;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .hub-container {
+            width: 450px;
+            height: 450px;
+            border: 2px solid var(--safe);
+            background: rgba(0, 15, 5, 0.95);
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 255, 65, 0.3);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 8px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: var(--safe);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .build-steps {
+            margin-top: 10px;
+            font-size: 0.65rem;
+            flex: 1;
+        }
+
+        .step {
+            padding: 8px;
+            border-left: 2px solid var(--safe);
+            margin-bottom: 8px;
+            background: rgba(0, 255, 65, 0.05);
+            color: var(--safe);
+        }
+
+        .viz-container {
+            height: 150px;
+            width: 100%;
+            border: 1px solid var(--safe);
+            background: rgba(0,0,0,0.5);
+            position: relative;
+            margin-top: 10px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hub-core {
+            width: 120px;
+            height: 60px;
+            background: var(--safe);
+            border-radius: 15px 150px 0 0;
+            box-shadow: 0 0 30px var(--safe);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .shield-dome {
+            position: absolute;
+            width: 180px;
+            height: 90px;
+            border: 2px solid var(--nexus);
+            border-bottom: none;
+            border-radius: 90px 90px 0 0;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 255, 255, 0.1);
+            animation: pulse-shield 2s infinite alternate;
+        }
+
+        @keyframes pulse-shield {
+            0% { opacity: 0.2; transform: translateX(-50%) scale(1); }
+            100% { opacity: 0.4; transform: translateX(-50%) scale(1.05); }
+        }
+
+        .status-footer {
+            margin-top: 15px;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: space-between;
+            color: var(--safe);
+        }
+
+        .blink { animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    </style>
+</head>
+<body>
+    <div class="hub-container">
+        <div class="header">
+            <span>> EXOHUB_ALPHA_READY</span>
+            <span class="blink">[ FULLY_OPERATIONAL ]</span>
+        </div>
+
+        <div class="build-steps">
+            <div class="step">01. SURFACE_STABILIZATION [COMPLETE]</div>
+            <div class="step">02. CORE_HABITAT_ASSEMBLY [COMPLETE]</div>
+            <div class="step">03. THERMAL_GRID_INITIALIZATION [COMPLETE]</div>
+            <div class="step">04. NEURAL_MESH_SYNC_UPLOAD [COMPLETE]</div>
+        </div>
+
+        <div class="viz-container">
+            <div class="shield-dome"></div>
+            <div class="hub-core">
+                <span style="font-size: 0.5rem; color: #000; font-weight: bold;">HUB_NB_PROX_01</span>
+            </div>
+            <div style="position: absolute; bottom: 0; width: 100%; height: 20px; background: #111; border-top: 1px solid #444;"></div>
+        </div>
+
+        <div class="status-footer">
+            <span>UPTIME: 00:00:00:12</span>
+            <span>SYNC_STATUS: 100% (BIGTREE)</span>
+        </div>
+    </div>
+</body>
+</html>
