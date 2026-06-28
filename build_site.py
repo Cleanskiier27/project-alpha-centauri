@@ -930,6 +930,51 @@ index_html = f"""<!DOCTYPE html>
     <a href="master_doc.html" class="btn btn-primary" style="white-space:nowrap;">Read Full Document →</a>
   </div>
 
+  <div class="section" id="visualizations" style="padding-top: 20px;">
+    <div class="section-label">// Mission Control Center</div>
+    <h2 class="section-title">Interactive Visualizations & Specs</h2>
+    <p class="section-sub">Experience real-time interactive space operations, neural synchronizations, and deep-space role allocations.</p>
+    
+    <div class="phases-grid">
+      <div class="phase-card" style="border-color: rgba(123, 47, 255, 0.25);">
+        <div class="phase-header">
+          <div class="phase-icon b">🛰️</div>
+          <div>
+            <div class="phase-name">Interactive Simulations</div>
+            <div class="phase-trl">PRECISELIENS Layer</div>
+          </div>
+        </div>
+        <ul class="phase-artifacts">
+          <li><span class="artifact-id">NAV-SYS</span><a href="viz/galactic_navigation_system.html" style="color:var(--muted); text-decoration:none;">Galactic Navigation System</a></li>
+          <li><span class="artifact-id">EXO-HUB</span><a href="viz/proxima_b_exohub.html" style="color:var(--muted); text-decoration:none;">Proxima B Exohub Console</a></li>
+          <li><span class="artifact-id">TERRA</span><a href="viz/proxima_b_terraforming.html" style="color:var(--muted); text-decoration:none;">Proxima B Terraforming Panel</a></li>
+          <li><span class="artifact-id">SLIDES</span><a href="viz/galactic_mission_slides.html" style="color:var(--muted); text-decoration:none;">Galactic Mission Slides</a></li>
+        </ul>
+      </div>
+
+      <div class="phase-card" style="border-color: rgba(0, 198, 255, 0.25);">
+        <div class="phase-header">
+          <div class="phase-icon a">🔬</div>
+          <div>
+            <div class="phase-name">Core Specs & Metrics</div>
+            <div class="phase-trl">Galactic Framework</div>
+          </div>
+        </div>
+        <ul class="phase-artifacts">
+          <li><span class="artifact-id">SYNC</span><a href="viz/bigtree_sync.html" style="color:var(--muted); text-decoration:none;">Bigtree Neural Sync Log</a></li>
+          <li><span class="artifact-id">CLUSTER</span><a href="viz/galactic_cluster_specs.html" style="color:var(--muted); text-decoration:none;">Galactic Cluster Specifications</a></li>
+          <li><span class="artifact-id">ROLES</span><a href="galactic_roles.html" style="color:var(--muted); text-decoration:none;">Galactic Roles Granted</a></li>
+          <li><span class="artifact-id">SPECS</span><a href="project_specs.html" style="color:var(--muted); text-decoration:none;">Full System Specs Matrix</a></li>
+          <li><span class="artifact-id">AI-DATA</span><a href="ai_training_personalization.html" style="color:var(--muted); text-decoration:none;">AI Training & Personalization</a></li>
+          <li><span class="artifact-id">GUIDE</span><a href="implementation_guide.html" style="color:var(--muted); text-decoration:none;">Implementation Guide</a></li>
+          <li><span class="artifact-id">STERIL</span><a href="sterilization.html" style="color:var(--muted); text-decoration:none;">Sterilization Protocol</a></li>
+          <li><span class="artifact-id">CHECKLIST</span><a href="sterilization_checklist.html" style="color:var(--muted); text-decoration:none;">Sterilization Checklist</a></li>
+          <li><span class="artifact-id">BID-JSON</span><a href="NASA_SBIR_ROBOTIC_BID.json" style="color:var(--muted); text-decoration:none;">NASA SBIR Robotic Bid JSON</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
   <footer class="main-footer">
     <div class="footer-brand">PROJECT ALPHA CENTAURI &bull; CIS FRAMEWORK</div>
     <div class="footer-links">
@@ -946,3 +991,64 @@ with open(os.path.join(output_dir, "index.html"), "w", encoding="utf-8") as f_ou
     f_out.write(index_html)
 
 print("Generated index.html with interactive artifact catalog links.")
+
+# -------------------------------------------------------------
+# Additional copy and conversion scripts for complete build
+# -------------------------------------------------------------
+import shutil
+
+# Copy viz directory to _site/viz
+viz_src = "viz"
+viz_dest = os.path.join(output_dir, "viz")
+if os.path.exists(viz_src):
+    if os.path.exists(viz_dest):
+        shutil.rmtree(viz_dest)
+    shutil.copytree(viz_src, viz_dest)
+    print("Copied viz folder to _site/viz")
+
+# Copy json bid payload
+bid_src = "docs/NASA_SBIR_ROBOTIC_BID.json"
+bid_dest = os.path.join(output_dir, "NASA_SBIR_ROBOTIC_BID.json")
+if os.path.exists(bid_src):
+    shutil.copy2(bid_src, bid_dest)
+    print("Copied NASA_SBIR_ROBOTIC_BID.json to _site/")
+
+# Convert other md files in docs/ to HTML
+docs_to_convert = [
+    ("docs/GALACTIC_ROLES_GRANTED.md", "galactic_roles.html", "Galactic Roles"),
+    ("docs/PROJECT_SPECS_FULL.md", "project_specs.html", "Project Specifications"),
+    ("docs/AI_TRAINING_AND_DATA_PERSONALIZATION.md", "ai_training_personalization.html", "AI Training"),
+    ("docs/IMPLEMENTATION_GUIDE.md", "implementation_guide.html", "Implementation Guide"),
+    ("docs/STERILIZATION.md", "sterilization.html", "Sterilization Protocol"),
+    ("docs/STERILIZATION_CHECKLIST.md", "sterilization_checklist.html", "Sterilization Checklist"),
+]
+
+for src_md, out_name, doc_title in docs_to_convert:
+    if os.path.exists(src_md):
+        with open(src_md, "r", encoding="utf-8") as f_in:
+            md_text = f_in.read()
+        parsed_body = md_to_html(md_text)
+        
+        page_html = []
+        page_html.append(generate_header(doc_title))
+        page_html.append(f"""
+          <div style="max-width: 800px; margin: 40px auto; padding: 0 4%;">
+            <a href="index.html" style="color: var(--primary); text-decoration: none; font-size: 0.9rem; font-family: 'JetBrains Mono', monospace;">&larr; Back to Dashboard</a>
+            <div class="markdown-body" style="margin-top: 30px;">
+              {parsed_body}
+            </div>
+          </div>
+          <footer>
+            PROJECT ALPHA CENTAURI &bull; CIS TECHNOLOGY MATURATION REGISTRY
+          </footer>
+        """)
+        page_html.append("</div></body></html>")
+        
+        # Write file (adjust links from chapters folder back to root)
+        header_adjusted = generate_header(doc_title).replace("../index.html", "index.html").replace("../master_doc.html", "master_doc.html")
+        page_html[0] = header_adjusted
+        
+        with open(os.path.join(output_dir, out_name), "w", encoding="utf-8") as f_out:
+            f_out.write("\n".join(page_html))
+        print(f"Generated {out_name} from {src_md}")
+
