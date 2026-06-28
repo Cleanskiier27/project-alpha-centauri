@@ -107,16 +107,11 @@ app.use('/api/recycle', recycleRouter);
 app.use('/api/dtn', dtnRouter);
 app.use('/api/quantum', quantumRouter);
 
-// Real-time Star Positions (Mock for Phase 14)
-app.get('/api/realtime/star-positions', (req, res) => {
-  res.json([
-    { name: 'Sol', x: 0, y: 0, z: 0, drift: { x: 0, y: 0, z: 0 } },
-    { name: 'Proxima Centauri', x: 1.3, y: 0.8, z: -0.9, drift: { x: 0.000005, y: 0.000003, z: -0.000002 } },
-    { name: 'Sirius A', x: 2.6, y: 0.3, z: -1.9, drift: { x: 0.000008, y: -0.000001, z: 0.000004 } },
-    { name: 'Vega', x: 7.8, y: -2.3, z: 4.1, drift: { x: -0.000002, y: 0.000005, z: 0.000001 } },
-    { name: 'Tau Ceti', x: 3.6, y: -2.1, z: 1.8, drift: { x: 0.000004, y: 0.000002, z: -0.000003 } },
-    { name: 'Betelgeuse', x: -24.3, y: -18.5, z: 30.2, drift: { x: 0.000015, y: -0.000012, z: 0.000020 } }
-  ]);
+// Mock ingestion endpoint — accepts device payloads and acknowledges them
+app.post('/api/ingestion/mock', (req, res) => {
+  const { deviceId } = req.body || {};
+  if (!deviceId) return res.status(400).json({ error: 'deviceId required' });
+  res.json({ status: 'acknowledged', deviceId, ts: new Date().toISOString() });
 });
 
 // ============================================

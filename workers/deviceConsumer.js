@@ -11,8 +11,10 @@ async function processMessage(msg, retryCount = 0) {
   console.log(`Processing message ${msg.id} for device ${deviceId} (attempt ${retryCount + 1})`);
 
   try {
-    // Mark as processing
-    transitionStatus(deviceId, 'processing', { processingStartedAt: new Date().toISOString() });
+    // Mark as processing (only on first attempt — already processing on retries)
+    if (retryCount === 0) {
+      transitionStatus(deviceId, 'processing', { processingStartedAt: new Date().toISOString() });
+    }
 
     // Forward to ingestion endpoint
     const res = await fetch(INGESTION_ENDPOINT, {
