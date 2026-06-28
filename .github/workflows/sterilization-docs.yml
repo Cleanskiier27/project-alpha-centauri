@@ -11,7 +11,7 @@ jobs:
   lint_docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Run Super-Linter (markdown)
         uses: github/super-linter@v5
         env:
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: lint_docs
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Run cspell
         uses: check-spelling/action@v0.0.25
         with:

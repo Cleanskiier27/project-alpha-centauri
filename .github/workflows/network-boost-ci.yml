@@ -11,7 +11,7 @@ jobs:
     name: Lint (shellcheck) & Dry-run (Linux)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install ShellCheck
         run: sudo apt-get update && sudo apt-get install -y shellcheck
       - name: Run ShellCheck on Linux script
@@ -25,7 +25,7 @@ jobs:
     name: Lint (PSScriptAnalyzer) & Dry-run (Windows)
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install PSScriptAnalyzer
         shell: pwsh
         run: |
@@ -43,7 +43,7 @@ jobs:
     name: Optional checks (formatters/linter)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Run shellcheck on all shell scripts (contrib)
         run: |
           for f in $(git ls-files 'contrib/**.sh'); do shellcheck "$f" || true; done
