@@ -1,225 +1,49 @@
-# 🏆 NetworkBuster - Competition Winner
+# 🌌 Project Alpha Centauri: Interstellar Maturation Registry
 
-![Project Status](https://img.shields.io/badge/status-WINNER-brightgreen.svg)
-![Award](https://img.shields.io/badge/award-Innovation%20%26%20Excellence-gold.svg)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-
-[![OpenAI secret test](https://github.com/networkbuster/networkbuster.net/actions/workflows/test-openai-secret.yml/badge.svg)](https://github.com/networkbuster/networkbuster.net/actions/workflows/test-openai-secret.yml)
-[![OpenAI E2E smoke test](https://github.com/networkbuster/networkbuster.net/actions/workflows/smoke-e2e-openai.yml/badge.svg)](https://github.com/networkbuster/networkbuster.net/actions/workflows/smoke-e2e-openai.yml)
-
-
-## 🥇 Award-Winning Advanced Networking Platform
-
-**NetworkBuster** is the competition-winning advanced networking technology platform for space exploration and lunar operations. Featuring cutting-edge real-time visualization, interactive dashboards, and enterprise-grade automation.
-
-### 🎯 Live Demo & Preview
-**Main Website:** https://networkbuster-mez5d7bmv-networkbuster.vercel.app  
-**Project Repository:** https://github.com/Cleanskiier27/finalm2m  
-**Documentation:** https://github.com/Cleanskiier27/DOCS-m2m  
-
-**📺 Watch on YouTube:** https://www.youtube.com/channel/daypirate1/networkbuster
-
-### ⚡ Quick Access
-[![Audio Lab](https://img.shields.io/badge/Audio%20Lab-Stream%20MP3%2FMP4-blue?style=for-the-badge&logo=audio-technica)](http://localhost:3002/audio-lab)
-[![AGI Host](https://img.shields.io/badge/AGI%20Host-Cinematic%20Overlay-purple?style=for-the-badge&logo=openai)](http://localhost:4500)
-[![Public Landing](https://img.shields.io/badge/Public%20Landing-Repository-green?style=for-the-badge&logo=github)](public-landing.html)
-
-## 🎨 System Preview
-![Component Overview](docs/diagrams/component-overview.svg)
-*Architectural visualization of the NetworkBuster Lunar Recycling & Monitoring System.*
-
-## 🌐 Global Internet Usage Scope
-
-**NetworkBuster** is engineered for unrestricted global and interplanetary operation. The platform's scope encompasses:
-
-### 📡 Terrestrial Operations
-- **Full Spectrum Connectivity**: Optimized for high-throughput terrestrial fiber, 5G NR, and specialized WiFi 7 mesh overlays.
-- **Global Edge Distribution**: Leveraging the Vercel Edge Network across 100+ countries for sub-100ms latency.
-- **Unlimited AI Throughput**: Unlocked token capacity for global inference requests via the AI Proxy Gateway.
-
-### 🌕 Extra-Terrestrial & Lunar Sync
-- **Artemis Integration**: Real-time telemetry and mission control for lunar surface operations.
-- **Lunar Insertion Monitoring**: Active tracking of orbital phases and deep-space data packets.
-- **Vegas Dome Projection**: High-fidelity architectural visualization for Earth-based mission oversight.
-
-### 🛡️ Secure Execution Layer
-- **GATES Protocol**: Integrated Sam Altman Shutdown Protocol (Mock) for centralized system termination.
-- **Arch Matrix VM**: Visualized network topology mapping across the entire internet namespace.
-- **Distributed Audio Nodes**: Real-time signal analysis and synthesis distributed across multi-server environments.
-
-### 🚀 Strategic Mandate
-NetworkBuster is designed to bridge the gap between local enterprise networks and the "Deep Internet"—extending functional agency to the lunar surface and beyond.
+A comprehensive, 30-phase SBIR- and TRL-aligned maturation pipeline for deep-space technology development and interstellar infrastructure staging.
 
 ---
 
-## 🥇 Why NetworkBuster Wins
+## 🛰️ Live Preview & Portals
 
-### Four Complete Applications
-- 📡 **Real-Time Overlay** - Advanced 3D visualization with React + Three.js
-- 🎨 **Dashboard** - Interactive metrics and specifications viewer
-- 📝 **Blog** - Research updates and insights
-- 📚 **Documentation** - Complete technical guides and APIs
+*   **Interactive Dashboard:** [https://cleanskiier27.github.io/project-alpha-centauri/](https://cleanskiier27.github.io/project-alpha-centauri/)
+*   **Stitched Master Document:** [https://cleanskiier27.github.io/project-alpha-centauri/master_doc.html](https://cleanskiier27.github.io/project-alpha-centauri/master_doc.html)
+*   **Robotic Swarm Bid Proposal:** [https://cleanskiier27.github.io/project-alpha-centauri/nasa_robotic_bid.html](https://cleanskiier27.github.io/project-alpha-centauri/nasa_robotic_bid.html)
 
-### Enterprise Features
-✅ Real-time 3D visualization  
-✅ Interactive dashboards  
-✅ Automatic branch synchronization  
-✅ GitHub Actions CI/CD  
-✅ Vercel global deployment  
-✅ Production + staging environments  
-✅ Git hooks for validation  
-✅ Mobile-responsive design  
+---
 
-### CI: OpenAI secret validation & E2E smoke test 🔬
+## 🏗️ Mission Architecture
 
-We added GitHub Actions workflows to validate that `OPENAI_API_KEY` is set and to perform a safe end‑to‑end smoke test that starts the app and calls `/api/recycle/recommend`. See the status badges above and the flow diagram in `docs/diagrams/openai-secret-flow.mmd` for details.
+Project Alpha Centauri is segmented into **six distinct vector phases**, each delivering 5 distinct CIS technology maturation artifacts:
 
-
-### Competition Results
-| Category | Achievement |
-|----------|-------------|
-| **Innovation** | 🥇 Winner |
-| **Technology** | 🥇 Winner |
-| **Deployment** | 🥇 Winner |
-| **Uptime** | 99.99% |
-| **Response Time** | <100ms |
-
-## 🚀 Get Started
-
-### 🎨 Visuals & small renders
-
-- Emoji stack (render): `docs/diagrams/emoji-stack.svg`
-
-#### 🖼️ Render diagrams locally
-
-You can render Mermaid `.mmd` sources to SVG and PNG locally with the provided helper script:
-
-```powershell
-# From the repository root
-# - downloads a portable Node 24.x if missing (wait longer with -LongTimeout)
-# - runs mermaid-cli to produce SVGs
-# - installs Puppeteer (Chromium) and converts SVG -> PNG at configurable scale
-.
-.\scripts\render-local.ps1 [-LongTimeout] [-RenderScale <scale>]
+```
+🔭 Origin Vector (TRL 1–2)  ->  🌱 Seed Vector (TRL 2–4)   ->  🔥 Ignition Vector (TRL 3–4)
+                                                                       |
+🌕 Translunar Vector (TRL 7–9) <- 🛸 Orbit Vector (TRL 6–7) <- 🚀 Ascent Vector (TRL 4–6)
 ```
 
-Options:
-- `-UseNvm -AcceptUAC` — use nvm-windows installer (requires UAC) instead of the portable Node download.
-- `-SkipChromiumDownload` — skip Puppeteer's Chromium download if you already have a compatible Chromium in PATH.
-- `-LongTimeout` — use longer timeouts & retries for downloads/Chromium install (helpful on flaky networks).
-- `-RenderScale <n>` — set PNG scale (default 2, CI uses 4 for hi-res).
-
-Notes & tips:
-- Puppeteer will download Chromium (100+ MB); allow time and network access. ⚠️
-- The script writes PNGs to `docs/diagrams` and lists generated PNG files when finished. ✅
-- For CI rendering we provide `.github/workflows/render-diagrams.yml` which runs on GitHub runners and uploads PNG artifacts.
-
-### Android `antigravity` module
-A small Kotlin Android module skeleton has been added at `android/antigravity/`. It includes Gradle files and a placeholder `MainActivity`. Add `google-services.json` to `android/antigravity/app/` if integrating Firebase (do not commit it; see `.gitignore`).
-
-### Google Cloud SDK helpers
-Scripts added under `scripts/`:
-- `scripts/setup-gcloud-sdk.ps1` — download and (optionally) install Google Cloud SDK on Windows, and initialize it interactively.
-- `scripts/gcloud-auth.ps1` — authenticate with a service account JSON and set a project non-interactively.
-- `scripts/gcloud-startup.ps1` — interactive helper to sign in as `ceanskiier27@networkbuster.net`, set project, and enable common APIs (or run non-interactive service-account auth).
-
-
-
-
-### View Live Demo
-Visit: https://networkbuster-mez5d7bmv-networkbuster.vercel.app
-
-### Clone & Run Locally
-```bash
-git clone https://github.com/NetworkBuster/networkbuster.net.git
-cd networkbuster.net
-npm install
-npm start
-```
-
-## 📱 Services Available
-
-| Service | URL |
-|---------|-----|
-| Main Portal | / |
-
-![Emoji stack render](docs/diagrams/emoji-stack.svg)
-| Real-Time Overlay | /overlay |
-| Dashboard | /dashboard |
-| Blog | /blog |
-| Documentation | /documentation.html |
-| About | /about.html |
-| Projects | /projects.html |
-| Technology | /technology.html |
-| Contact | /contact.html |
-
-## 🔧 Technology Stack
-
-- **Frontend:** React 18, Vite, Three.js, Framer Motion
-- **Backend:** Node.js 24.x, Express.js
-- **Deployment:** Vercel Edge Network
-- **Automation:** GitHub Actions, Git Hooks
-
-## 📈 Why We're Different
-
-- **5x Faster** - Vite build system
-- **Global Scale** - Vercel CDN in 100+ countries
-- **Fully Automated** - GitHub Actions CI/CD
-- **Mobile Ready** - Responsive on all devices
-- **Enterprise Grade** - HTTPS, security, monitoring
-- **Cost Effective** - Serverless pricing model
-
-## 📊 System Status
-
-| Metric | Status |
-|--------|--------|
-| **Uptime** | 99.99% ✅ |
-| **Deployment** | Production ✅ |
-| **Branches** | Main + Staging ✅ |
-| **Automation** | 100% Active ✅ |
-| **Version** | 1.0.1 ✅ |
-
-### 🤖 AI Agent Access
-NetworkBuster is optimized for AI agent interaction. The repository includes an `agent` role in `launch.py` and a `distribution_config.json` wired to `localhost:3000` for automated software distribution. Agents are explicitly permitted to use and interact with the networkbuster.net repository for research, deployment, and optimization tasks.
-
-#### 📂 Branch Organization (Cleanskiier27)
-To facilitate modular development and AI-driven updates, work has been branched as follows:
-- `cleanskiier27/docs`: Documentation, timeline updates, and permission manifests.
-- `cleanskiier27/logic`: Core server logic, launcher roles, and distribution configs.
-- `cleanskiier27/database`: Database initialization and structural metadata.
-- `cleanskiier27/satgpu`: GPU monitoring components and Linux overlay scaffolding.
-- `cleanskiier27/gitvslocal`: Local Git repository synchronization and management.
+1.  **Origin Vector (A1–A5)**: Establishes foundations, matrices, scanned principles, and early drafts.
+2.  **Seed Vector (B1–B5)**: Focuses on architectural blueprints, physical lattices, and prototype reports.
+3.  **Ignition Vector (C1–C5)**: Drives experimental validation logs, interface definitions, and TRL audits.
+4.  **Ascent Vector (D1–D5)**: Systems engineering plans, environmental qualification, and simulation trials.
+5.  **Orbit Vector (E1–E5)**: Beta prototype validation, infrastructure mapping, and lunar ops readiness reviews.
+6.  **Translunar Vector (F1–F5)**: Gamma prototype validation, final flight certifications, and scale engines.
 
 ---
 
-**Last Updated**: April 16, 2026  
-**Version**: 1.0.0  
-**Status**: Active Development - Documentation Phase
+## 🛠️ Repository Assets
+
+*   `/docs/centauri/`: Core Markdown catalog for the 30 maturation artifacts.
+*   `/docs/NASA-ROBOTIC-BID-SUBMISSION.md`: Formally submitted SBIR Galactic Proposal for the Alpha Centauri robotic construction swarm ($5B contract value).
+*   `/viz/`: Interactive simulations including the Galactic Navigation System and the Proxima B Exohub console.
+*   `build_site.py`: Fast Python site compiler that parses Markdown files and compiles a responsive space-themed catalog.
 
 ---
 
-## 📦 Distribution & Installation (Windows)  
+## ⚙️ CI/CD Workflows
 
-- Build artifact (ZIP): `npm run dist:zip` — creates `dist/<name>-<version>.zip` with required files.  
-- Create desktop launcher: `npm run release:create-shortcut` — creates a shortcut called "NetworkBuster Launcher" on the current user desktop pointing to `start-desktop.bat`.  
-- Build NSIS installer: `npm run dist:nsis` — builds an NSIS installer (requires NSIS / makensis in PATH).  
-- Start from desktop: Double click the created shortcut or run `npm run start:desktop`.  
-
-Notes:  
-- The packaging scripts rely on `node`/`npm` being available in PATH and use PowerShell `Compress-Archive` on Windows.  
-- For a branded installer include an ICO at `scripts/installer/icon.ico` or place SVG/PNG assets in `scripts/installer/branding/`. You can generate an ICO from `scripts/installer/icon-placeholder.png` using `scripts/installer/convert-icon.ps1` (requires ImageMagick `magick`).  
-- An End User License Agreement (`scripts/installer/EULA.txt`) is bundled into the installer and is required.  
-- To test locally on Windows see `scripts/test-local-build.ps1` (requires Node, npm, Git, NSIS, and optionally ImageMagick).  
-- For CI, add a job that runs `npm run dist:zip`, `npm run dist:nsis` (on windows), archives `dist/` as release artifacts, and tags the release in GitHub.  
-
-### 🛠️ Development Tools
-- **NPM Wormhole:** A unified bridge that starts all critical services (Main Server, AI Gateway, Proxy) concurrently. Designed for seamless M2M (Moon-to-Mars) environment integration.
-  - Run: `npm run wormhole`
-  - VS Code: Use the "npm: wormhole" task.
-- **Neural Coder OS:** Quick launch for the immersive Agent Core dashboard.
-  - Run: `npm run neural-os`
-  - VS Code: Use the "npm: neural coder os" task.
-
----
-
-**Contributing:** See `CONTRIBUTING.md` for guidelines on releases and artifact verification.
+The registry is verified by automated pipelines:
+*   **CI - Device Registration Tests**: Runs Mocha/Chai integration test suites for status queuing.
+*   **Deploy Centauri Docs**: Automates site compiling and publishes it to GitHub Pages.
+*   **Sync Branches**: Synchronizes the main branch with the active `bigtree` branch.
+*   **Dependabot Integration**: Automatically tracks and updates Node.js dependencies and GitHub Actions packages.
