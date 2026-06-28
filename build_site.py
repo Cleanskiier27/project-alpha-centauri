@@ -970,6 +970,7 @@ index_html = f"""<!DOCTYPE html>
           <li><span class="artifact-id">STERIL</span><a href="sterilization.html" style="color:var(--muted); text-decoration:none;">Sterilization Protocol</a></li>
           <li><span class="artifact-id">CHECKLIST</span><a href="sterilization_checklist.html" style="color:var(--muted); text-decoration:none;">Sterilization Checklist</a></li>
           <li><span class="artifact-id">BID-JSON</span><a href="NASA_SBIR_ROBOTIC_BID.json" style="color:var(--muted); text-decoration:none;">NASA SBIR Robotic Bid JSON</a></li>
+          <li><span class="artifact-id">BID-SUBMIT</span><a href="nasa_robotic_bid.html" style="color:var(--muted); text-decoration:none;">Robotic Swarm Bid Proposal</a></li>
         </ul>
       </div>
     </div>
@@ -1001,10 +1002,11 @@ import shutil
 viz_src = "viz"
 viz_dest = os.path.join(output_dir, "viz")
 if os.path.exists(viz_src):
-    if os.path.exists(viz_dest):
-        shutil.rmtree(viz_dest)
-    shutil.copytree(viz_src, viz_dest)
-    print("Copied viz folder to _site/viz")
+    try:
+        shutil.copytree(viz_src, viz_dest, dirs_exist_ok=True)
+        print("Copied viz folder to _site/viz")
+    except Exception as e:
+        print(f"Warning: Could not copy viz folder: {e}")
 
 # Copy json bid payload
 bid_src = "docs/NASA_SBIR_ROBOTIC_BID.json"
@@ -1021,6 +1023,7 @@ docs_to_convert = [
     ("docs/IMPLEMENTATION_GUIDE.md", "implementation_guide.html", "Implementation Guide"),
     ("docs/STERILIZATION.md", "sterilization.html", "Sterilization Protocol"),
     ("docs/STERILIZATION_CHECKLIST.md", "sterilization_checklist.html", "Sterilization Checklist"),
+    ("docs/NASA-ROBOTIC-BID-SUBMISSION.md", "nasa_robotic_bid.html", "Robotic Swarm Proposal"),
 ]
 
 for src_md, out_name, doc_title in docs_to_convert:
