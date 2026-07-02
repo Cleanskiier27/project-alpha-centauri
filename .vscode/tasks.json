@@ -2,6 +2,44 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "npm: build",
+      "type": "npm",
+      "script": "build",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "Build the project with Vite."
+    },
+    {
+      "label": "npm: dev",
+      "type": "npm",
+      "script": "dev",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "detail": "Start the server in watch mode for development."
+    },
+    {
+      "label": "npm: test",
+      "type": "npm",
+      "script": "test",
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "detail": "Run the project tests."
+    },
+    {
       "label": "npm: wormhole",
       "type": "npm",
       "script": "wormhole",
@@ -22,15 +60,6 @@
         "isDefault": false
       },
       "detail": "Opens the Neural Coder OS dashboard in the default browser."
-    },
-    {
-      "label": "build",
-      "type": "shell",
-      "command": "dotnet",
-      "args": ["build"],
-      "group": { "kind": "build", "isDefault": true },
-      "presentation": { "reveal": "always" },
-      "problemMatcher": ["$msCompile"]
     }
   ]
 }
