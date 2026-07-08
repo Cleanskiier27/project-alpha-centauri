@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Restore cache (initial)
         uses: actions/cache@v4
@@ -34,7 +34,7 @@ jobs:
     needs: build-and-cache
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Restore cache (verify)
         uses: actions/cache@v4
