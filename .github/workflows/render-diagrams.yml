@@ -26,7 +26,11 @@ jobs:
         run: npm install puppeteer --no-save
 
       - name: Render Mermaid to SVG
-        run: npx -y @mermaid-js/mermaid-cli -i "docs/diagrams/*.mmd" -o docs/diagrams -f svg
+        run: |
+          for f in docs/diagrams/*.mmd; do
+            base=$(basename "$f" .mmd)
+            npx -y @mermaid-js/mermaid-cli -i "$f" -o "docs/diagrams/${base}.svg"
+          done
 
       - name: Render SVGs to PNG (hi-res)
         run: node scripts/render-svgs.js 4
