@@ -31,6 +31,12 @@ jobs:
           nohup npm start > server.log 2>&1 &
           echo $! > server.pid
 
+      - name: Start Admin Runner in background
+        run: |
+          nohup node admin-runner.js --server > admin-runner.log 2>&1 &
+          echo $! > admin-runner.pid
+          sleep 1
+
       - name: Wait for server health
         run: |
           for i in {1..30}; do
@@ -60,8 +66,31 @@ jobs:
             exit 1
           fi
 
+      - name: Verify Admin Runner endpoints through Proxy
+        run: |
+          set -o pipefail
+          echo "Verifying permissions API..."
+          HTTP_CODE_PERMS=$(curl -s -w "%{http_code}" -o /tmp/perms.json http://localhost:3001/api/matrix/api/admin/permissions)
+          echo "Permissions HTTP CODE: $HTTP_CODE_PERMS"
+          cat /tmp/perms.json
+          if [ "$HTTP_CODE_PERMS" != "200" ]; then
+            echo "Admin Permissions endpoint failed!" >&2
+            exit 1
+          fi
+
+          echo "Verifying app layout template release..."
+          HTTP_CODE_LAYOUT=$(curl -s -w "%{http_code}" -o /tmp/layout.html http://localhost:3001/api/matrix/api/admin/layout)
+          echo "Layout HTTP CODE: $HTTP_CODE_LAYOUT"
+          if [ "$HTTP_CODE_LAYOUT" != "200" ]; then
+            echo "Admin Layout template endpoint failed!" >&2
+            exit 1
+          fi
+          grep -q "TEMPLATE RELEASE v1.0.1" /tmp/layout.html || { echo "Template release watermark not found!"; exit 1; }
+
       - name: Cleanup server
         if: always()
         run: |
+          if [ -f admin-runner.pid ]; then kill $(cat admin-runner.pid) || true; fi
           if [ -f server.pid ]; then kill $(cat server.pid) || true; fi
           pkill -f "node server.js" || true
+          pkill -f "node admin-runner.js" || true

@@ -13,6 +13,8 @@ import platform
 import getpass
 from pathlib import Path
 
+PROJECT_PATH = Path(__file__).parent.resolve()
+
 # Add tools/python to sys.path for moved components
 TOOLS_PATH = PROJECT_PATH / "tools" / "python"
 if str(TOOLS_PATH) not in sys.path:
