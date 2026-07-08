@@ -1,0 +1,27 @@
+name: Signer and Verifier
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  sign-and-verify:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      attestations: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build dummy artifact
+        run: echo "artifact" > artifact.txt
+      - name: Signer
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: artifact.txt
+      - name: Verifier
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh attestation verify artifact.txt --owner ${{ github.repository_owner }}
