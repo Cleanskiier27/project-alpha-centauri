@@ -58,6 +58,7 @@
     "cloud:export": "node cloud-storage-manager.js export",
     "cloud:backup": "node cloud-storage-manager.js backup",
     "cloud:status": "node cloud-storage-manager.js status",
+    "admin:runner": "node admin-runner.js",
     "admin:setup": "powershell -ExecutionPolicy Bypass -File setup-admin.ps1",
     "admin:verify": "powershell -ExecutionPolicy Bypass -File verify-admin.ps1",
     "admin:elevated": "powershell -ExecutionPolicy Bypass -File run-elevated.ps1",
