@@ -417,7 +417,7 @@ function startCLI() {
 // Start API Server / Web UI
 function startServer() {
   const app = express();
-  const PORT = process.env.PORT || 9001;
+  const PORT = process.env.ADMIN_PORT || 9001;
 
   app.use(cors());
   app.use(express.json());
