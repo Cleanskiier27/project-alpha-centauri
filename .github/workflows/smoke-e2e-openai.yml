@@ -87,6 +87,14 @@ jobs:
           fi
           grep -q "TEMPLATE RELEASE v1.0.1" /tmp/layout.html || { echo "Template release watermark not found!"; exit 1; }
 
+      - name: Dump logs on failure
+        if: failure()
+        run: |
+          echo "=== server.log ==="
+          cat server.log || echo "(no server.log found)"
+          echo "=== admin-runner.log ==="
+          cat admin-runner.log || echo "(no admin-runner.log found)"
+
       - name: Cleanup server
         if: always()
         run: |
