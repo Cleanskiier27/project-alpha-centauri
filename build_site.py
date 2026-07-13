@@ -359,13 +359,14 @@ footer {
 }
 """
 
-def generate_header(title, active_page=""):
+def generate_header(title, active_page="", description="30-phase SBIR and TRL-aligned maturation pipeline for Project Alpha Centauri."):
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title} | Project Alpha Centauri</title>
+  <meta name="description" content="{description}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>{CSS_COMMON}</style>
@@ -375,6 +376,7 @@ def generate_header(title, active_page=""):
     <a href="../index.html" class="nav-logo">α Centauri</a>
     <div class="nav-links">
       <a href="../index.html#phases">Phases</a>
+      <a href="../nasa_cinematic_hub.html">NASA Themes</a>
       <a href="../master_doc.html">Master Doc</a>
       <a href="https://github.com/Cleanskiier27/project-alpha-centauri">GitHub</a>
     </div>
@@ -629,6 +631,246 @@ for sec, files in sections.items():
       </div>
     """)
 
+cinematic_groups = [
+    {
+        "icon": "🛰️",
+        "title": "Artemis Flight Sequence",
+        "slug": "artemis_flight_sequence",
+        "subtitle": "NASA-inspired mission approach and transfer operations",
+        "items": [
+            ("L-CAP", "lunar_capture.html", "Lunar Capture"),
+            ("TLI", "lunar_injection.html", "Trans-Lunar Injection"),
+            ("LOI", "lunar_orbit_insertion.html", "Lunar Orbit Insertion"),
+            ("DUAL-OPS", "lunar_mission_combined.html", "Combined Lunar Mission"),
+        ],
+    },
+    {
+        "icon": "🌕",
+        "title": "Surface Operations",
+        "slug": "surface_operations",
+        "subtitle": "Lunar deployment, construction, and milestone visuals",
+        "items": [
+            ("MINER", "lunar_miner_deployment.html", "Lunar Miner Deployment"),
+            ("REFINERY", "lunar_refinery_construction.html", "Refinery Construction"),
+            ("PRECISE", "preciseliens_cinematic.html", "PRECISELIENS Cinematic"),
+            ("AGI", "agi_cinematic_overlay.html", "AGI Cinematic Overlay"),
+        ],
+    },
+    {
+        "icon": "🪐",
+        "title": "Deep Space Reveal",
+        "slug": "deep_space_reveal",
+        "subtitle": "Navigation, scans, landings, and far-field control systems",
+        "items": [
+            ("NAV", "galactic_navigation_system.html", "Galactic Navigation"),
+            ("SCAN", "proxima_b_scan.html", "Proxima B Planetary Scan"),
+            ("LAND", "proxima_b_landing.html", "Proxima B Landing HUD"),
+            ("EXO", "proxima_b_exohub.html", "Proxima B Exohub"),
+            ("TERRA", "proxima_b_terraforming.html", "Proxima B Terraforming"),
+            ("MESH", "galactic_mesh_expansion.html", "Galactic Mesh Expansion"),
+            ("SIG", "galactic_signal_processing.html", "Deep Space Signal Processing"),
+            ("BYPASS", "shield_bypass_deployment.html", "Shield Bypass Deployment"),
+            ("SECTOR", "sector_02_decryption.html", "Sector 02 Decryption"),
+        ],
+    },
+    {
+        "icon": "🎞️",
+        "title": "Archive & Legacy",
+        "slug": "archive_legacy",
+        "subtitle": "Presentation, reflection, and command-console style reveals",
+        "items": [
+            ("SLIDES", "galactic_mission_slides.html", "Galactic Mission Slides"),
+            ("SOL", "return_to_sol_reflection.html", "Return to Sol Reflection"),
+            ("OS", "os.html", "Neural Coder OS"),
+        ],
+    },
+]
+
+def render_cinematic_list(items, href_prefix="cinematics/"):
+    rendered_items = []
+    for code, href, title in items:
+        rendered_items.append(f"""
+          <li>
+            <span class="artifact-id">{code}</span>
+            <a href="{href_prefix}{href}" style="color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='#00c6ff'" onmouseout="this.style.color='var(--muted)'">{title}</a>
+          </li>
+        """)
+    return "".join(rendered_items)
+
+cinematic_cards = []
+for group in cinematic_groups:
+    cinematic_cards.append(f"""
+      <div class="phase-card mission-hub-card">
+        <div class="phase-header">
+          <div class="phase-icon" style="background: rgba(255,255,255,0.08);">{group['icon']}</div>
+          <div>
+            <div class="phase-name"><a href="{group['slug']}.html" style="color:inherit; text-decoration:none;">{group['title']}</a></div>
+            <div class="phase-trl">{group['subtitle']}</div>
+          </div>
+        </div>
+        <ul class="phase-artifacts">
+          {render_cinematic_list(group["items"])}
+        </ul>
+        <a href="{group['slug']}.html" class="btn btn-outline" style="margin-top: 20px; width: fit-content;">Open Theme Page</a>
+      </div>
+    """)
+
+def generate_nasa_theme_pages():
+    mission_page_css = """
+    .mission-page {
+      display: grid;
+      gap: 28px;
+    }
+    .mission-page-hero,
+    .mission-page-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 32px;
+      backdrop-filter: blur(14px);
+      box-shadow: var(--card-shadow);
+    }
+    .mission-page-kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #9fc7ff;
+      margin-bottom: 14px;
+    }
+    .mission-page-hero h1 { margin-bottom: 14px; }
+    .mission-page-hero p { max-width: 760px; margin-bottom: 0; }
+    .mission-page-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 24px;
+    }
+    .mission-page-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
+    }
+    .mission-page-grid .phase-card {
+      height: 100%;
+    }
+    .mission-page-breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+    .mission-page-breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+    .mission-page-breadcrumbs a:hover { color: var(--primary); }
+    """
+
+    hub_cards = []
+    for group in cinematic_groups:
+        hub_cards.append(f"""
+          <div class="phase-card mission-hub-card">
+            <div class="phase-header">
+              <div class="phase-icon" style="background: rgba(255,255,255,0.08);">{group['icon']}</div>
+              <div>
+                <div class="phase-name"><a href="{group['slug']}.html" style="color:inherit; text-decoration:none;">{group['title']}</a></div>
+                <div class="phase-trl">{group['subtitle']}</div>
+              </div>
+            </div>
+            <ul class="phase-artifacts">
+              {render_cinematic_list(group["items"])}
+            </ul>
+            <a href="{group['slug']}.html" class="btn btn-outline" style="margin-top: 20px; width: fit-content;">View Collection</a>
+          </div>
+        """)
+
+    hub_page = [
+        generate_header(
+            "NASA Cinematic Hub",
+            description="Mission-themed NASA cinematic pages for Project Alpha Centauri, including Artemis-inspired launch, lunar, and deep-space visual collections."
+        ).replace("</style>", mission_page_css + "\n</style>").replace("../index.html", "index.html").replace("../master_doc.html", "master_doc.html").replace("../nasa_cinematic_hub.html", "nasa_cinematic_hub.html"),
+        """
+        <div class="mission-page">
+          <section class="mission-page-hero">
+            <div class="mission-page-kicker">NASA Mission Visual Archive</div>
+            <h1>Full Cinematic Reveal Access</h1>
+            <p>Explore every Artemis-inspired launch, orbit, surface, and legacy cinematic from one mission hub, with direct paths into each themed collection.</p>
+            <div class="mission-page-actions">
+              <a href="cinematics/preciseliens_cinematic.html" class="btn btn-primary">🎬 Open Feature Reveal</a>
+              <a href="cinematics/lunar_mission_combined.html" class="btn btn-outline">🌕 Open Lunar Mission</a>
+              <a href="index.html#nasa-cinematics" class="btn btn-outline">↩ Return to Dashboard Section</a>
+            </div>
+          </section>
+          <section class="mission-page-panel">
+            <div class="section-label">// NASA Theme Collections</div>
+            <h2 class="section-title" style="margin-top: 10px;">Mission Pages</h2>
+            <div class="mission-page-grid">
+        """,
+        "".join(hub_cards),
+        """
+            </div>
+          </section>
+          <footer>
+            PROJECT ALPHA CENTAURI • NASA CINEMATIC HUB
+          </footer>
+        </div>
+        </div></body></html>
+        """
+    ]
+
+    with open(os.path.join(output_dir, "nasa_cinematic_hub.html"), "w", encoding="utf-8") as f_out:
+        f_out.write("\n".join(hub_page))
+    print("Generated nasa_cinematic_hub.html")
+
+    for group in cinematic_groups:
+        items_count = len(group["items"])
+        group_page = [
+            generate_header(
+                group["title"],
+                description=f"{group['title']} NASA-themed cinematic collection for Project Alpha Centauri with {items_count} linked mission visuals."
+            ).replace("</style>", mission_page_css + "\n</style>").replace("../index.html", "index.html").replace("../master_doc.html", "master_doc.html").replace("../nasa_cinematic_hub.html", "nasa_cinematic_hub.html"),
+            f"""
+            <div class="mission-page">
+              <section class="mission-page-hero">
+                <div class="mission-page-breadcrumbs">
+                  <a href="index.html">Dashboard</a>
+                  <span>•</span>
+                  <a href="nasa_cinematic_hub.html">NASA Themes</a>
+                  <span>•</span>
+                  <span>{group['title']}</span>
+                </div>
+                <div class="mission-page-kicker">Mission Theme Page</div>
+                <h1>{group['icon']} {group['title']}</h1>
+                <p>{group['subtitle']}. Open the full collection below or jump back to the main NASA mission hub.</p>
+                <div class="mission-page-actions">
+                  <a href="nasa_cinematic_hub.html" class="btn btn-primary">🚀 Back to NASA Hub</a>
+                  <a href="cinematics/{group['items'][0][1]}" class="btn btn-outline">▶ Launch First Sequence</a>
+                </div>
+              </section>
+              <section class="mission-page-panel">
+                <div class="section-label">// Cinematic Playlist</div>
+                <h2 class="section-title" style="margin-top: 10px;">{items_count} Mission Visuals</h2>
+                <div class="phase-card mission-hub-card" style="margin-top: 24px;">
+                  <ul class="phase-artifacts">
+                    {render_cinematic_list(group["items"])}
+                  </ul>
+                </div>
+              </section>
+              <footer>
+                PROJECT ALPHA CENTAURI • {group['title'].upper()}
+              </footer>
+            </div>
+            </div></body></html>
+            """
+        ]
+        with open(os.path.join(output_dir, f"{group['slug']}.html"), "w", encoding="utf-8") as f_out:
+            f_out.write("\n".join(group_page))
+        print(f"Generated {group['slug']}.html")
+
 index_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -857,6 +1099,40 @@ index_html = f"""<!DOCTYPE html>
     .master-doc-cta h2 {{ font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; color: #fff; }}
     .master-doc-cta p {{ color: var(--muted); font-size: 0.95rem; line-height: 1.6; max-width: 500px; }}
 
+    /* NASA cinematic hub */
+    .mission-hub {{
+      margin: 80px 8%;
+      padding: 48px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background:
+        radial-gradient(circle at top right, rgba(11, 61, 145, 0.24), transparent 35%),
+        radial-gradient(circle at bottom left, rgba(252, 61, 33, 0.14), transparent 30%),
+        linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+      backdrop-filter: blur(14px);
+    }}
+    .mission-hub-header {{
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: end;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }}
+    .mission-hub-copy {{ max-width: 720px; }}
+    .mission-hub-kicker {{
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #9fc7ff;
+      margin-bottom: 12px;
+    }}
+    .mission-hub-title {{ font-size: clamp(1.7rem, 4vw, 2.7rem); font-weight: 800; margin-bottom: 12px; }}
+    .mission-hub-sub {{ color: var(--muted); line-height: 1.7; }}
+    .mission-hub-actions {{ display: flex; gap: 14px; flex-wrap: wrap; }}
+    .mission-hub-card {{ border-color: rgba(159, 199, 255, 0.18); }}
+
     /* Footer overrides */
     footer.main-footer {{
       border-top: 1px solid var(--border);
@@ -886,6 +1162,7 @@ index_html = f"""<!DOCTYPE html>
     <a href="#" class="nav-logo">α Centauri</a>
     <div class="nav-links">
       <a href="#phases">Phases</a>
+      <a href="#nasa-cinematics">NASA Cinematics</a>
       <a href="master_doc.html">Master Doc</a>
       <a href="https://github.com/Cleanskiier27/project-alpha-centauri">GitHub</a>
     </div>
@@ -900,6 +1177,7 @@ index_html = f"""<!DOCTYPE html>
     </p>
     <div class="hero-buttons">
       <a href="master_doc.html" class="btn btn-primary">📄 Read Master Document</a>
+      <a href="#nasa-cinematics" class="btn btn-outline">🚀 Launch NASA Cinematics</a>
       <a href="https://github.com/Cleanskiier27/project-alpha-centauri" class="btn btn-outline">⭐ View on GitHub</a>
     </div>
   </section>
@@ -928,6 +1206,24 @@ index_html = f"""<!DOCTYPE html>
       <p>All 30 CIS artifacts stitched into a single 1,600-line document — structured with an interactive Table of Contents, normalized heading hierarchy, and phase-by-phase chapter divisions.</p>
     </div>
     <a href="master_doc.html" class="btn btn-primary" style="white-space:nowrap;">Read Full Document →</a>
+  </div>
+
+  <div class="mission-hub" id="nasa-cinematics">
+    <div class="mission-hub-header">
+      <div class="mission-hub-copy">
+        <div class="mission-hub-kicker">NASA Mission Visual Archive</div>
+        <h2 class="mission-hub-title">Full Cinematic Reveal Access</h2>
+        <p class="mission-hub-sub">Explore the full lunar and deep-space cinematic collection from one mission hub, with direct access to Artemis-inspired launch, orbit, surface, and legacy sequences.</p>
+      </div>
+      <div class="mission-hub-actions">
+        <a href="cinematics/preciseliens_cinematic.html" class="btn btn-primary">🎬 Open Feature Reveal</a>
+        <a href="cinematics/lunar_mission_combined.html" class="btn btn-outline">🌕 Open Lunar Mission</a>
+      </div>
+    </div>
+
+    <div class="phases-grid">
+      {"".join(cinematic_cards)}
+    </div>
   </div>
 
   <div class="section" id="visualizations" style="padding-top: 20px;">
@@ -988,25 +1284,26 @@ index_html = f"""<!DOCTYPE html>
 </html>
 """
 
-with open(os.path.join(output_dir, "index.html"), "w", encoding="utf-8") as f_out:
-    f_out.write(index_html)
+for landing_page in ("index.html", "404.html"):
+    with open(os.path.join(output_dir, landing_page), "w", encoding="utf-8") as f_out:
+        f_out.write(index_html)
 
-print("Generated index.html with interactive artifact catalog links.")
+print("Generated index.html and 404.html with interactive artifact catalog links.")
 
 # -------------------------------------------------------------
 # Additional copy and conversion scripts for complete build
 # -------------------------------------------------------------
 import shutil
 
-# Copy viz directory to _site/viz
-viz_src = "viz"
-viz_dest = os.path.join(output_dir, "viz")
-if os.path.exists(viz_src):
-    try:
-        shutil.copytree(viz_src, viz_dest, dirs_exist_ok=True)
-        print("Copied viz folder to _site/viz")
-    except Exception as e:
-        print(f"Warning: Could not copy viz folder: {e}")
+for folder_name in ("viz", "cinematics"):
+    src = folder_name
+    dest = os.path.join(output_dir, folder_name)
+    if os.path.exists(src):
+        try:
+            shutil.copytree(src, dest, dirs_exist_ok=True)
+            print(f"Copied {folder_name} folder to _site/{folder_name}")
+        except Exception as e:
+            print(f"Warning: Could not copy {folder_name} folder: {e}")
 
 # Copy json bid payload
 bid_src = "docs/NASA_SBIR_ROBOTIC_BID.json"
@@ -1055,3 +1352,4 @@ for src_md, out_name, doc_title in docs_to_convert:
             f_out.write("\n".join(page_html))
         print(f"Generated {out_name} from {src_md}")
 
+generate_nasa_theme_pages()
