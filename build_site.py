@@ -988,10 +988,11 @@ index_html = f"""<!DOCTYPE html>
 </html>
 """
 
-with open(os.path.join(output_dir, "index.html"), "w", encoding="utf-8") as f_out:
-    f_out.write(index_html)
+for landing_page in ("index.html", "404.html"):
+    with open(os.path.join(output_dir, landing_page), "w", encoding="utf-8") as f_out:
+        f_out.write(index_html)
 
-print("Generated index.html with interactive artifact catalog links.")
+print("Generated index.html and 404.html with interactive artifact catalog links.")
 
 # -------------------------------------------------------------
 # Additional copy and conversion scripts for complete build
@@ -1054,4 +1055,3 @@ for src_md, out_name, doc_title in docs_to_convert:
         with open(os.path.join(output_dir, out_name), "w", encoding="utf-8") as f_out:
             f_out.write("\n".join(page_html))
         print(f"Generated {out_name} from {src_md}")
-
