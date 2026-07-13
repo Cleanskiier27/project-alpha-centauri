@@ -12,6 +12,27 @@ A comprehensive, 30-phase SBIR- and TRL-aligned maturation pipeline for deep-spa
 
 ---
 
+## 🌐 Web App Preview
+
+**Live:** [https://networkbuster.net](https://networkbuster.net)
+
+The NetworkBuster web app is a full-featured portal for the Lunar Recycling System and space infrastructure platform. Key pages include:
+
+| Page | Description |
+|------|-------------|
+| [🏠 Home](https://networkbuster.net) | Documentation hub and mission overview |
+| [ℹ️ About](https://networkbuster.net/about.html) | Project background and team |
+| [🚀 Projects](https://networkbuster.net/projects.html) | Active missions and build pipeline status |
+| [⚡ Technology](https://networkbuster.net/technology.html) | Core tech stack and system architecture |
+| [📖 Docs](https://networkbuster.net/documentation.html) | Full technical documentation |
+| [📊 Dashboard](https://networkbuster.net/dashboard/) | Live system metrics and control panel |
+| [🌙 Lunar Mission Control](https://networkbuster.net/lunar_mission_control.html) | Lunar ops readiness console |
+| [🌐 AI World Overlay](https://networkbuster.net/overlay.html) | AI-powered world tracking interface |
+
+> **Tech stack:** HTML5 · CSS3 · Vanilla JS · Space Mono / Inter fonts · Node.js backend
+
+---
+
 ## 🏗️ Mission Architecture
 
 Project Alpha Centauri is segmented into **six distinct vector phases**, each delivering 5 distinct CIS technology maturation artifacts:
