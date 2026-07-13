@@ -8,6 +8,7 @@ A comprehensive, 30-phase SBIR- and TRL-aligned maturation pipeline for deep-spa
 
 *   **Interactive Dashboard:** [https://cleanskiier27.github.io/project-alpha-centauri/](https://cleanskiier27.github.io/project-alpha-centauri/)
 *   **Stitched Master Document:** [https://cleanskiier27.github.io/project-alpha-centauri/master_doc.html](https://cleanskiier27.github.io/project-alpha-centauri/master_doc.html)
+*   **NASA Cinematic Hub:** [https://cleanskiier27.github.io/project-alpha-centauri/nasa_cinematic_hub.html](https://cleanskiier27.github.io/project-alpha-centauri/nasa_cinematic_hub.html)
 *   **Robotic Swarm Bid Proposal:** [https://cleanskiier27.github.io/project-alpha-centauri/nasa_robotic_bid.html](https://cleanskiier27.github.io/project-alpha-centauri/nasa_robotic_bid.html)
 
 ---
@@ -36,6 +37,7 @@ Project Alpha Centauri is segmented into **six distinct vector phases**, each de
 *   `/docs/centauri/`: Core Markdown catalog for the 30 maturation artifacts.
 *   `/docs/NASA-ROBOTIC-BID-SUBMISSION.md`: Formally submitted SBIR Galactic Proposal for the Alpha Centauri robotic construction swarm ($5B contract value).
 *   `/viz/`: Interactive simulations including the Galactic Navigation System and the Proxima B Exohub console.
+*   `/cinematics/`: NASA-themed cinematic mission pages grouped into Artemis flight, lunar surface, deep-space, and archive collections.
 *   `build_site.py`: Fast Python site compiler that parses Markdown files and compiles a responsive space-themed catalog.
 
 ---
