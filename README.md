@@ -13,6 +13,12 @@ A comprehensive, 30-phase SBIR- and TRL-aligned maturation pipeline for deep-spa
 
 ---
 
+## 🖥️ Web App Preview
+
+![Project Alpha Centauri web app screenshot](https://github.com/user-attachments/assets/268bc2bd-022f-4c58-8796-d302021f89a0)
+
+---
+
 ## 🏗️ Mission Architecture
 
 Project Alpha Centauri is segmented into **six distinct vector phases**, each delivering 5 distinct CIS technology maturation artifacts:
