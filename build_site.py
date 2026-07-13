@@ -1351,3 +1351,5 @@ for src_md, out_name, doc_title in docs_to_convert:
         with open(os.path.join(output_dir, out_name), "w", encoding="utf-8") as f_out:
             f_out.write("\n".join(page_html))
         print(f"Generated {out_name} from {src_md}")
+
+generate_nasa_theme_pages()
